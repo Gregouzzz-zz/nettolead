@@ -134,6 +134,39 @@ footer {
 <footer>
 © 2025 NettoLead — Tous droits réservés
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+  const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  document.getElementById("contactForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    const { error } = await supabase
+      .from("leads")
+      .insert([{
+        name: formData.get("name"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        city: formData.get("city"),
+        type: formData.get("type"),
+        surface: formData.get("surface"),
+        message: formData.get("message"),
+        unlocked: false
+      }]);
+
+    if (error) {
+      alert("Erreur : " + error.message);
+    } else {
+      alert("Message envoyé !");
+      this.reset();
+    }
+  });
+</script>
 </body>
 </html>
+
