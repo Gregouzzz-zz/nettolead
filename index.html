@@ -3,35 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demande de Nettoyage</title>
+  <title>NettoLeads - Votre site de nettoyage</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #6dd5ed, #2193b0);
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      background: #f0f4f8;
+      color: #333;
     }
 
-    h1 {
+    /* Header */
+    header {
+      background: #007BFF;
       color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header img {
+      height: 50px;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* Section accueil */
+    .hero {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 2rem;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #6dd5ed, #2193b0);
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
       text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
     }
 
+    .hero p {
+      font-size: 1.2rem;
+    }
+
+    /* Stickers / images */
+    .stickers {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 30px 20px;
+    }
+
+    .stickers img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Formulaire */
     form {
-      background: white;
+      max-width: 500px;
+      margin: 40px auto;
       padding: 30px;
+      background: white;
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      width: 90%;
-      max-width: 500px;
       display: flex;
       flex-direction: column;
       gap: 15px;
@@ -73,38 +122,76 @@
       to {opacity: 1; transform: translateY(0);}
     }
 
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #007BFF;
+      color: white;
+    }
+
+    /* Responsive */
     @media (max-width: 600px) {
-      form {
-        padding: 20px;
+      form, .stickers {
+        width: 90%;
       }
     }
   </style>
 </head>
 <body>
 
-  <h1>Demande de Nettoyage</h1>
+  <!-- Header avec logo -->
+  <header>
+    <img src="https://via.placeholder.com/150x50?text=NettoLeads" alt="NettoLeads Logo">
+    <nav>
+      <a href="#home">Accueil</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-  <form id="contactForm">
-    <input type="text" name="name" placeholder="Nom" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="text" name="phone" placeholder="Téléphone" required>
-    <input type="text" name="city" placeholder="Ville" required>
-    <input type="text" name="type" placeholder="Type (menage/bureaux)" required>
-    <input type="number" name="surface" placeholder="Surface (m²)" required>
-    <textarea name="message" placeholder="Message" required rows="4"></textarea>
-    <button type="submit">Envoyer</button>
-  </form>
+  <!-- Hero section -->
+  <section class="hero" id="home">
+    <h1>Bienvenue sur NettoLeads</h1>
+    <p>Vos demandes de nettoyage pour maison et bureaux en quelques clics !</p>
+  </section>
+
+  <!-- Stickers / images -->
+  <section class="stickers" id="services">
+    <img src="https://via.placeholder.com/100?text=Ménage" alt="Ménage">
+    <img src="https://via.placeholder.com/100?text=Bureau" alt="Bureau">
+    <img src="https://via.placeholder.com/100?text=Maison" alt="Maison">
+    <img src="https://via.placeholder.com/100?text=Rapide" alt="Rapide">
+  </section>
+
+  <!-- Formulaire -->
+  <section id="contact">
+    <form id="contactForm">
+      <input type="text" name="name" placeholder="Nom" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="text" name="phone" placeholder="Téléphone" required>
+      <input type="text" name="city" placeholder="Ville" required>
+      <input type="text" name="type" placeholder="Type (menage/bureaux)" required>
+      <input type="number" name="surface" placeholder="Surface (m²)" required>
+      <textarea name="message" placeholder="Message" required rows="4"></textarea>
+      <button type="submit">Envoyer</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2026 NettoLeads - Tous droits réservés
+  </footer>
 
   <!-- Script Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const supabaseUrl = "TON_URL_SUPABASE";   // Remplace par ton URL
-    const supabaseKey = "TA_CLE_ANON";        // Remplace par ta clé publique
+    const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";   
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     document.getElementById("contactForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-
       const formData = new FormData(this);
 
       const { error } = await supabase.from("leads").insert([{
