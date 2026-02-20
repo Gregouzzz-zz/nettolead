@@ -3,325 +3,304 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NettoLead</title>
+<title>NettoLead - SaaS Leads Premium</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family: 'Segoe UI', sans-serif;}
 
 body{
-background:#f4f6fb;
-color:#1e293b;
+margin:0;
+font-family:Inter, sans-serif;
+background:#0f172a;
+color:white;
 }
 
-/* ===== HEADER ===== */
-header{
+nav{
 display:flex;
 justify-content:space-between;
+padding:20px 8%;
 align-items:center;
-padding:20px 60px;
-position:absolute;
-width:100%;
-z-index:10;
+background:#020617;
 }
 
 .logo{
-color:white;
+font-weight:800;
 font-size:22px;
-font-weight:bold;
 }
 
-.nav-buttons a{
-text-decoration:none;
-padding:10px 18px;
-border-radius:30px;
-margin-left:10px;
-font-size:14px;
+.nav-btn{
+background:linear-gradient(90deg,#3b82f6,#06b6d4);
+padding:10px 20px;
+border-radius:25px;
+cursor:pointer;
 }
 
-.btn-outline{
-border:1px solid white;
-color:white;
+section{
+padding:80px 8%;
 }
 
-.btn-primary{
-background:linear-gradient(90deg,#3b82f6,#2563eb);
-color:white;
-}
-
-/* ===== HERO ===== */
 .hero{
-background:linear-gradient(135deg,#1e3a8a,#2563eb);
-color:white;
-padding:160px 60px 120px 60px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-}
-
-.hero-text{
-max-width:600px;
+text-align:center;
+padding-top:120px;
 }
 
 .hero h1{
-font-size:42px;
+font-size:48px;
 margin-bottom:20px;
 }
 
 .hero p{
+color:#94a3b8;
 font-size:18px;
-margin-bottom:30px;
-opacity:0.9;
+margin-bottom:40px;
 }
 
-.hero img{
-width:380px;
-max-width:100%;
-}
-
-/* ===== SECTION ===== */
-section{
-padding:80px 60px;
-}
-
-.section-title{
-text-align:center;
-font-size:28px;
-margin-bottom:50px;
-}
-
-/* ===== HOW IT WORKS ===== */
-.cards{
-display:flex;
-justify-content:center;
-gap:30px;
-flex-wrap:wrap;
+.btn{
+padding:15px 30px;
+border-radius:30px;
+border:none;
+background:linear-gradient(90deg,#3b82f6,#06b6d4);
+color:white;
+cursor:pointer;
+font-size:16px;
 }
 
 .card{
-background:white;
+background:rgba(255,255,255,0.05);
 padding:30px;
 border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
-width:280px;
-text-align:center;
+margin-bottom:20px;
 }
 
-.card h3{
-margin:15px 0 10px;
-}
-
-/* ===== SERVICES ===== */
-.services-grid{
+.features{
 display:flex;
-gap:25px;
+gap:30px;
 flex-wrap:wrap;
 justify-content:center;
 }
 
-.service{
-background:white;
-border-radius:20px;
-padding:25px;
-width:220px;
-text-align:center;
-box-shadow:0 10px 25px rgba(0,0,0,0.06);
-}
-
-/* ===== FORM SECTION ===== */
-.devis-section{
-background:#eef2ff;
-border-radius:30px;
-display:flex;
-justify-content:space-between;
-padding:60px;
-flex-wrap:wrap;
-gap:40px;
-}
-
-.devis-left{
-max-width:400px;
-}
-
-.devis-left h2{
-margin-bottom:20px;
-}
-
-.devis-left ul{
-list-style:none;
-}
-
-.devis-left li{
-margin-bottom:12px;
-}
-
-form{
-background:white;
-padding:30px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
-width:350px;
-display:flex;
-flex-direction:column;
-gap:12px;
-}
-
 input,select,textarea{
-padding:12px;
-border-radius:10px;
-border:1px solid #ddd;
-font-size:14px;
-}
-
-button{
+width:100%;
 padding:14px;
+margin-bottom:15px;
+border-radius:12px;
 border:none;
-border-radius:30px;
-background:linear-gradient(90deg,#3b82f6,#2563eb);
+background:rgba(255,255,255,0.08);
 color:white;
-font-size:15px;
-cursor:pointer;
 }
 
-/* ===== FOOTER ===== */
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #1e293b;
+text-align:left;
+}
+
+th{
+background:#1e293b;
+}
+
+.hidden{
+display:none;
+}
+
 footer{
 text-align:center;
-padding:30px;
-color:#777;
-font-size:14px;
+padding:40px;
+background:#020617;
+color:#64748b;
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:900px){
-.hero{
-flex-direction:column;
-text-align:center;
-}
-.devis-section{
-flex-direction:column;
-align-items:center;
-}
-}
 </style>
 </head>
-
 <body>
 
-<header>
-<div class="logo">💧 NettoLead</div>
-<div class="nav-buttons">
-<a href="#" class="btn-outline">Je suis une entreprise</a>
-<a href="#contact" class="btn-primary">Obtenir mon devis gratuit</a>
+<nav>
+<div class="logo">🚀 NettoLead</div>
+<div>
+<span class="nav-btn" onclick="showHome()">Accueil</span>
+<span class="nav-btn" onclick="showPro()">Espace Entreprise</span>
 </div>
-</header>
+</nav>
 
-<!-- HERO -->
-<div class="hero">
-<div class="hero-text">
-<h1>Trouvez une entreprise<br>de nettoyage fiable en 24h</h1>
-<p>Comparez gratuitement des professionnels vérifiés près de chez vous.</p>
-<a href="#contact" class="btn-primary">Obtenir mon devis gratuit</a>
-</div>
-<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952" alt="Nettoyage">
-</div>
+<!-- HOME -->
+<div id="home">
 
-<!-- HOW IT WORKS -->
+<section class="hero">
+<h1>Générez des leads qualifiés<br>dans le nettoyage</h1>
+<p>Plateforme SaaS premium pour connecter clients et entreprises.</p>
+<button class="btn" onclick="scrollToForm()">Obtenir un devis</button>
+</section>
+
 <section>
-<h2 class="section-title">Comment ça marche</h2>
-<div class="cards">
+<h2 style="text-align:center;">Pourquoi NettoLead ?</h2>
+<div class="features">
 <div class="card">
-<h3>Décrivez votre besoin</h3>
-<p>Remplissez le formulaire en 1 minute.</p>
+<h3>🎯 Leads qualifiés</h3>
+<p>Demandes réelles et vérifiées.</p>
 </div>
 <div class="card">
-<h3>Nous sélectionnons les meilleurs pros</h3>
-<p>Entreprises locales vérifiées.</p>
+<h3>⚡ Transmission instantanée</h3>
+<p>Recevez les demandes en temps réel.</p>
 </div>
 <div class="card">
-<h3>Recevez votre devis sous 24h</h3>
-<p>Sans engagement.</p>
+<h3>📈 Croissance garantie</h3>
+<p>Augmentez votre chiffre d'affaires.</p>
 </div>
 </div>
 </section>
 
-<!-- SERVICES -->
-<section>
-<h2 class="section-title">Services de nettoyage</h2>
-<div class="services-grid">
-<div class="service">Nettoyage maison</div>
-<div class="service">Nettoyage appartement</div>
-<div class="service">Nettoyage fin de chantier</div>
-<div class="service">Nettoyage bureaux</div>
-<div class="service">Nettoyage Airbnb</div>
-</div>
-</section>
+<section id="formSection">
+<h2 style="text-align:center;">Demande de devis</h2>
 
-<!-- DEVIS + FORM -->
-<section id="contact">
-<div class="devis-section">
-<div class="devis-left">
-<h2>Obtenez votre devis gratuit !</h2>
-<ul>
-<li>✔ Entreprises vérifiées</li>
-<li>✔ Réponse rapide</li>
-<li>✔ Service gratuit</li>
-<li>✔ Paiement sécurisé</li>
-</ul>
-</div>
-
-<form id="contactForm">
-<input type="text" name="name" placeholder="Nom" required>
-<input type="email" name="email" placeholder="Email" required>
-<input type="text" name="phone" placeholder="Téléphone" required>
-<input type="text" name="city" placeholder="Ville" required>
-<select name="type" required>
-<option value="">Type de nettoyage</option>
-<option>Maison</option>
-<option>Appartement</option>
-<option>Bureau</option>
-<option>Airbnb</option>
+<div style="max-width:600px;margin:auto;">
+<form id="leadForm">
+<input type="text" id="name" placeholder="Nom" required>
+<input type="email" id="email" placeholder="Email" required>
+<input type="text" id="phone" placeholder="Téléphone">
+<input type="text" id="city" placeholder="Ville">
+<select id="type">
+<option>Ménage</option>
+<option>Bureaux</option>
+<option>Fin de chantier</option>
 </select>
-<input type="number" name="surface" placeholder="Surface (m²)" required>
-<textarea name="message" placeholder="Message"></textarea>
-<button type="submit">Obtenir mon devis</button>
+<input type="text" id="surface" placeholder="Surface en m²">
+<textarea id="message" placeholder="Message"></textarea>
+<button type="submit">Envoyer la demande</button>
 </form>
+</div>
+
+</section>
 
 </div>
+
+<!-- PRO LOGIN -->
+<div id="pro" class="hidden">
+<section style="display:flex;justify-content:center;align-items:center;height:80vh;">
+<div class="card" style="width:400px;text-align:center;">
+<h2>Espace Entreprise</h2>
+<input type="password" id="code" placeholder="Code accès">
+<button class="btn" onclick="login()">Accéder</button>
+</div>
 </section>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="admin" class="hidden">
+<section>
+<h1>📊 Dashboard Leads Live</h1>
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Email</th>
+<th>Téléphone</th>
+<th>Ville</th>
+<th>Type</th>
+<th>Surface</th>
+<th>Message</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</section>
+</div>
 
 <footer>
-© 2026 NettoLead - Tous droits réservés
+© 2026 NettoLead - SaaS Premium
 </footer>
 
-<!-- SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
+
+const supabaseUrl = "TON_URL_SUPABASE";
+const supabaseKey = "TA_CLE_ANON";
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-document.getElementById("contactForm").addEventListener("submit", async function(e){
-e.preventDefault();
-const formData = new FormData(this);
+function showHome(){
+document.getElementById("home").classList.remove("hidden");
+document.getElementById("pro").classList.add("hidden");
+document.getElementById("admin").classList.add("hidden");
+}
 
-const { error } = await supabase.from("leads").insert([{
-name: formData.get("name"),
-email: formData.get("email"),
-phone: formData.get("phone"),
-city: formData.get("city"),
-type: formData.get("type"),
-surface: formData.get("surface"),
-message: formData.get("message"),
-unlocked: false
+function showPro(){
+document.getElementById("home").classList.add("hidden");
+document.getElementById("pro").classList.remove("hidden");
+document.getElementById("admin").classList.add("hidden");
+}
+
+function scrollToForm(){
+document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
+}
+
+function login(){
+if(document.getElementById("code").value === "NETTOLEAD2026"){
+document.getElementById("pro").classList.add("hidden");
+document.getElementById("admin").classList.remove("hidden");
+loadLeads();
+}else{
+alert("Code incorrect");
+}
+}
+
+document.getElementById("leadForm").addEventListener("submit", async function(e){
+e.preventDefault();
+
+const { error } = await supabase
+.from("leads")
+.insert([{
+name: name.value,
+email: email.value,
+phone: phone.value,
+city: city.value,
+type: type.value,
+surface: surface.value,
+message: message.value
 }]);
 
 if(error){
-alert("Erreur : "+error.message);
+alert("Erreur envoi");
 }else{
-alert("Demande envoyée avec succès !");
-this.reset();
+alert("Demande envoyée !");
+leadForm.reset();
 }
 });
+
+async function loadLeads(){
+const { data } = await supabase
+.from("leads")
+.select("*")
+.order("id",{ascending:false});
+
+const tbody = document.getElementById("tbody");
+tbody.innerHTML="";
+
+data.forEach(l=>{
+tbody.innerHTML+=`
+<tr>
+<td>${l.name}</td>
+<td>${l.email}</td>
+<td>${l.phone}</td>
+<td>${l.city}</td>
+<td>${l.type}</td>
+<td>${l.surface}</td>
+<td>${l.message}</td>
+</tr>`;
+});
+}
+
+setInterval(()=>{
+if(!document.getElementById("admin").classList.contains("hidden")){
+loadLeads();
+}
+},5000);
+
 </script>
 
 </body>
