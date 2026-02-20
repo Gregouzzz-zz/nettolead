@@ -3,169 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NettoLeads - Votre site de nettoyage</title>
+  <title>NettoLeads - Nettoyage maison et bureaux</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f0f4f8;
-      color: #333;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+    body { background:#f9f9f9; color:#333; line-height:1.6; }
 
     /* Header */
-    header {
-      background: #007BFF;
-      color: white;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    header { display:flex; justify-content:space-between; align-items:center; padding:20px 50px; background:#007BFF; color:white; position:sticky; top:0; z-index:100; }
+    header img { height:50px; }
+    nav a { color:white; margin-left:25px; text-decoration:none; font-weight:bold; }
+    nav a:hover { text-decoration:underline; }
 
-    header img {
-      height: 50px;
-    }
+    /* Hero */
+    .hero { text-align:center; padding:100px 20px; background: linear-gradient(135deg,#6dd5ed,#2193b0); color:white; }
+    .hero h1 { font-size:3rem; margin-bottom:20px; text-shadow:1px 1px 4px rgba(0,0,0,0.3); }
+    .hero p { font-size:1.3rem; max-width:600px; margin:auto; }
 
-    nav a {
-      color: white;
-      margin-left: 15px;
-      text-decoration: none;
-      font-weight: bold;
-    }
+    /* Services */
+    .services { display:flex; justify-content:center; flex-wrap:wrap; gap:30px; padding:50px 20px; }
+    .service-card { background:white; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.1); width:250px; text-align:center; padding:20px; transition: transform 0.3s, box-shadow 0.3s; }
+    .service-card img { width:100px; height:100px; object-fit:contain; margin-bottom:15px; }
+    .service-card:hover { transform:translateY(-5px); box-shadow:0 12px 25px rgba(0,0,0,0.15); }
+    .service-card h3 { margin-bottom:10px; }
+    .service-card p { font-size:0.95rem; color:#555; }
 
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    /* Section accueil */
-    .hero {
-      text-align: center;
-      padding: 60px 20px;
-      background: linear-gradient(135deg, #6dd5ed, #2193b0);
-      color: white;
-    }
-
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-    }
-
-    /* Stickers / images */
-    .stickers {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding: 30px 20px;
-    }
-
-    .stickers img {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
+    /* Avantages / Témoignages */
+    .advantages { display:flex; flex-wrap:wrap; justify-content:center; gap:30px; padding:50px 20px; background:#f0f8ff; }
+    .adv-card { background:white; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.1); width:250px; text-align:center; padding:20px; }
+    .adv-card img { width:60px; height:60px; margin-bottom:10px; }
+    .adv-card h4 { margin-bottom:10px; }
+    .adv-card p { font-size:0.9rem; color:#555; }
 
     /* Formulaire */
-    form {
-      max-width: 500px;
-      margin: 40px auto;
-      padding: 30px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      animation: fadeIn 1s ease-out;
-    }
-
-    input, textarea {
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-      transition: border 0.3s, box-shadow 0.3s;
-    }
-
-    input:focus, textarea:focus {
-      border: 1px solid #007BFF;
-      box-shadow: 0 0 5px rgba(0,123,255,0.5);
-      outline: none;
-    }
-
-    button {
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      background: #007BFF;
-      color: white;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    button:hover {
-      background: #0056b3;
-      transform: scale(1.03);
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(-20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
+    .contact-section { padding:50px 20px; background:#ffffff; }
+    .contact-section h2 { text-align:center; margin-bottom:30px; }
+    form { max-width:500px; margin:auto; padding:30px; background:white; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.2); display:flex; flex-direction:column; gap:15px; }
+    input, textarea { padding:12px; border-radius:8px; border:1px solid #ccc; font-size:1rem; transition:border 0.3s, box-shadow 0.3s; }
+    input:focus, textarea:focus { border:1px solid #007BFF; box-shadow:0 0 5px rgba(0,123,255,0.5); outline:none; }
+    button { padding:14px; border:none; border-radius:8px; background:#007BFF; color:white; font-size:1.1rem; cursor:pointer; transition: background 0.3s, transform 0.2s; }
+    button:hover { background:#0056b3; transform:scale(1.03); }
 
     /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #007BFF;
-      color: white;
-    }
+    footer { text-align:center; padding:20px; background:#007BFF; color:white; }
 
-    /* Responsive */
-    @media (max-width: 600px) {
-      form, .stickers {
-        width: 90%;
-      }
-    }
+    @media (max-width:768px) { .services, .advantages { flex-direction:column; align-items:center; } }
   </style>
 </head>
 <body>
 
-  <!-- Header avec logo -->
+  <!-- Header -->
   <header>
     <img src="https://via.placeholder.com/150x50?text=NettoLeads" alt="NettoLeads Logo">
     <nav>
       <a href="#home">Accueil</a>
       <a href="#services">Services</a>
+      <a href="#advantages">Avantages</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <!-- Hero section -->
+  <!-- Hero -->
   <section class="hero" id="home">
-    <h1>Bienvenue sur NettoLeads</h1>
-    <p>Vos demandes de nettoyage pour maison et bureaux en quelques clics !</p>
+    <h1>Nettoyage facile pour maison et bureaux</h1>
+    <p>NettoLeads vous aide à trouver le service de nettoyage parfait rapidement et efficacement.</p>
   </section>
 
-  <!-- Stickers / images -->
-  <section class="stickers" id="services">
-    <img src="https://via.placeholder.com/100?text=Ménage" alt="Ménage">
-    <img src="https://via.placeholder.com/100?text=Bureau" alt="Bureau">
-    <img src="https://via.placeholder.com/100?text=Maison" alt="Maison">
-    <img src="https://via.placeholder.com/100?text=Rapide" alt="Rapide">
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="service-card">
+      <img src="https://via.placeholder.com/100?text=Ménage" alt="Ménage">
+      <h3>Ménage Maison</h3>
+      <p>Service complet pour garder votre maison propre et accueillante.</p>
+    </div>
+    <div class="service-card">
+      <img src="https://via.placeholder.com/100?text=Bureau" alt="Bureau">
+      <h3>Bureaux</h3>
+      <p>Nettoyage efficace pour vos espaces professionnels.</p>
+    </div>
+    <div class="service-card">
+      <img src="https://via.placeholder.com/100?text=Rapide" alt="Rapide">
+      <h3>Interventions rapides</h3>
+      <p>Des services ponctuels adaptés à vos besoins urgents.</p>
+    </div>
+  </section>
+
+  <!-- Avantages -->
+  <section class="advantages" id="advantages">
+    <div class="adv-card">
+      <img src="https://via.placeholder.com/60?text=Qualité" alt="Qualité">
+      <h4>Qualité garantie</h4>
+      <p>Nos prestataires sont sélectionnés pour un travail impeccable.</p>
+    </div>
+    <div class="adv-card">
+      <img src="https://via.placeholder.com/60?text=Rapide" alt="Rapide">
+      <h4>Rapide et fiable</h4>
+      <p>Vos demandes sont traitées en quelques minutes.</p>
+    </div>
+    <div class="adv-card">
+      <img src="https://via.placeholder.com/60?text=Simple" alt="Simple">
+      <h4>Simple d'utilisation</h4>
+      <p>Remplissez le formulaire et obtenez votre lead immédiatement.</p>
+    </div>
   </section>
 
   <!-- Formulaire -->
-  <section id="contact">
+  <section class="contact-section" id="contact">
+    <h2>Demande de nettoyage</h2>
     <form id="contactForm">
       <input type="text" name="name" placeholder="Nom" required>
       <input type="email" name="email" placeholder="Email" required>
@@ -186,14 +129,13 @@
   <!-- Script Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";   
+    const supabaseUrl = "TON_URL_SUPABASE";   // Remplace par ton URL
+    const supabaseKey = "TA_CLE_ANON";        // Remplace par ta clé publique
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     document.getElementById("contactForm").addEventListener("submit", async function(e) {
       e.preventDefault();
       const formData = new FormData(this);
-
       const { error } = await supabase.from("leads").insert([{
         name: formData.get("name"),
         email: formData.get("email"),
@@ -204,7 +146,6 @@
         message: formData.get("message"),
         unlocked: false
       }]);
-
       if (error) {
         alert("Erreur : " + error.message);
       } else {
@@ -216,4 +157,3 @@
 
 </body>
 </html>
-
