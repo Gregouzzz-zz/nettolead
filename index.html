@@ -1,154 +1,113 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NettoLead</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-body {
-  margin:0;
-  font-family: 'Inter', sans-serif;
-  background:#f4f6fb;
-  color:#1f2937;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demande de Nettoyage</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6dd5ed, #2193b0);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
 
-header {
-  background:linear-gradient(135deg,#1e3a8a,#3b82f6);
-  color:white;
-  padding:80px 20px;
-  text-align:center;
-}
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
 
-header h1 {
-  font-size:40px;
-  margin-bottom:20px;
-}
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      animation: fadeIn 1s ease-out;
+    }
 
-header p {
-  font-size:18px;
-  margin-bottom:30px;
-}
+    input, textarea {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
 
-.btn {
-  background:#3b82f6;
-  padding:15px 30px;
-  color:white;
-  border:none;
-  border-radius:30px;
-  font-size:16px;
-  cursor:pointer;
-}
+    input:focus, textarea:focus {
+      border: 1px solid #007BFF;
+      box-shadow: 0 0 5px rgba(0,123,255,0.5);
+      outline: none;
+    }
 
-.section {
-  padding:60px 20px;
-  text-align:center;
-}
+    button {
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #007BFF;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
 
-.cards {
-  display:flex;
-  gap:20px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
+    button:hover {
+      background: #0056b3;
+      transform: scale(1.03);
+    }
 
-.card {
-  background:white;
-  padding:30px;
-  border-radius:15px;
-  width:280px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.05);
-}
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
 
-.form-container {
-  background:white;
-  padding:40px;
-  border-radius:15px;
-  max-width:500px;
-  margin:0 auto;
-  box-shadow:0 5px 20px rgba(0,0,0,0.05);
-}
-
-input, select, textarea {
-  width:100%;
-  padding:12px;
-  margin-bottom:15px;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-
-footer {
-  text-align:center;
-  padding:20px;
-  background:#111827;
-  color:white;
-}
-</style>
+    @media (max-width: 600px) {
+      form {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-<h1>Trouvez une entreprise de nettoyage fiable en 24h</h1>
-<p>Comparez gratuitement des professionnels vérifiés près de chez vous.</p>
-<button class="btn">Obtenir mon devis gratuit</button>
-</header>
+  <h1>Demande de Nettoyage</h1>
 
-<section class="section">
-<h2>Comment ça marche</h2>
-<div class="cards">
-<div class="card">
-<h3>Décrivez votre besoin</h3>
-<p>Remplissez le formulaire en 1 minute.</p>
-</div>
-<div class="card">
-<h3>Nous sélectionnons les meilleurs pros</h3>
-<p>Entreprises locales vérifiées.</p>
-</div>
-<div class="card">
-<h3>Recevez votre devis sous 24h</h3>
-<p>Sans engagement.</p>
-</div>
-</div>
-</section>
+  <form id="contactForm">
+    <input type="text" name="name" placeholder="Nom" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="phone" placeholder="Téléphone" required>
+    <input type="text" name="city" placeholder="Ville" required>
+    <input type="text" name="type" placeholder="Type (menage/bureaux)" required>
+    <input type="number" name="surface" placeholder="Surface (m²)" required>
+    <textarea name="message" placeholder="Message" required rows="4"></textarea>
+    <button type="submit">Envoyer</button>
+  </form>
 
-<section class="section">
-<h2>Obtenez votre devis gratuit</h2>
-<div class="form-container">
-<form>
-<input type="text" placeholder="Nom">
-<input type="email" placeholder="Email">
-<input type="tel" placeholder="Téléphone">
-<select>
-<option>Type de nettoyage</option>
-<option>Appartement</option>
-<option>Maison</option>
-<option>Bureau</option>
-<option>Fin de chantier</option>
-</select>
-<textarea placeholder="Votre message"></textarea>
-<button class="btn" type="submit">Obtenir mon devis</button>
-</form>
-</div>
-</section>
+  <!-- Script Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = "TON_URL_SUPABASE";   // Remplace par ton URL
+    const supabaseKey = "TA_CLE_ANON";        // Remplace par ta clé publique
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-<footer>
-© 2025 NettoLead — Tous droits réservés
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    document.getElementById("contactForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
 
-<script>
-  const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+      const formData = new FormData(this);
 
-  document.getElementById("contactForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-
-    const { error } = await supabase
-      .from("leads")
-      .insert([{
+      const { error } = await supabase.from("leads").insert([{
         name: formData.get("name"),
         email: formData.get("email"),
         phone: formData.get("phone"),
@@ -159,14 +118,15 @@ footer {
         unlocked: false
       }]);
 
-    if (error) {
-      alert("Erreur : " + error.message);
-    } else {
-      alert("Message envoyé !");
-      this.reset();
-    }
-  });
-</script>
+      if (error) {
+        alert("Erreur : " + error.message);
+      } else {
+        alert("Message envoyé avec succès ! ✅");
+        this.reset();
+      }
+    });
+  </script>
+
 </body>
 </html>
 
