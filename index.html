@@ -345,34 +345,10 @@ document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
 }
 
 /* FORMULAIRE */
-document.getElementById("leadForm").addEventListener("submit", async function(e){
+document.getElementById("leadForm").addEventListener("submit", function(e){
 
 e.preventDefault();
-
-let price = 25;
-let surfaceValue = parseInt(document.getElementById("surface").value);
-if(surfaceValue > 200){ price = 40; }
-
-const { error } = await supabase
-.from("leads")
-.insert([{
-name: document.getElementById("name").value,
-email: document.getElementById("email").value,
-phone: document.getElementById("phone").value,
-city: document.getElementById("city").value,
-type: document.getElementById("type").value,
-surface: document.getElementById("surface").value,
-message: document.getElementById("message").value,
-price: price,
-unlocked: false
-}]);
-
-if(error){
-alert("Erreur : " + error.message);
-}else{
-alert("Demande envoyée !");
-document.getElementById("leadForm").reset();
-}
+alert("Le bouton fonctionne !");
 
 });
 
@@ -430,4 +406,5 @@ loadLeads();
 
 </body>
 </html>
+
 
