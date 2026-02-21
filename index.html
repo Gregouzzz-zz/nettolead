@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NettoLead - Plateforme de mise en relation nettoyage</title>
+<title>NettoLead</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,61 +13,21 @@
 body{
 margin:0;
 font-family:Inter, sans-serif;
-background:#f5f7fa;
+background:#f4f6f9;
 color:#1e293b;
 }
 
 nav{
 display:flex;
 justify-content:space-between;
-align-items:center;
 padding:20px 8%;
 background:white;
 box-shadow:0 2px 10px rgba(0,0,0,0.05);
-position:sticky;
-top:0;
-z-index:100;
 }
 
 .logo{
 font-weight:700;
 font-size:22px;
-color:#0f172a;
-}
-
-.nav-btn{
-margin-left:15px;
-padding:10px 18px;
-border-radius:8px;
-background:#0f172a;
-color:white;
-cursor:pointer;
-}
-
-section{
-padding:80px 8%;
-}
-
-.hero{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:40px;
-}
-
-.hero-text{
-max-width:600px;
-}
-
-.hero h1{
-font-size:42px;
-margin-bottom:20px;
-}
-
-.hero p{
-font-size:18px;
-color:#475569;
-margin-bottom:25px;
 }
 
 .btn{
@@ -79,26 +39,8 @@ color:white;
 cursor:pointer;
 }
 
-.hero img{
-width:450px;
-border-radius:12px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
-}
-
-.card{
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
-}
-
-.light{
-background:#eef2f7;
+section{
+padding:60px 8%;
 }
 
 input,select,textarea{
@@ -109,6 +51,19 @@ border-radius:8px;
 border:1px solid #cbd5e1;
 }
 
+.card{
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+max-width:600px;
+margin:auto;
+}
+
+.hidden{
+display:none;
+}
+
 table{
 width:100%;
 border-collapse:collapse;
@@ -116,7 +71,7 @@ margin-top:20px;
 }
 
 th,td{
-padding:14px;
+padding:12px;
 border-bottom:1px solid #e2e8f0;
 text-align:left;
 }
@@ -130,125 +85,50 @@ color:white;
 color:#94a3b8;
 }
 
-.hidden{display:none;}
-
-footer{
-padding:40px;
-background:#0f172a;
-color:white;
-text-align:center;
-}
-
 </style>
 </head>
 <body>
 
 <nav>
 <div class="logo">NettoLead</div>
-<div>
-<span class="nav-btn" onclick="showHome()">Accueil</span>
-<span class="nav-btn" onclick="showPro()">Professionnels</span>
-</div>
+<button class="btn" onclick="showPro()">Espace Pro</button>
 </nav>
 
-<!-- PAGE ACCUEIL -->
-<div id="home">
+<!-- CLIENT -->
+<section id="home">
 
-<section class="hero">
-<div class="hero-text">
-<h1>Trouvez rapidement une entreprise de nettoyage fiable</h1>
-<p>
-NettoLead met en relation des particuliers et des entreprises avec des professionnels du nettoyage qualifiés dans leur région.
-Simple, rapide et gratuit pour les clients.
-</p>
-<button class="btn" onclick="scrollForm()">Demander un devis</button>
-</div>
-<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952" alt="Nettoyage">
-</section>
-
-<section class="light">
-<h2>Comment ça fonctionne ?</h2>
-<div class="grid">
+<h1>Demande de devis nettoyage</h1>
 
 <div class="card">
-<h3>1️⃣ Vous décrivez votre besoin</h3>
-<p>Remplissez notre formulaire en quelques minutes. Indiquez le type de prestation et la surface à nettoyer.</p>
-</div>
-
-<div class="card">
-<h3>2️⃣ Les professionnels consultent la demande</h3>
-<p>Les entreprises locales accèdent à votre demande via leur espace professionnel.</p>
-</div>
-
-<div class="card">
-<h3>3️⃣ Vous êtes contacté</h3>
-<p>Un professionnel débloque vos coordonnées et vous contacte pour établir un devis personnalisé.</p>
-</div>
-
-</div>
-</section>
-
-<section id="formSection">
-<h2>Demande de devis gratuite</h2>
-
-<div style="max-width:600px;margin:auto;">
 <form id="leadForm">
+
 <input type="text" id="name" placeholder="Nom" required>
 <input type="email" id="email" placeholder="Email" required>
 <input type="text" id="phone" placeholder="Téléphone" required>
 <input type="text" id="city" placeholder="Ville" required>
+
 <select id="type">
-<option>Ménage à domicile</option>
-<option>Nettoyage de bureaux</option>
+<option>Ménage</option>
+<option>Bureaux</option>
 <option>Fin de chantier</option>
 </select>
+
 <input type="text" id="surface" placeholder="Surface en m²">
-<textarea id="message" placeholder="Précisions supplémentaires"></textarea>
+<textarea id="message" placeholder="Message"></textarea>
+
 <button type="submit" class="btn">Envoyer la demande</button>
+
 </form>
 </div>
 
 </section>
 
-<section class="light">
-<h2>Pourquoi choisir NettoLead ?</h2>
-<div class="grid">
+<!-- PRO -->
+<section id="pro" class="hidden">
 
-<div class="card">
-<h3>Professionnels vérifiés</h3>
-<p>Nous travaillons uniquement avec des entreprises sérieuses et déclarées.</p>
-</div>
+<h1>Dashboard Professionnel</h1>
 
-<div class="card">
-<h3>Gain de temps</h3>
-<p>Plus besoin de chercher : les professionnels viennent à vous.</p>
-</div>
-
-<div class="card">
-<h3>Service gratuit</h3>
-<p>La demande de devis est entièrement gratuite et sans engagement.</p>
-</div>
-
-</div>
-</section>
-
-</div>
-
-<!-- PAGE PRO -->
-<div id="pro" class="hidden">
-
-<section>
-<h2>Espace Professionnel</h2>
-<p>
-Accédez aux demandes de devis dans votre région et développez votre activité.
-</p>
-
-<input type="password" id="code" placeholder="Code d'accès professionnel">
-<button class="btn" onclick="login()">Se connecter</button>
-
-<div id="dashboard" class="hidden">
-
-<h3>Demandes disponibles</h3>
+<button class="btn" onclick="showHome()">Retour</button>
 
 <table>
 <thead>
@@ -256,7 +136,7 @@ Accédez aux demandes de devis dans votre région et développez votre activité
 <th>Ville</th>
 <th>Type</th>
 <th>Surface</th>
-<th>Coordonnées</th>
+<th>Contact</th>
 <th>Prix</th>
 <th>Action</th>
 </tr>
@@ -264,106 +144,133 @@ Accédez aux demandes de devis dans votre région et développez votre activité
 <tbody id="tbody"></tbody>
 </table>
 
-</div>
-
 </section>
-
-</div>
-
-<footer>
-© 2026 NettoLead - Plateforme de mise en relation en nettoyage
-</footer>
 
 <script>
 
-const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
+/* ===========================
+   CONFIGURATION SUPABASE
+=========================== */
+
+const supabaseUrl = "COLLE_TON_URL_SUPABASE_ICI";
+const supabaseKey = "COLLE_TA_CLE_ANON_ICI";
+
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-function showHome(){
-home.classList.remove("hidden");
-pro.classList.add("hidden");
-}
+
+/* ===========================
+   NAVIGATION
+=========================== */
 
 function showPro(){
-home.classList.add("hidden");
-pro.classList.remove("hidden");
+document.getElementById("home").classList.add("hidden");
+document.getElementById("pro").classList.remove("hidden");
+loadLeads();
 }
 
-function scrollForm(){
-document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
+function showHome(){
+document.getElementById("pro").classList.add("hidden");
+document.getElementById("home").classList.remove("hidden");
 }
 
-leadForm.addEventListener("submit", async (e)=>{
+
+/* ===========================
+   FORMULAIRE
+=========================== */
+
+document.getElementById("leadForm").addEventListener("submit", async function(e){
+
 e.preventDefault();
 
 let price = 25;
-if(surface.value > 200) price = 40;
+let surfaceValue = parseInt(document.getElementById("surface").value);
 
-await supabase.from("leads").insert([{
-name:name.value,
-email:email.value,
-phone:phone.value,
-city:city.value,
-type:type.value,
-surface:surface.value,
-message:message.value,
-price:price,
-unlocked:false
+if(surfaceValue > 200){
+price = 40;
+}
+
+const { data, error } = await supabase
+.from("leads")
+.insert([{
+name: document.getElementById("name").value,
+email: document.getElementById("email").value,
+phone: document.getElementById("phone").value,
+city: document.getElementById("city").value,
+type: document.getElementById("type").value,
+surface: document.getElementById("surface").value,
+message: document.getElementById("message").value,
+price: price,
+unlocked: false
 }]);
 
-alert("Votre demande a bien été envoyée.");
-leadForm.reset();
+if(error){
+console.error(error);
+alert("Erreur : " + error.message);
+}else{
+alert("Demande envoyée avec succès !");
+document.getElementById("leadForm").reset();
+}
+
 });
 
-function login(){
-if(code.value === "PRO2026"){
-dashboard.classList.remove("hidden");
-loadLeads();
-}else{
-alert("Code incorrect");
-}
-}
+
+/* ===========================
+   DASHBOARD PRO
+=========================== */
 
 async function loadLeads(){
-const { data } = await supabase
+
+const { data, error } = await supabase
 .from("leads")
 .select("*")
 .order("created_at",{ascending:false});
 
-tbody.innerHTML="";
+if(error){
+console.error(error);
+return;
+}
 
-data.forEach(l=>{
-tbody.innerHTML+=`
+const tbody = document.getElementById("tbody");
+tbody.innerHTML = "";
+
+data.forEach(function(l){
+
+tbody.innerHTML += `
 <tr>
 <td>${l.city}</td>
 <td>${l.type}</td>
-<td>${l.surface} m²</td>
+<td>${l.surface}</td>
 <td>
-${l.unlocked ? l.phone+"<br>"+l.email : "<span class='locked'>Coordonnées masquées</span>"}
+${l.unlocked ? l.phone + "<br>" + l.email : "<span class='locked'>Coordonnées masquées</span>"}
 </td>
 <td>${l.price}€</td>
 <td>
-${l.unlocked ? "Débloqué" : `<button class="btn" onclick="buyLead(${l.id})">Débloquer</button>`}
+${l.unlocked ? "Débloqué" : `<button onclick="buyLead(${l.id})">Débloquer</button>`}
 </td>
 </tr>
 `;
+
 });
+
 }
 
 async function buyLead(id){
-if(confirm("Confirmer le déblocage du lead ?")){
-await supabase
-.from("leads")
-.update({unlocked:true})
-.eq("id",id);
 
+const { error } = await supabase
+.from("leads")
+.update({ unlocked: true })
+.eq("id", id);
+
+if(error){
+alert("Erreur lors du déblocage");
+}else{
+alert("Lead débloqué !");
 loadLeads();
 }
+
 }
 
 </script>
 
 </body>
 </html>
-
