@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NettoLead - Plateforme de mise en relation</title>
+<title>NettoLead - Mise en relation nettoyage</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 body{
 margin:0;
 font-family:Inter, sans-serif;
-background:#f4f6f9;
+background:#f8fafc;
 color:#1e293b;
 }
 
@@ -22,12 +23,73 @@ justify-content:space-between;
 align-items:center;
 padding:20px 8%;
 background:white;
-box-shadow:0 2px 10px rgba(0,0,0,0.05);
+box-shadow:0 2px 12px rgba(0,0,0,0.06);
+position:sticky;
+top:0;
+z-index:100;
 }
 
 .logo{
 font-weight:700;
 font-size:22px;
+}
+
+.nav-btn{
+margin-left:15px;
+padding:10px 18px;
+border-radius:8px;
+background:#0f172a;
+color:white;
+cursor:pointer;
+}
+
+.hero{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:50px;
+padding:80px 8%;
+}
+
+.hero-text{
+max-width:600px;
+}
+
+.hero h1{
+font-size:42px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:18px;
+color:#475569;
+margin-bottom:25px;
+}
+
+.hero img{
+width:450px;
+border-radius:14px;
+}
+
+.section{
+padding:80px 8%;
+}
+
+.light{
+background:#eef2f7;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 6px 18px rgba(0,0,0,0.05);
 }
 
 .btn{
@@ -37,31 +99,6 @@ border-radius:8px;
 background:#0f172a;
 color:white;
 cursor:pointer;
-}
-
-section{
-padding:60px 8%;
-}
-
-.hero{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:40px;
-}
-
-.hero img{
-width:450px;
-border-radius:12px;
-}
-
-.card{
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
-max-width:600px;
-margin:auto;
 }
 
 input,select,textarea{
@@ -80,10 +117,14 @@ table{
 width:100%;
 border-collapse:collapse;
 margin-top:20px;
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 6px 18px rgba(0,0,0,0.05);
 }
 
 th,td{
-padding:12px;
+padding:14px;
 border-bottom:1px solid #e2e8f0;
 text-align:left;
 }
@@ -103,6 +144,7 @@ background:#0f172a;
 color:white;
 text-align:center;
 }
+
 </style>
 </head>
 <body>
@@ -110,27 +152,52 @@ text-align:center;
 <nav>
 <div class="logo">NettoLead</div>
 <div>
-<button class="btn" onclick="showHome()">Accueil</button>
-<button class="btn" onclick="showPro()">Espace Pro</button>
+<span class="nav-btn" onclick="showHome()">Accueil</span>
+<span class="nav-btn" onclick="showPro()">Professionnels</span>
 </div>
 </nav>
 
 <!-- PAGE CLIENT -->
-<section id="home">
+<div id="home">
 
 <div class="hero">
-<div>
-<h1>Trouvez un professionnel du nettoyage</h1>
-<p>Décrivez votre besoin et recevez rapidement des propositions d'entreprises qualifiées.</p>
+<div class="hero-text">
+<h1>Trouvez rapidement une entreprise de nettoyage fiable</h1>
+<p>
+NettoLead met en relation particuliers et entreprises avec des professionnels qualifiés.
+Simple, rapide et gratuit.
+</p>
 <button class="btn" onclick="scrollToForm()">Demander un devis</button>
 </div>
-
 <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952" alt="Nettoyage">
 </div>
 
-<h2 id="formSection" style="margin-top:60px;">Demande de devis gratuite</h2>
+<div class="section light">
+<h2>Comment ça fonctionne ?</h2>
+<div class="grid">
 
 <div class="card">
+<h3>1. Décrivez votre besoin</h3>
+<p>Indiquez le type de nettoyage, la surface et votre localisation.</p>
+</div>
+
+<div class="card">
+<h3>2. Les pros consultent votre demande</h3>
+<p>Les entreprises accèdent à votre demande via leur espace sécurisé.</p>
+</div>
+
+<div class="card">
+<h3>3. Vous êtes contacté</h3>
+<p>Un professionnel débloque vos coordonnées et vous contacte.</p>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+<h2 id="formSection">Demande de devis gratuite</h2>
+
+<div class="card" style="max-width:600px;margin:auto;">
 <form id="leadForm">
 
 <input type="text" id="name" placeholder="Nom" required>
@@ -139,8 +206,8 @@ text-align:center;
 <input type="text" id="city" placeholder="Ville" required>
 
 <select id="type">
-<option>Ménage</option>
-<option>Bureaux</option>
+<option>Ménage à domicile</option>
+<option>Nettoyage de bureaux</option>
 <option>Fin de chantier</option>
 </select>
 
@@ -152,13 +219,15 @@ text-align:center;
 </form>
 </div>
 
-</section>
+</div>
+
+</div>
 
 <!-- PAGE PRO -->
-<section id="pro" class="hidden">
+<div id="pro" class="hidden section">
 
-<h1>Dashboard Professionnel</h1>
-<p>Consultez les demandes disponibles et débloquez les coordonnées.</p>
+<h1>Espace Professionnel</h1>
+<p>Accédez aux demandes disponibles et développez votre activité.</p>
 
 <table>
 <thead>
@@ -174,27 +243,24 @@ text-align:center;
 <tbody id="tbody"></tbody>
 </table>
 
-</section>
+</div>
 
 <footer>
-© 2026 NettoLead
+© 2026 NettoLead - Plateforme de mise en relation nettoyage
 </footer>
 
 <script>
 
-/* =======================
-CONFIG SUPABASE
-======================= */
-
+/* CONFIG SUPABASE */
 const supabaseUrl = "COLLE_TON_URL_SUPABASE";
 const supabaseKey = "COLLE_TA_CLE_ANON";
-
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-
-/* =======================
-NAVIGATION
-======================= */
+/* NAVIGATION */
+function showHome(){
+document.getElementById("home").classList.remove("hidden");
+document.getElementById("pro").classList.add("hidden");
+}
 
 function showPro(){
 document.getElementById("home").classList.add("hidden");
@@ -202,32 +268,20 @@ document.getElementById("pro").classList.remove("hidden");
 loadLeads();
 }
 
-function showHome(){
-document.getElementById("pro").classList.add("hidden");
-document.getElementById("home").classList.remove("hidden");
-}
-
 function scrollToForm(){
 document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
 }
 
-
-/* =======================
-FORMULAIRE
-======================= */
-
+/* FORMULAIRE */
 document.getElementById("leadForm").addEventListener("submit", async function(e){
 
 e.preventDefault();
 
 let price = 25;
 let surfaceValue = parseInt(document.getElementById("surface").value);
+if(surfaceValue > 200){ price = 40; }
 
-if(surfaceValue > 200){
-price = 40;
-}
-
-const { data, error } = await supabase
+const { error } = await supabase
 .from("leads")
 .insert([{
 name: document.getElementById("name").value,
@@ -242,20 +296,15 @@ unlocked: false
 }]);
 
 if(error){
-console.error(error);
 alert("Erreur : " + error.message);
 }else{
-alert("Demande envoyée avec succès !");
+alert("Demande envoyée !");
 document.getElementById("leadForm").reset();
 }
 
 });
 
-
-/* =======================
-DASHBOARD PRO
-======================= */
-
+/* DASHBOARD */
 async function loadLeads(){
 
 const { data, error } = await supabase
@@ -264,23 +313,21 @@ const { data, error } = await supabase
 .order("created_at",{ascending:false});
 
 if(error){
-console.error(error);
 alert("Erreur chargement : " + error.message);
 return;
 }
 
 const tbody = document.getElementById("tbody");
-tbody.innerHTML = "";
+tbody.innerHTML="";
 
 data.forEach(function(l){
-
 tbody.innerHTML += `
 <tr>
 <td>${l.city}</td>
 <td>${l.type}</td>
 <td>${l.surface}</td>
 <td>
-${l.unlocked ? l.phone + "<br>" + l.email : "<span class='locked'>Coordonnées masquées</span>"}
+${l.unlocked ? l.phone+"<br>"+l.email : "<span class='locked'>Coordonnées masquées</span>"}
 </td>
 <td>${l.price}€</td>
 <td>
@@ -288,22 +335,20 @@ ${l.unlocked ? "Débloqué" : `<button onclick="buyLead(${l.id})">Débloquer</bu
 </td>
 </tr>
 `;
-
 });
-
 }
 
 async function buyLead(id){
 
 const { error } = await supabase
 .from("leads")
-.update({ unlocked: true })
-.eq("id", id);
+.update({unlocked:true})
+.eq("id",id);
 
 if(error){
 alert("Erreur : " + error.message);
 }else{
-alert("Lead débloqué !");
+alert("Lead débloqué");
 loadLeads();
 }
 
