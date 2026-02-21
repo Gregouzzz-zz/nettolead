@@ -15,9 +15,13 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8
 .logo-box{width:32px;height:32px;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;border-radius:6px;font-weight:700;}
 .nav-btn{padding:10px 18px;border:none;border-radius:8px;background:#0f172a;color:white;cursor:pointer;}
 .hero{display:flex;align-items:center;justify-content:space-between;gap:50px;padding:80px 8%;}
+.hero-text{max-width:600px;}
 .hero img{width:450px;border-radius:14px;}
 .section{padding:80px 8%;}
-.card{background:white;padding:30px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.05);max-width:600px;margin:auto;}
+.light{background:#eef2f7;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;}
+.card{background:white;padding:30px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.05);}
+.step{width:32px;height:32px;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;border-radius:6px;font-weight:700;margin-bottom:15px;}
 input,select,textarea{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #cbd5e1;}
 .hidden{display:none;}
 table{width:100%;border-collapse:collapse;margin-top:20px;background:white;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.05);}
@@ -41,16 +45,43 @@ NettoLead
 <div id="home">
 
 <div class="hero">
-<div>
+<div class="hero-text">
 <h1>Trouvez une entreprise de nettoyage fiable</h1>
-<p>Déposez gratuitement votre demande. Les pros peuvent débloquer vos coordonnées.</p>
+<p>
+NettoLead met en relation les clients ayant un besoin de nettoyage 
+avec des entreprises professionnelles qualifiées.
+Déposez gratuitement votre demande et recevez un contact rapide.
+</p>
 </div>
 <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
 </div>
 
+<div class="section light">
+<h2>Comment ça fonctionne ?</h2>
+
+<div class="grid">
+<div class="card">
+<div class="step">1</div>
+<h3>Vous déposez votre demande</h3>
+<p>Indiquez votre besoin (ménage, bureaux, fin de chantier).</p>
+</div>
+
+<div class="card">
+<div class="step">2</div>
+<h3>Les entreprises consultent</h3>
+<p>Les professionnels voient la demande mais pas vos coordonnées.</p>
+</div>
+
+<div class="card">
+<div class="step">3</div>
+<h3>Déblocage du contact</h3>
+<p>Une entreprise débloque vos coordonnées et vous contacte.</p>
+</div>
+</div>
+</div>
+
 <div class="section">
 <h2>Demande de devis gratuite</h2>
-
 <div class="card">
 <form id="leadForm">
 
@@ -73,9 +104,10 @@ NettoLead
 </form>
 </div>
 </div>
+
 </div>
 
-<!-- LOGIN PRO -->
+<!-- LOGIN -->
 <div id="loginSection" class="hidden section">
 <h2>Connexion Espace Pro</h2>
 <div class="card" style="max-width:400px;">
@@ -86,7 +118,7 @@ NettoLead
 </div>
 </div>
 
-<!-- DASHBOARD PRO -->
+<!-- DASHBOARD -->
 <div id="pro" class="hidden section">
 <h1>Espace Pro</h1>
 <button onclick="logoutPro()" style="background:#dc2626;">Déconnexion</button>
@@ -110,147 +142,83 @@ NettoLead
 
 <script>
 
-const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
+const supabaseUrl = "COLLE_TON_URL_SUPABASE";
+const supabaseKey = "COLLE_TA_CLE_ANON";
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-/* ================= FORMULAIRE ================= */
-
+/* FORMULAIRE */
 document.getElementById("leadForm").addEventListener("submit", async function(e){
-
 e.preventDefault();
 
 const result = await supabaseClient.from("leads").insert([{
-name: document.getElementById("name").value,
-email: document.getElementById("email").value,
-phone: document.getElementById("phone").value,
-city: document.getElementById("city").value,
-type: document.getElementById("type").value,
-surface: document.getElementById("surface").value,
-message: document.getElementById("message").value,
-price: 25,
-unlocked: false
+name:document.getElementById("name").value,
+email:document.getElementById("email").value,
+phone:document.getElementById("phone").value,
+city:document.getElementById("city").value,
+type:document.getElementById("type").value,
+surface:document.getElementById("surface").value,
+message:document.getElementById("message").value,
+price:25,
+unlocked:false
 }]);
 
-if(result.error){
-alert(result.error.message);
-}else{
-alert("Demande envoyée !");
-document.getElementById("leadForm").reset();
-}
-
+if(result.error){alert(result.error.message);}
+else{alert("Demande envoyée !");leadForm.reset();}
 });
 
-/* ================= AUTH ================= */
-
+/* AUTH */
 async function registerPro(){
-
-const { error } = await supabaseClient.auth.signUp({
-email: document.getElementById("loginEmail").value,
-password: document.getElementById("loginPassword").value
+const {error}=await supabaseClient.auth.signUp({
+email:loginEmail.value,
+password:loginPassword.value
 });
-
-if(error){
-alert(error.message);
-}else{
-alert("Compte créé !");
-}
-
+if(error){alert(error.message);}else{alert("Compte créé !");}
 }
 
 async function loginPro(){
-
-const { error } = await supabaseClient.auth.signInWithPassword({
-email: document.getElementById("loginEmail").value,
-password: document.getElementById("loginPassword").value
+const {error}=await supabaseClient.auth.signInWithPassword({
+email:loginEmail.value,
+password:loginPassword.value
 });
-
-if(error){
-alert(error.message);
-return;
-}
-
-document.getElementById("loginSection").classList.add("hidden");
-document.getElementById("pro").classList.remove("hidden");
+if(error){alert(error.message);return;}
+loginSection.classList.add("hidden");
+pro.classList.remove("hidden");
 loadLeads();
-
 }
 
 async function logoutPro(){
-
 await supabaseClient.auth.signOut();
-document.getElementById("pro").classList.add("hidden");
-document.getElementById("home").classList.remove("hidden");
-
+pro.classList.add("hidden");
+home.classList.remove("hidden");
 }
-
-/* ================= NAVIGATION ================= */
 
 async function showPro(){
-
-const { data } = await supabaseClient.auth.getSession();
-
+const {data}=await supabaseClient.auth.getSession();
 if(!data.session){
-document.getElementById("home").classList.add("hidden");
-document.getElementById("loginSection").classList.remove("hidden");
+home.classList.add("hidden");
+loginSection.classList.remove("hidden");
 return;
 }
-
-document.getElementById("home").classList.add("hidden");
-document.getElementById("pro").classList.remove("hidden");
+home.classList.add("hidden");
+pro.classList.remove("hidden");
 loadLeads();
-
 }
 
-/* ================= DASHBOARD ================= */
-
+/* DASHBOARD */
 async function loadLeads(){
-
-const { data, error } = await supabaseClient
-.from("leads")
-.select("*")
-.order("created_at",{ascending:false});
-
-if(error){
-alert(error.message);
-return;
-}
-
-const tbody = document.getElementById("tbody");
+const {data,error}=await supabaseClient.from("leads").select("*").order("created_at",{ascending:false});
+if(error){alert(error.message);return;}
 tbody.innerHTML="";
-
 data.forEach(function(l){
-
-let contact = l.unlocked ? l.phone + " / " + l.email : "Coordonnées masquées";
-let action = l.unlocked ? "Débloqué" : "<button onclick='unlockLead(" + l.id + ")'>Débloquer Gratuit</button>";
-
-tbody.innerHTML += "<tr>" +
-"<td>"+l.city+"</td>" +
-"<td>"+l.type+"</td>" +
-"<td>"+l.surface+"</td>" +
-"<td class='locked'>"+contact+"</td>" +
-"<td>"+l.price+"€</td>" +
-"<td>"+action+"</td>" +
-"</tr>";
-
+let contact=l.unlocked?l.phone+" / "+l.email:"Coordonnées masquées";
+let action=l.unlocked?"Débloqué":"<button onclick='unlockLead("+l.id+")'>Débloquer Gratuit</button>";
+tbody.innerHTML+="<tr><td>"+l.city+"</td><td>"+l.type+"</td><td>"+l.surface+"</td><td class='locked'>"+contact+"</td><td>"+l.price+"€</td><td>"+action+"</td></tr>";
 });
-
 }
 
 async function unlockLead(id){
-
-const { error } = await supabaseClient
-.from("leads")
-.update({ unlocked:true })
-.eq("id",id);
-
-if(error){
-alert(error.message);
-}else{
-alert("Lead débloqué !");
-loadLeads();
-}
-
+const {error}=await supabaseClient.from("leads").update({unlocked:true}).eq("id",id);
+if(error){alert(error.message);}else{alert("Lead débloqué !");loadLeads();}
 }
 
 </script>
