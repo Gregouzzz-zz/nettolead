@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NettoLead - Mise en relation nettoyage</title>
+<title>NettoLead - Plateforme de mise en relation nettoyage</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -30,8 +30,23 @@ z-index:100;
 }
 
 .logo{
+display:flex;
+align-items:center;
+gap:10px;
 font-weight:700;
 font-size:22px;
+}
+
+.logo-icon{
+width:32px;
+height:32px;
+background:#2563eb;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:8px;
+font-weight:700;
 }
 
 .nav-btn{
@@ -92,6 +107,19 @@ border-radius:12px;
 box-shadow:0 6px 18px rgba(0,0,0,0.05);
 }
 
+.step-number{
+width:32px;
+height:32px;
+background:#2563eb;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:6px;
+font-weight:700;
+margin-bottom:15px;
+}
+
 .btn{
 padding:12px 20px;
 border:none;
@@ -150,10 +178,13 @@ text-align:center;
 <body>
 
 <nav>
-<div class="logo">NettoLead</div>
+<div class="logo">
+<div class="logo-icon">N</div>
+NettoLead
+</div>
 <div>
 <span class="nav-btn" onclick="showHome()">Accueil</span>
-<span class="nav-btn" onclick="showPro()">Professionnels</span>
+<span class="nav-btn" onclick="showPro()">Espace Pro</span>
 </div>
 </nav>
 
@@ -162,10 +193,13 @@ text-align:center;
 
 <div class="hero">
 <div class="hero-text">
-<h1>Trouvez rapidement une entreprise de nettoyage fiable</h1>
+<h1>Trouvez une entreprise de nettoyage fiable en quelques minutes</h1>
 <p>
-NettoLead met en relation particuliers et entreprises avec des professionnels qualifiés.
-Simple, rapide et gratuit.
+NettoLead est une plateforme de mise en relation intelligente entre clients et professionnels du nettoyage.
+Notre mission : simplifier la recherche de prestataires tout en offrant aux entreprises des demandes qualifiées.
+</p>
+<p>
+Vous décrivez votre besoin gratuitement, et seuls les professionnels intéressés peuvent accéder à vos coordonnées.
 </p>
 <button class="btn" onclick="scrollToForm()">Demander un devis</button>
 </div>
@@ -173,22 +207,57 @@ Simple, rapide et gratuit.
 </div>
 
 <div class="section light">
-<h2>Comment ça fonctionne ?</h2>
+<h2>Comment fonctionne NettoLead ?</h2>
 <div class="grid">
 
 <div class="card">
-<h3>1. Décrivez votre besoin</h3>
-<p>Indiquez le type de nettoyage, la surface et votre localisation.</p>
+<div class="step-number">1</div>
+<h3>Vous déposez votre demande</h3>
+<p>
+Indiquez le type de prestation (ménage, bureaux, fin de chantier...), la surface et votre localisation.
+Votre demande est publiée instantanément sur la plateforme.
+</p>
 </div>
 
 <div class="card">
-<h3>2. Les pros consultent votre demande</h3>
-<p>Les entreprises accèdent à votre demande via leur espace sécurisé.</p>
+<div class="step-number">2</div>
+<h3>Les entreprises consultent les demandes</h3>
+<p>
+Les professionnels voient les informations générales (ville, type, surface).
+Les coordonnées restent masquées pour protéger votre confidentialité.
+</p>
 </div>
 
 <div class="card">
-<h3>3. Vous êtes contacté</h3>
-<p>Un professionnel débloque vos coordonnées et vous contacte.</p>
+<div class="step-number">3</div>
+<h3>Un professionnel débloque vos coordonnées</h3>
+<p>
+Une entreprise intéressée débloque votre contact et vous appelle directement
+pour établir un devis personnalisé.
+</p>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+<h2>Pourquoi utiliser NettoLead ?</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>✔ Gratuit pour les clients</h3>
+<p>Déposez votre demande sans frais et sans engagement.</p>
+</div>
+
+<div class="card">
+<h3>✔ Leads qualifiés pour les pros</h3>
+<p>Les entreprises reçoivent uniquement des demandes réelles et ciblées.</p>
+</div>
+
+<div class="card">
+<h3>✔ Confidentialité protégée</h3>
+<p>Vos coordonnées ne sont visibles qu'après déblocage.</p>
 </div>
 
 </div>
@@ -226,8 +295,11 @@ Simple, rapide et gratuit.
 <!-- PAGE PRO -->
 <div id="pro" class="hidden section">
 
-<h1>Espace Professionnel</h1>
-<p>Accédez aux demandes disponibles et développez votre activité.</p>
+<h1>Espace Pro</h1>
+<p>
+Bienvenue dans votre espace professionnel.
+Consultez les demandes disponibles et débloquez les coordonnées pour développer votre activité.
+</p>
 
 <table>
 <thead>
