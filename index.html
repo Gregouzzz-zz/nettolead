@@ -375,7 +375,7 @@ tbody.innerHTML += `
 <td>${l.type}</td>
 <td>${l.surface}</td>
 <td>
-${l.unlocked ? l.phone+"<br>"+l.email : "<span class='locked'>Coordonnées masquées</span>"}
+${l.unlocked ? l.phone + "<br>" + l.email : "<span class='locked'>Coordonnées masquées</span>"}
 </td>
 <td>${l.price}€</td>
 <td>
@@ -390,8 +390,8 @@ async function buyLead(id){
 
 const { error } = await supabase
 .from("leads")
-.update({unlocked:true})
-.eq("id",id);
+.update({ unlocked: true })
+.eq("id", id);
 
 if(error){
 alert("Erreur : " + error.message);
@@ -402,7 +402,7 @@ loadLeads();
 
 }
 
-<script>
+/* ===== TEST FORMULAIRE ===== */
 
 document.getElementById("leadForm").addEventListener("submit", function(e){
 e.preventDefault();
@@ -410,9 +410,5 @@ alert("Le bouton fonctionne !");
 });
 
 </script>
-
 </body>
-</html>
-
-
-
+</html>             
