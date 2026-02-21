@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NettoLead</title>
+<title>NettoLead - Plateforme de mise en relation</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 body{
 margin:0;
 font-family:Inter, sans-serif;
@@ -20,6 +19,7 @@ color:#1e293b;
 nav{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:20px 8%;
 background:white;
 box-shadow:0 2px 10px rgba(0,0,0,0.05);
@@ -43,12 +43,16 @@ section{
 padding:60px 8%;
 }
 
-input,select,textarea{
-width:100%;
-padding:12px;
-margin-bottom:12px;
-border-radius:8px;
-border:1px solid #cbd5e1;
+.hero{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:40px;
+}
+
+.hero img{
+width:450px;
+border-radius:12px;
 }
 
 .card{
@@ -58,6 +62,14 @@ border-radius:12px;
 box-shadow:0 5px 15px rgba(0,0,0,0.05);
 max-width:600px;
 margin:auto;
+}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border-radius:8px;
+border:1px solid #cbd5e1;
 }
 
 .hidden{
@@ -85,19 +97,38 @@ color:white;
 color:#94a3b8;
 }
 
+footer{
+padding:40px;
+background:#0f172a;
+color:white;
+text-align:center;
+}
 </style>
 </head>
 <body>
 
 <nav>
 <div class="logo">NettoLead</div>
+<div>
+<button class="btn" onclick="showHome()">Accueil</button>
 <button class="btn" onclick="showPro()">Espace Pro</button>
+</div>
 </nav>
 
-<!-- CLIENT -->
+<!-- PAGE CLIENT -->
 <section id="home">
 
-<h1>Demande de devis nettoyage</h1>
+<div class="hero">
+<div>
+<h1>Trouvez un professionnel du nettoyage</h1>
+<p>Décrivez votre besoin et recevez rapidement des propositions d'entreprises qualifiées.</p>
+<button class="btn" onclick="scrollToForm()">Demander un devis</button>
+</div>
+
+<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952" alt="Nettoyage">
+</div>
+
+<h2 id="formSection" style="margin-top:60px;">Demande de devis gratuite</h2>
 
 <div class="card">
 <form id="leadForm">
@@ -114,7 +145,7 @@ color:#94a3b8;
 </select>
 
 <input type="text" id="surface" placeholder="Surface en m²">
-<textarea id="message" placeholder="Message"></textarea>
+<textarea id="message" placeholder="Précisions supplémentaires"></textarea>
 
 <button type="submit" class="btn">Envoyer la demande</button>
 
@@ -123,12 +154,11 @@ color:#94a3b8;
 
 </section>
 
-<!-- PRO -->
+<!-- PAGE PRO -->
 <section id="pro" class="hidden">
 
 <h1>Dashboard Professionnel</h1>
-
-<button class="btn" onclick="showHome()">Retour</button>
+<p>Consultez les demandes disponibles et débloquez les coordonnées.</p>
 
 <table>
 <thead>
@@ -146,21 +176,25 @@ color:#94a3b8;
 
 </section>
 
+<footer>
+© 2026 NettoLead
+</footer>
+
 <script>
 
-/* ===========================
-   CONFIGURATION SUPABASE
-=========================== */
+/* =======================
+CONFIG SUPABASE
+======================= */
 
-const supabaseUrl = "COLLE_TON_URL_SUPABASE_ICI";
-const supabaseKey = "COLLE_TA_CLE_ANON_ICI";
+const supabaseUrl = "COLLE_TON_URL_SUPABASE";
+const supabaseKey = "COLLE_TA_CLE_ANON";
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 
-/* ===========================
-   NAVIGATION
-=========================== */
+/* =======================
+NAVIGATION
+======================= */
 
 function showPro(){
 document.getElementById("home").classList.add("hidden");
@@ -173,10 +207,14 @@ document.getElementById("pro").classList.add("hidden");
 document.getElementById("home").classList.remove("hidden");
 }
 
+function scrollToForm(){
+document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
+}
 
-/* ===========================
-   FORMULAIRE
-=========================== */
+
+/* =======================
+FORMULAIRE
+======================= */
 
 document.getElementById("leadForm").addEventListener("submit", async function(e){
 
@@ -214,9 +252,9 @@ document.getElementById("leadForm").reset();
 });
 
 
-/* ===========================
-   DASHBOARD PRO
-=========================== */
+/* =======================
+DASHBOARD PRO
+======================= */
 
 async function loadLeads(){
 
@@ -227,6 +265,7 @@ const { data, error } = await supabase
 
 if(error){
 console.error(error);
+alert("Erreur chargement : " + error.message);
 return;
 }
 
@@ -262,7 +301,7 @@ const { error } = await supabase
 .eq("id", id);
 
 if(error){
-alert("Erreur lors du déblocage");
+alert("Erreur : " + error.message);
 }else{
 alert("Lead débloqué !");
 loadLeads();
