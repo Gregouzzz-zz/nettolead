@@ -281,10 +281,11 @@ Vous déposez gratuitement votre demande. Les entreprises intéressées peuvent 
 
 <script>
 
-const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
+const supabaseUrl = "COLLE_TON_URL_SUPABASE";
+const supabaseKey = "COLLE_TA_CLE_ANON";
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+/* NAVIGATION */
 function showPro(){
 document.getElementById("home").classList.add("hidden");
 document.getElementById("pro").classList.remove("hidden");
@@ -300,6 +301,7 @@ function scrollToForm(){
 document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
 }
 
+/* FORMULAIRE */
 document.getElementById("leadForm").addEventListener("submit", async function(e){
 
 e.preventDefault();
@@ -329,6 +331,7 @@ document.getElementById("leadForm").reset();
 
 });
 
+/* DASHBOARD */
 async function loadLeads(){
 
 const result = await supabase
@@ -382,5 +385,8 @@ loadLeads();
 
 </script>
 
+
+
 </body>
 </html>
+
