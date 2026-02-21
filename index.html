@@ -190,11 +190,8 @@ NettoLead
 <div class="hero-text">
 <h1>Trouvez une entreprise de nettoyage fiable</h1>
 <p>
-NettoLead est une plateforme de mise en relation entre clients et entreprises de nettoyage.
-Notre mission : simplifier la recherche de prestataires tout en apportant des demandes qualifiées aux professionnels.
-</p>
-<p>
-Vous déposez gratuitement votre demande. Les entreprises intéressées peuvent ensuite débloquer vos coordonnées.
+NettoLead met en relation clients et entreprises de nettoyage.
+Déposez gratuitement votre demande, et les professionnels intéressés peuvent débloquer vos coordonnées.
 </p>
 <button class="btn" onclick="scrollToForm()">Demander un devis</button>
 </div>
@@ -208,19 +205,19 @@ Vous déposez gratuitement votre demande. Les entreprises intéressées peuvent 
 <div class="card">
 <div class="step">1</div>
 <h3>Vous déposez votre demande</h3>
-<p>Indiquez le type de prestation, la surface et votre ville.</p>
+<p>Indiquez votre besoin en quelques minutes.</p>
 </div>
 
 <div class="card">
 <div class="step">2</div>
 <h3>Les entreprises consultent</h3>
-<p>Elles voient la demande mais pas vos coordonnées.</p>
+<p>Les pros voient la demande sans voir vos coordonnées.</p>
 </div>
 
 <div class="card">
 <div class="step">3</div>
 <h3>Un professionnel débloque</h3>
-<p>Il accède à votre contact et vous appelle directement.</p>
+<p>Il accède à vos coordonnées et vous contacte.</p>
 </div>
 
 </div>
@@ -282,8 +279,8 @@ Vous déposez gratuitement votre demande. Les entreprises intéressées peuvent 
 <script>
 
 const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs"; 
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 /* NAVIGATION */
 function showPro(){
@@ -310,7 +307,7 @@ let price = 25;
 let surfaceValue = parseInt(document.getElementById("surface").value);
 if(surfaceValue > 200){ price = 40; }
 
-const result = await supabase.from("leads").insert([{
+const result = await supabaseClient.from("leads").insert([{
 name: document.getElementById("name").value,
 email: document.getElementById("email").value,
 phone: document.getElementById("phone").value,
@@ -334,7 +331,7 @@ document.getElementById("leadForm").reset();
 /* DASHBOARD */
 async function loadLeads(){
 
-const result = await supabase
+const result = await supabaseClient
 .from("leads")
 .select("*")
 .order("created_at",{ascending:false});
@@ -369,7 +366,7 @@ tbody.innerHTML += row;
 
 async function buyLead(id){
 
-const result = await supabase
+const result = await supabaseClient
 .from("leads")
 .update({ unlocked: true })
 .eq("id", id);
@@ -385,9 +382,5 @@ loadLeads();
 
 </script>
 
-
-
 </body>
 </html>
-
-
