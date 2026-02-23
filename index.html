@@ -9,10 +9,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body{margin:0;font-family:Inter,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.6;}
+body{margin:0;font-family:Inter,sans-serif;background:#f8fafc;color:#1e293b;}
 nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
 .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;}
 .logo-box{width:32px;height:32px;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;border-radius:6px;}
+.nav-buttons{display:flex;gap:10px;}
 button{padding:10px 18px;border:none;border-radius:8px;background:#0f172a;color:white;cursor:pointer;}
 .hero{display:flex;justify-content:space-between;align-items:center;padding:80px 8%;gap:50px;}
 .hero img{width:450px;border-radius:16px;box-shadow:0 10px 20px rgba(0,0,0,0.1);}
@@ -20,10 +21,8 @@ button{padding:10px 18px;border:none;border-radius:8px;background:#0f172a;color:
 .light{background:#eef2f7;}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-top:30px;}
 .card{background:white;padding:25px;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06);}
-.card-small{background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);font-size:14px;}
 .centered{max-width:600px;margin:0 auto;}
-.centered-small{max-width:420px;margin:0 auto;}
-.step{width:32px;height:32px;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;border-radius:6px;margin-bottom:10px;font-weight:bold;}
+.centered-small{max-width:500px;margin:0 auto;}
 input,select,textarea{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #cbd5e1;}
 .hidden{display:none;}
 table{width:100%;border-collapse:collapse;margin-top:20px;background:white;border-radius:12px;overflow:hidden;}
@@ -39,116 +38,50 @@ footer{padding:40px;background:#0f172a;color:white;text-align:center;margin-top:
 <div class="logo-box">N</div>
 NettoLead
 </div>
+
+<div class="nav-buttons">
+<button onclick="goHome()">Accueil</button>
 <button onclick="showPro()">Espace Pro</button>
+</div>
 </nav>
 
+<!-- PAGE ACCUEIL -->
 <div id="home">
 
-<!-- HERO -->
 <div class="hero">
 <div>
-<h1>Trouvez une entreprise de nettoyage fiable et professionnelle</h1>
-<p>NettoLead simplifie la mise en relation entre particuliers et entreprises de nettoyage qualifiées.</p>
-<p>Vos coordonnées sont protégées et accessibles uniquement aux professionnels réellement intéressés.</p>
+<h1>Trouvez une entreprise de nettoyage fiable</h1>
+<p>Déposez votre demande gratuitement et recevez un contact qualifié rapidement.</p>
+<p>Vos coordonnées sont protégées jusqu’au déblocage par un professionnel.</p>
 </div>
-<img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=900&q=80" alt="Nettoyage professionnel">
-</div>
-
-<!-- COMMENT -->
-<div class="section light">
-<h2>Comment ça fonctionne ?</h2>
-<div class="grid">
-<div class="card">
-<div class="step">1</div>
-<h3>Déposez votre demande</h3>
-<p>Expliquez votre besoin en moins de 2 minutes.</p>
-</div>
-<div class="card">
-<div class="step">2</div>
-<h3>Les professionnels consultent</h3>
-<p>Ils voient la demande sans vos coordonnées.</p>
-</div>
-<div class="card">
-<div class="step">3</div>
-<h3>Un pro vous contacte</h3>
-<p>Un professionnel débloque votre contact et vous appelle.</p>
-</div>
-</div>
+<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80">
 </div>
 
-<!-- POURQUOI -->
-<div class="section">
-<h2>Pourquoi nous faire confiance ?</h2>
-<div class="grid">
-<div class="card">
-<h3>🔒 Protection des données</h3>
-<p>Vos informations ne sont jamais publiques. Elles sont sécurisées jusqu’au déblocage.</p>
-</div>
-<div class="card">
-<h3>⚡ Rapidité</h3>
-<p>Recevez un contact rapidement sans démarcher plusieurs entreprises.</p>
-</div>
-<div class="card">
-<h3>🏆 Professionnels sérieux</h3>
-<p>Nous travaillons uniquement avec des entreprises inscrites et identifiées.</p>
-</div>
-</div>
-</div>
-
-<!-- AVIS -->
-<div class="section light">
-<h2>Avis clients</h2>
-<div class="grid">
-<div class="card-small">
-<p>⭐⭐⭐⭐⭐</p>
-<p>“Contact rapide et très professionnel.”</p>
-<strong>— Sophie M.</strong>
-</div>
-<div class="card-small">
-<p>⭐⭐⭐⭐⭐</p>
-<p>“Plateforme simple et efficace.”</p>
-<strong>— Karim L.</strong>
-</div>
-<div class="card-small">
-<p>⭐⭐⭐⭐⭐</p>
-<p>“Service sérieux et rassurant.”</p>
-<strong>— Claire D.</strong>
-</div>
-</div>
-</div>
-
-<!-- FORMULAIRE -->
 <div class="section">
 <h2>Demande de devis</h2>
 <div class="card centered">
 <form id="leadForm">
-
 <input type="text" id="name" placeholder="Nom" required>
 <input type="email" id="email" placeholder="Email" required>
 <input type="text" id="phone" placeholder="Téléphone" required>
 <input type="text" id="city" placeholder="Ville" required>
-
 <select id="type">
 <option>Ménage</option>
 <option>Bureaux</option>
 <option>Fin de chantier</option>
 </select>
-
 <input type="text" id="surface" placeholder="Surface en m²">
 <textarea id="message" placeholder="Détails supplémentaires"></textarea>
-
 <button type="submit">Envoyer</button>
-
 </form>
 </div>
 </div>
 
 </div>
 
-<!-- ESPACE PRO AUTH -->
+<!-- AUTH PRO -->
 <div id="loginSection" class="hidden section">
 <h2>Espace Pro</h2>
-
 <div class="card centered-small">
 
 <div id="authChoice">
@@ -156,228 +89,151 @@ NettoLead
 <button onclick="showRegister()" style="background:#2563eb;margin-left:10px;">Créer un compte</button>
 </div>
 
-<!-- LOGIN -->
-<div id="loginForm" class="hidden" style="margin-top:20px;">
+<div id="loginForm" class="hidden">
 <input type="email" id="loginEmail" placeholder="Email">
 <input type="password" id="loginPassword" placeholder="Mot de passe">
 <button onclick="loginPro()">Connexion</button>
 </div>
 
-<!-- REGISTER MULTI STEP -->
-<div id="registerForm" class="hidden" style="margin-top:20px;">
-
+<div id="registerForm" class="hidden">
 <div id="step1">
-<h3>Entreprise</h3>
 <input type="text" id="companyName" placeholder="Raison sociale">
-<input type="text" id="companySiret" placeholder="SIRET">
-<input type="text" id="companyAddress" placeholder="Adresse">
 <input type="text" id="companyCity" placeholder="Ville">
 <button onclick="nextStep(2)">Suivant</button>
 </div>
 
 <div id="step2" class="hidden">
-<h3>Contact</h3>
-<input type="text" id="contactFirstName" placeholder="Prénom">
-<input type="text" id="contactLastName" placeholder="Nom">
 <input type="email" id="loginEmailRegister" placeholder="Email">
 <input type="password" id="loginPasswordRegister" placeholder="Mot de passe">
-<button onclick="nextStep(3)">Suivant</button>
-</div>
-
-<div id="step3" class="hidden">
-<h3>Activité</h3>
-<select id="serviceType">
-<option>Ménage</option>
-<option>Bureaux</option>
-<option>Fin de chantier</option>
-</select>
-<input type="number" id="radius" placeholder="Rayon d’intervention (km)">
-<input type="number" id="employees" placeholder="Nombre d’employés">
-<label>
-<input type="checkbox" id="acceptCgu">
-J'accepte les CGU
-</label>
+<label><input type="checkbox" id="acceptCgu"> J'accepte les CGU</label>
 <button onclick="registerPro()">Créer mon compte</button>
 </div>
-
 </div>
 
+<button onclick="goHome()" style="margin-top:15px;background:#64748b;">Retour Accueil</button>
+
 </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- DASHBOARD PRO -->
 <div id="pro" class="hidden section">
 <h1>Dashboard Espace Pro</h1>
+
+<div style="margin-bottom:20px;">
 <button onclick="logoutPro()" style="background:#dc2626;">Déconnexion</button>
+<button onclick="goHome()" style="background:#64748b;margin-left:10px;">Accueil</button>
+</div>
 
 <table>
 <thead>
 <tr>
-<th>Nom</th>
-<th>Ville</th>
-<th>Type</th>
-<th>Surface</th>
-<th>Contact</th>
-<th>Action</th>
+<th>Nom</th><th>Ville</th><th>Type</th><th>Surface</th><th>Contact</th><th>Action</th>
 </tr>
 </thead>
 <tbody id="tbody"></tbody>
 </table>
-
 </div>
 
 <footer>© 2026 NettoLead</footer>
 
 <script>
-const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
-const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseUrl="https://rldhxezafzeencuaifpm.supabase.co";
+const supabaseKey="TA_CLE_ANON";
+const supabaseClient=window.supabase.createClient(supabaseUrl,supabaseKey);
 
-/* FORMULAIRE */
-document.getElementById("leadForm").addEventListener("submit", async function(e){
+/* NAVIGATION */
+function goHome(){
+home.classList.remove("hidden");
+loginSection.classList.add("hidden");
+pro.classList.add("hidden");
+}
+
+function showLogin(){
+authChoice.classList.add("hidden");
+loginForm.classList.remove("hidden");
+}
+
+function showRegister(){
+authChoice.classList.add("hidden");
+registerForm.classList.remove("hidden");
+}
+
+function nextStep(step){
+document.querySelectorAll("#registerForm > div").forEach(div=>div.classList.add("hidden"));
+document.getElementById("step"+step).classList.remove("hidden");
+}
+
+/* FORM CLIENT */
+document.getElementById("leadForm").addEventListener("submit",async function(e){
 e.preventDefault();
-
-const nameValue = document.getElementById("name").value;
-const emailValue = document.getElementById("email").value;
-const phoneValue = document.getElementById("phone").value;
-const cityValue = document.getElementById("city").value;
-const typeValue = document.getElementById("type").value;
-const surfaceValue = document.getElementById("surface").value;
-const messageValue = document.getElementById("message").value;
-
-await supabaseClient.from("leads").insert([{
-name:nameValue,
-email:emailValue,
-phone:phoneValue,
-city:cityValue,
-type:typeValue,
-surface:surfaceValue,
-message:messageValue,
-price:25,
-unlocked:false
+const {error}=await supabaseClient.from("leads").insert([{
+name:name.value,email:email.value,phone:phone.value,
+city:city.value,type:type.value,surface:surface.value,
+message:message.value,price:25,unlocked:false
 }]);
-
+if(error){alert(error.message);return;}
 alert("Demande envoyée !");
-document.getElementById("leadForm").reset();
+this.reset();
 });
 
-/* AUTH PRO */
+/* REGISTER */
 async function registerPro(){
-
-if(!document.getElementById("acceptCgu").checked){
-alert("Vous devez accepter les CGU.");
-return;
-}
-
-const email = document.getElementById("loginEmailRegister").value;
-const password = document.getElementById("loginPasswordRegister").value;
-
-if(!email || !password){
-alert("Email et mot de passe obligatoires.");
-return;
-}
-
-const { data, error } = await supabaseClient.auth.signUp({
-email: email,
-password: password
+if(!acceptCgu.checked){alert("Acceptez les CGU");return;}
+const {data,error}=await supabaseClient.auth.signUp({
+email:loginEmailRegister.value,
+password:loginPasswordRegister.value
 });
-
-if(error){
-alert("Erreur inscription : " + error.message);
-return;
+if(error){alert(error.message);return;}
+alert("Compte créé !");
 }
 
-if(!data.user){
-alert("Vérifiez votre email pour confirmer votre compte.");
-return;
-}
-
-const { error: insertError } = await supabaseClient.from("pros").insert([{
-user_id: data.user.id,
-company_name: document.getElementById("companyName").value,
-siret: document.getElementById("companySiret").value,
-address: document.getElementById("companyAddress").value,
-city: document.getElementById("companyCity").value,
-first_name: document.getElementById("contactFirstName").value,
-last_name: document.getElementById("contactLastName").value,
-service_type: document.getElementById("serviceType").value,
-radius: document.getElementById("radius").value,
-employees: document.getElementById("employees").value,
-credits: 0
-}]);
-
-if(insertError){
-alert("Erreur base de données : " + insertError.message);
-return;
-}
-
-alert("Compte professionnel créé avec succès !");
-}
-
+/* LOGIN */
 async function loginPro(){
-const { error } = await supabaseClient.auth.signInWithPassword({
-email: document.getElementById("loginEmail").value,
-password: document.getElementById("loginPassword").value
+const {error}=await supabaseClient.auth.signInWithPassword({
+email:loginEmail.value,password:loginPassword.value
 });
-if(error){ alert(error.message); return; }
-document.getElementById("loginSection").classList.add("hidden");
-document.getElementById("pro").classList.remove("hidden");
+if(error){alert(error.message);return;}
+loginSection.classList.add("hidden");
+pro.classList.remove("hidden");
 loadLeads();
 }
 
+/* LOGOUT */
 async function logoutPro(){
 await supabaseClient.auth.signOut();
-document.getElementById("pro").classList.add("hidden");
-document.getElementById("home").classList.remove("hidden");
+goHome();
 }
 
+/* SHOW PRO */
 async function showPro(){
-const { data } = await supabaseClient.auth.getSession();
+const {data}=await supabaseClient.auth.getSession();
+home.classList.add("hidden");
 if(!data.session){
-document.getElementById("home").classList.add("hidden");
-document.getElementById("loginSection").classList.remove("hidden");
+loginSection.classList.remove("hidden");
 return;
 }
-document.getElementById("home").classList.add("hidden");
-document.getElementById("pro").classList.remove("hidden");
+pro.classList.remove("hidden");
 loadLeads();
 }
 
+/* LOAD LEADS */
 async function loadLeads(){
-const { data } = await supabaseClient.from("leads").select("*").order("created_at",{ascending:false});
-const tbody = document.getElementById("tbody");
+const {data}=await supabaseClient.from("leads").select("*").order("created_at",{ascending:false});
 tbody.innerHTML="";
-data.forEach(function(l){
+data.forEach(l=>{
 let contact=l.unlocked?l.phone+" / "+l.email:"Coordonnées masquées";
-let action=l.unlocked?"Débloqué":"<button onclick='unlockLead("+l.id+")'>Débloquer Gratuit</button>";
-tbody.innerHTML+="<tr><td>"+l.name+"</td><td>"+l.city+"</td><td>"+l.type+"</td><td>"+l.surface+"</td><td>"+contact+"</td><td>"+action+"</td></tr>";
+let action=l.unlocked?"Débloqué":"<button onclick='unlockLead("+l.id+")'>Débloquer</button>";
+tbody.innerHTML+=`<tr><td>${l.name}</td><td>${l.city}</td><td>${l.type}</td><td>${l.surface}</td><td>${contact}</td><td>${action}</td></tr>`;
 });
 }
 
+/* UNLOCK */
 async function unlockLead(id){
 await supabaseClient.from("leads").update({unlocked:true}).eq("id",id);
 alert("Lead débloqué !");
 loadLeads();
 }
- function showLogin(){
-document.getElementById("authChoice").classList.add("hidden");
-document.getElementById("loginForm").classList.remove("hidden");
-}
-
-function showRegister(){
-document.getElementById("authChoice").classList.add("hidden");
-document.getElementById("registerForm").classList.remove("hidden");
-}
-
-function nextStep(step){
-document.getElementById("step1").classList.add("hidden");
-document.getElementById("step2").classList.add("hidden");
-document.getElementById("step3").classList.add("hidden");
-document.getElementById("step"+step).classList.remove("hidden");
-} 
 </script>
 
 </body>
 </html>
-
-
