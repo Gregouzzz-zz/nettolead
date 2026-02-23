@@ -13,7 +13,6 @@ body{margin:0;font-family:Inter,sans-serif;background:#f8fafc;color:#1e293b;line
 nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
 .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;}
 .logo-box{width:32px;height:32px;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;border-radius:6px;}
-.nav-buttons{display:flex;gap:10px;}
 button{padding:10px 18px;border:none;border-radius:8px;background:#0f172a;color:white;cursor:pointer;}
 .hero{display:flex;justify-content:space-between;align-items:center;padding:80px 8%;gap:50px;}
 .hero img{width:450px;border-radius:16px;box-shadow:0 10px 20px rgba(0,0,0,0.1);}
@@ -40,11 +39,7 @@ footer{padding:40px;background:#0f172a;color:white;text-align:center;margin-top:
 <div class="logo-box">N</div>
 NettoLead
 </div>
-
-<div class="nav-buttons">
-<button onclick="goHome()">Accueil</button>
 <button onclick="showPro()">Espace Pro</button>
-</div>
 </nav>
 
 <div id="home">
@@ -127,18 +122,23 @@ NettoLead
 <h2>Demande de devis</h2>
 <div class="card centered">
 <form id="leadForm">
+
 <input type="text" id="name" placeholder="Nom" required>
 <input type="email" id="email" placeholder="Email" required>
 <input type="text" id="phone" placeholder="Téléphone" required>
 <input type="text" id="city" placeholder="Ville" required>
+
 <select id="type">
 <option>Ménage</option>
 <option>Bureaux</option>
 <option>Fin de chantier</option>
 </select>
+
 <input type="text" id="surface" placeholder="Surface en m²">
 <textarea id="message" placeholder="Détails supplémentaires"></textarea>
+
 <button type="submit">Envoyer</button>
+
 </form>
 </div>
 </div>
@@ -148,6 +148,7 @@ NettoLead
 <!-- ESPACE PRO AUTH -->
 <div id="loginSection" class="hidden section">
 <h2>Espace Pro</h2>
+
 <div class="card centered-small">
 
 <div id="authChoice">
@@ -155,13 +156,16 @@ NettoLead
 <button onclick="showRegister()" style="background:#2563eb;margin-left:10px;">Créer un compte</button>
 </div>
 
+<!-- LOGIN -->
 <div id="loginForm" class="hidden" style="margin-top:20px;">
 <input type="email" id="loginEmail" placeholder="Email">
 <input type="password" id="loginPassword" placeholder="Mot de passe">
 <button onclick="loginPro()">Connexion</button>
 </div>
 
+<!-- REGISTER MULTI STEP -->
 <div id="registerForm" class="hidden" style="margin-top:20px;">
+
 <div id="step1">
 <h3>Entreprise</h3>
 <input type="text" id="companyName" placeholder="Raison sociale">
@@ -189,10 +193,15 @@ NettoLead
 </select>
 <input type="number" id="radius" placeholder="Rayon d’intervention (km)">
 <input type="number" id="employees" placeholder="Nombre d’employés">
-<label><input type="checkbox" id="acceptCgu"> J'accepte les CGU</label>
+<label>
+<input type="checkbox" id="acceptCgu">
+J'accepte les CGU
+</label>
 <button onclick="registerPro()">Créer mon compte</button>
 </div>
+
 </div>
+
 </div>
 </div>
 
@@ -200,7 +209,6 @@ NettoLead
 <div id="pro" class="hidden section">
 <h1>Dashboard Espace Pro</h1>
 <button onclick="logoutPro()" style="background:#dc2626;">Déconnexion</button>
-<button onclick="goHome()" style="background:#64748b;margin-left:10px;">Retour Accueil</button>
 
 <table>
 <thead>
@@ -215,19 +223,161 @@ NettoLead
 </thead>
 <tbody id="tbody"></tbody>
 </table>
+
 </div>
 
-<footer>©️ 2026 NettoLead</footer>
+<footer>© 2026 NettoLead</footer>
 
 <script>
 const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-/* RETOUR ACCUEIL */
-function goHome(){
-document.getElementById("home").classList.remove("hidden");
-document.getElementById("loginSection").classList.add("hidden");
-document.getElementById("pro").classList.add("hidden");
+/* FORMULAIRE */
+document.getElementById("leadForm").addEventListener("submit", async function(e){
+e.preventDefault();
+
+const nameValue = document.getElementById("name").value;
+const emailValue = document.getElementById("email").value;
+const phoneValue = document.getElementById("phone").value;
+const cityValue = document.getElementById("city").value;
+const typeValue = document.getElementById("type").value;
+const surfaceValue = document.getElementById("surface").value;
+const messageValue = document.getElementById("message").value;
+
+await supabaseClient.from("leads").insert([{
+name:nameValue,
+email:emailValue,
+phone:phoneValue,
+city:cityValue,
+type:typeValue,
+surface:surfaceValue,
+message:messageValue,
+price:25,
+unlocked:false
+}]);
+
+alert("Demande envoyée !");
+document.getElementById("leadForm").reset();
+});
+
+/* AUTH PRO */
+async function registerPro(){
+
+if(!document.getElementById("acceptCgu").checked){
+alert("Vous devez accepter les CGU.");
+return;
 }
+
+const email = document.getElementById("loginEmailRegister").value;
+const password = document.getElementById("loginPasswordRegister").value;
+
+if(!email || !password){
+alert("Email et mot de passe obligatoires.");
+return;
+}
+
+const { data, error } = await supabaseClient.auth.signUp({
+email: email,
+password: password
+});
+
+if(error){
+alert("Erreur inscription : " + error.message);
+return;
+}
+
+if(!data.user){
+alert("Vérifiez votre email pour confirmer votre compte.");
+return;
+}
+
+const { error: insertError } = await supabaseClient.from("pros").insert([{
+user_id: data.user.id,
+company_name: document.getElementById("companyName").value,
+siret: document.getElementById("companySiret").value,
+address: document.getElementById("companyAddress").value,
+city: document.getElementById("companyCity").value,
+first_name: document.getElementById("contactFirstName").value,
+last_name: document.getElementById("contactLastName").value,
+service_type: document.getElementById("serviceType").value,
+radius: document.getElementById("radius").value,
+employees: document.getElementById("employees").value,
+credits: 0
+}]);
+
+if(insertError){
+alert("Erreur base de données : " + insertError.message);
+return;
+}
+
+alert("Compte professionnel créé avec succès !");
+}
+
+async function loginPro(){
+const { error } = await supabaseClient.auth.signInWithPassword({
+email: document.getElementById("loginEmail").value,
+password: document.getElementById("loginPassword").value
+});
+if(error){ alert(error.message); return; }
+document.getElementById("loginSection").classList.add("hidden");
+document.getElementById("pro").classList.remove("hidden");
+loadLeads();
+}
+
+async function logoutPro(){
+await supabaseClient.auth.signOut();
+document.getElementById("pro").classList.add("hidden");
+document.getElementById("home").classList.remove("hidden");
+}
+
+async function showPro(){
+const { data } = await supabaseClient.auth.getSession();
+if(!data.session){
+document.getElementById("home").classList.add("hidden");
+document.getElementById("loginSection").classList.remove("hidden");
+return;
+}
+document.getElementById("home").classList.add("hidden");
+document.getElementById("pro").classList.remove("hidden");
+loadLeads();
+}
+
+async function loadLeads(){
+const { data } = await supabaseClient.from("leads").select("*").order("created_at",{ascending:false});
+const tbody = document.getElementById("tbody");
+tbody.innerHTML="";
+data.forEach(function(l){
+let contact=l.unlocked?l.phone+" / "+l.email:"Coordonnées masquées";
+let action=l.unlocked?"Débloqué":"<button onclick='unlockLead("+l.id+")'>Débloquer Gratuit</button>";
+tbody.innerHTML+="<tr><td>"+l.name+"</td><td>"+l.city+"</td><td>"+l.type+"</td><td>"+l.surface+"</td><td>"+contact+"</td><td>"+action+"</td></tr>";
+});
+}
+
+async function unlockLead(id){
+await supabaseClient.from("leads").update({unlocked:true}).eq("id",id);
+alert("Lead débloqué !");
+loadLeads();
+}
+ function showLogin(){
+document.getElementById("authChoice").classList.add("hidden");
+document.getElementById("loginForm").classList.remove("hidden");
+}
+
+function showRegister(){
+document.getElementById("authChoice").classList.add("hidden");
+document.getElementById("registerForm").classList.remove("hidden");
+}
+
+function nextStep(step){
+document.getElementById("step1").classList.add("hidden");
+document.getElementById("step2").classList.add("hidden");
+document.getElementById("step3").classList.add("hidden");
+document.getElementById("step"+step).classList.remove("hidden");
+} 
+</script>
+
+</body>
+</html>
+
 
