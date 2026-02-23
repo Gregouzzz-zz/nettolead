@@ -145,20 +145,62 @@ NettoLead
 
 </div>
 
-<!-- LOGIN PRO -->
+<!-- ESPACE PRO AUTH -->
 <div id="loginSection" class="hidden section">
 <h2>Espace Pro</h2>
+
 <div class="card centered-small">
 
-<input type="text" id="companyName" placeholder="Nom entreprise">
-<input type="text" id="companyPhone" placeholder="Téléphone entreprise">
-<input type="text" id="companyCity" placeholder="Ville entreprise">
+<div id="authChoice">
+<button onclick="showLogin()">Connexion</button>
+<button onclick="showRegister()" style="background:#2563eb;margin-left:10px;">Créer un compte</button>
+</div>
 
+<!-- LOGIN -->
+<div id="loginForm" class="hidden" style="margin-top:20px;">
 <input type="email" id="loginEmail" placeholder="Email">
 <input type="password" id="loginPassword" placeholder="Mot de passe">
-
 <button onclick="loginPro()">Connexion</button>
-<button onclick="registerPro()" style="margin-top:10px;background:#2563eb;">Créer un compte</button>
+</div>
+
+<!-- REGISTER MULTI STEP -->
+<div id="registerForm" class="hidden" style="margin-top:20px;">
+
+<div id="step1">
+<h3>Entreprise</h3>
+<input type="text" id="companyName" placeholder="Raison sociale">
+<input type="text" id="companySiret" placeholder="SIRET">
+<input type="text" id="companyAddress" placeholder="Adresse">
+<input type="text" id="companyCity" placeholder="Ville">
+<button onclick="nextStep(2)">Suivant</button>
+</div>
+
+<div id="step2" class="hidden">
+<h3>Contact</h3>
+<input type="text" id="contactFirstName" placeholder="Prénom">
+<input type="text" id="contactLastName" placeholder="Nom">
+<input type="email" id="loginEmailRegister" placeholder="Email">
+<input type="password" id="loginPasswordRegister" placeholder="Mot de passe">
+<button onclick="nextStep(3)">Suivant</button>
+</div>
+
+<div id="step3" class="hidden">
+<h3>Activité</h3>
+<select id="serviceType">
+<option>Ménage</option>
+<option>Bureaux</option>
+<option>Fin de chantier</option>
+</select>
+<input type="number" id="radius" placeholder="Rayon d’intervention (km)">
+<input type="number" id="employees" placeholder="Nombre d’employés">
+<label>
+<input type="checkbox" id="acceptCgu">
+J'accepte les CGU
+</label>
+<button onclick="registerPro()">Créer mon compte</button>
+</div>
+
+</div>
 
 </div>
 </div>
@@ -286,3 +328,4 @@ loadLeads();
 
 </body>
 </html>
+
