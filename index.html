@@ -10,9 +10,9 @@
 
 <style>
 body{margin:0;font-family:Inter,sans-serif;background:#f6f9fc;color:#1e293b}
-nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;background:white;box-shadow:0 4px 20px rgba(0,0,0,0.05);position:sticky;top:0;z-index:100}
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;background:white;box-shadow:0 4px 20px rgba(0,0,0,0.05)}
 .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px}
-.logo-box{width:36px;height:36px;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:700}
+.logo-box{width:36px;height:36px;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;border-radius:8px}
 .nav-btn{padding:10px 18px;border:none;border-radius:8px;background:#0f172a;color:white;cursor:pointer}
 
 .hero{display:flex;align-items:center;justify-content:space-between;gap:60px;padding:90px 8%}
@@ -31,16 +31,12 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8
 input,select,textarea{width:100%;padding:13px;margin-bottom:14px;border-radius:10px;border:1px solid #d1d9e6}
 .hidden{display:none}
 
-footer{padding:50px;background:#0f172a;color:white;text-align:center}
-
 .progress{height:6px;background:#e2e8f0;border-radius:4px;margin-bottom:25px}
 .progress-bar{height:6px;background:#2563eb;width:33%;border-radius:4px;transition:.3s}
 .step{display:none}
 .step.active{display:block}
 
-table{width:100%;border-collapse:collapse;margin-top:20px;background:white;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08)}
-th,td{padding:14px;border-bottom:1px solid #e2e8f0;text-align:left}
-th{background:#0f172a;color:white}
+footer{padding:50px;background:#0f172a;color:white;text-align:center}
 </style>
 </head>
 <body>
@@ -53,62 +49,30 @@ NettoLead
 <div>
 <button class="nav-btn" onclick="showHome()">Accueil</button>
 <button class="nav-btn" onclick="showProRegister()">Espace Pro</button>
-<button class="nav-btn" onclick="showDashboard()">Dashboard</button>
 </div>
 </nav>
 
-<!-- HERO -->
+<!-- PAGE ACCUEIL -->
 <div id="home">
+
 <div class="hero">
 <div class="hero-text">
 <h1>La plateforme dédiée au nettoyage professionnel</h1>
 <p>NettoLead met en relation des clients exigeants avec des entreprises de nettoyage qualifiées et vérifiées.</p>
-<p>Recevez rapidement des demandes sérieuses et développez votre activité.</p>
 <button class="btn" onclick="scrollToForm()">Demander un devis</button>
 </div>
-<img src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=1000&q=80" alt="Equipe nettoyage professionnelle">
+<img src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=1000&q=80">
 </div>
 
 <div class="section light">
 <h2>Comment ça fonctionne ?</h2>
 <div class="grid">
-<div class="card">
-<div class="step-box">1</div>
-<h3>Demande en ligne</h3>
-<p>Le client décrit son besoin gratuitement en 1 minute.</p>
-</div>
-<div class="card">
-<div class="step-box">2</div>
-<h3>Visibilité contrôlée</h3>
-<p>Les pros consultent la demande sans voir les coordonnées.</p>
-</div>
-<div class="card">
-<div class="step-box">3</div>
-<h3>Déblocage sécurisé</h3>
-<p>Le professionnel débloque le lead via son crédit.</p>
-</div>
+<div class="card"><div class="step-box">1</div><h3>Demande</h3><p>Le client dépose sa demande gratuitement.</p></div>
+<div class="card"><div class="step-box">2</div><h3>Consultation</h3><p>Les pros voient la demande sans coordonnées.</p></div>
+<div class="card"><div class="step-box">3</div><h3>Déblocage</h3><p>Le pro débloque le lead via crédit.</p></div>
 </div>
 </div>
 
-<div class="section">
-<h2>Pourquoi nous faire confiance ?</h2>
-<div class="grid">
-<div class="card"><h3>Entreprises vérifiées</h3><p>SIRET obligatoire et validation manuelle.</p></div>
-<div class="card"><h3>Demandes qualifiées</h3><p>Chaque lead est structuré et exploitable.</p></div>
-<div class="card"><h3>Modèle transparent</h3><p>Paiement uniquement au lead via système de crédits.</p></div>
-</div>
-</div>
-
-<div class="section light">
-<h2>Avis clients</h2>
-<div class="grid">
-<div class="card"><p>Service très professionnel, contact rapide.</p><strong>– Marie L.</strong></div>
-<div class="card"><p>Entreprise sérieuse trouvée en moins de 24h.</p><strong>– Julien P.</strong></div>
-<div class="card"><p>Plateforme simple et efficace.</p><strong>– Sophie D.</strong></div>
-</div>
-</div>
-
-<!-- FORMULAIRE CLIENT -->
 <div class="section" id="formSection">
 <h2>Demande de devis gratuite</h2>
 <div class="card" style="max-width:600px;margin:auto;">
@@ -118,27 +82,32 @@ NettoLead
 <input type="text" id="phone" placeholder="Téléphone" required>
 <input type="text" id="city" placeholder="Ville" required>
 <select id="type">
-<option>Ménage à domicile</option>
-<option>Nettoyage de bureaux</option>
+<option>Ménage</option>
+<option>Bureaux</option>
 <option>Fin de chantier</option>
 </select>
-<input type="number" id="surface" placeholder="Surface en m²">
-<textarea id="message" placeholder="Précisions supplémentaires"></textarea>
+<input type="number" id="surface" placeholder="Surface m²">
+<textarea id="message" placeholder="Précisions"></textarea>
 <button type="submit" class="btn">Envoyer la demande</button>
 </form>
 </div>
 </div>
+
 </div>
 
-<!-- ESPACE PRO -->
+<!-- PAGE ESPACE PRO -->
 <div id="proRegister" class="section hidden">
 <h2>Inscription Espace Pro</h2>
 <div class="card" style="max-width:700px;margin:auto;">
-<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+
 <form id="proForm">
 
 <div class="step active">
-<h3>Informations entreprise</h3>
+<h3>Entreprise</h3>
 <input type="text" id="company_name" placeholder="Raison sociale" required>
 <input type="text" id="siret" placeholder="SIRET" required>
 <input type="text" id="address" placeholder="Adresse" required>
@@ -148,7 +117,7 @@ NettoLead
 </div>
 
 <div class="step">
-<h3>Contact principal</h3>
+<h3>Contact</h3>
 <input type="text" id="first_name" placeholder="Prénom" required>
 <input type="text" id="last_name" placeholder="Nom" required>
 <input type="email" id="pro_email" placeholder="Email professionnel" required>
@@ -159,15 +128,13 @@ NettoLead
 <div class="step">
 <h3>Activité</h3>
 <select id="service_type" required>
-<option value="">Type de service</option>
 <option>Ménage</option>
 <option>Bureaux</option>
 <option>Fin de chantier</option>
 </select>
-<input type="number" id="intervention_radius" placeholder="Rayon d’intervention (km)" required>
+<input type="number" id="intervention_radius" placeholder="Rayon intervention (km)" required>
 <input type="number" id="employees_count" placeholder="Nombre d’employés" required>
-<label><input type="checkbox" required> J'accepte les CGU et le fonctionnement par crédits</label>
-<button type="submit" class="btn">Créer mon compte professionnel</button>
+<button type="submit" class="btn">Créer mon compte</button>
 </div>
 
 </form>
@@ -175,25 +142,49 @@ NettoLead
 </div>
 
 <footer>
-© 2026 NettoLead – Plateforme professionnelle de mise en relation nettoyage
+© 2026 NettoLead
 </footer>
 
 <script>
-const supabase = window.supabase.createClient("https://rldhxezafzeencuaifpm.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs");
 
-function showHome(){home.classList.remove("hidden");proRegister.classList.add("hidden");}
-function showProRegister(){home.classList.add("hidden");proRegister.classList.remove("hidden");}
-function showDashboard(){alert("Dashboard à connecter plus tard.");}
+const supabase = window.supabase.createClient(
+"TON_SUPABASE_URL",
+"TON_SUPABASE_ANON_KEY"
+);
 
-function scrollToForm(){document.getElementById("formSection").scrollIntoView({behavior:"smooth"});}
+// Navigation corrigée
+function showHome(){
+document.getElementById("home").classList.remove("hidden");
+document.getElementById("proRegister").classList.add("hidden");
+}
 
+function showProRegister(){
+document.getElementById("home").classList.add("hidden");
+document.getElementById("proRegister").classList.remove("hidden");
+}
+
+function scrollToForm(){
+document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
+}
+
+// Formulaire client
 document.getElementById("leadForm").addEventListener("submit", async function(e){
 e.preventDefault();
-await supabase.from("leads").insert([{name:name.value,email:email.value,phone:phone.value,city:city.value,type:type.value,surface:surface.value,message:message.value,unlocked:false}]);
+await supabase.from("leads").insert([{
+name:name.value,
+email:email.value,
+phone:phone.value,
+city:city.value,
+type:type.value,
+surface:surface.value,
+message:message.value,
+unlocked:false
+}]);
 alert("Demande envoyée !");
 leadForm.reset();
 });
 
+// Multi-step pro
 let currentStep=0;
 const steps=document.querySelectorAll(".step");
 function nextStep(){
@@ -205,11 +196,27 @@ document.getElementById("progressBar").style.width=(currentStep+1)*33+"%";
 
 document.getElementById("proForm").addEventListener("submit", async function(e){
 e.preventDefault();
-await supabase.from("pros").insert([{company_name:company_name.value,siret:siret.value,address:address.value,postal_code:postal_code.value,city:pro_city.value,first_name:first_name.value,last_name:last_name.value,email:pro_email.value,phone:pro_phone.value,service_type:service_type.value,intervention_radius:intervention_radius.value,employees_count:employees_count.value,credits_balance:0,status:"pending"}]);
-alert("Inscription envoyée. Validation en cours.");
+await supabase.from("pros").insert([{
+company_name:company_name.value,
+siret:siret.value,
+address:address.value,
+postal_code:postal_code.value,
+city:pro_city.value,
+first_name:first_name.value,
+last_name:last_name.value,
+email:pro_email.value,
+phone:pro_phone.value,
+service_type:service_type.value,
+intervention_radius:intervention_radius.value,
+employees_count:employees_count.value,
+credits_balance:0,
+status:"pending"
+}]);
+alert("Inscription envoyée !");
 proForm.reset();
-location.reload();
+showHome();
 });
+
 </script>
 
 </body>
