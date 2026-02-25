@@ -169,10 +169,16 @@ gap:10px;
 <input type="email" id="loginEmail" placeholder="Email">
 <input type="password" id="loginPassword" placeholder="Mot de passe">
 <button onclick="loginPro()">Connexion</button>
+<button type="button" onclick="backToChoice()" style="background:#64748b;margin-top:10px;">
+Retour
+</button>
 </div>
 
 <!-- REGISTER MULTI STEP -->
 <div id="registerForm" class="hidden" style="margin-top:20px;">
+<button type="button" onclick="backToChoice()" style="background:#64748b;margin-bottom:15px;">
+Retour
+</button>  
 
 <div id="step1">
 <h3>Entreprise</h3>
@@ -376,7 +382,7 @@ await supabaseClient.from("leads").update({unlocked:true}).eq("id",id);
 alert("Lead débloqué !");
 loadLeads();
 }
- function showLogin(){
+function showLogin(){
 document.getElementById("authChoice").classList.add("hidden");
 document.getElementById("loginForm").classList.remove("hidden");
 }
@@ -391,7 +397,13 @@ document.getElementById("step1").classList.add("hidden");
 document.getElementById("step2").classList.add("hidden");
 document.getElementById("step3").classList.add("hidden");
 document.getElementById("step"+step).classList.remove("hidden");
-} 
+}
+
+function backToChoice(){
+document.getElementById("loginForm").classList.add("hidden");
+document.getElementById("registerForm").classList.add("hidden");
+document.getElementById("authChoice").classList.remove("hidden");
+}
 
 function goHome(){
 document.getElementById("home").classList.remove("hidden");
@@ -420,6 +432,7 @@ return;
 
 </body>
 </html>
+
 
 
 
