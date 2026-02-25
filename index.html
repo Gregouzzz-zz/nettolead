@@ -336,21 +336,12 @@ alert("Erreur base de données : " + insertError.message);
 return;
 }
 
-alert("Compte professionnel créé avec succès ! Vous pouvez maintenant vous connecter.");
-
-// Reset formulaire inscription
-document.getElementById("registerForm").classList.add("hidden");
-
-// Réaffiche le choix Connexion / Créer compte
-document.getElementById("authChoice").classList.remove("hidden");
-
-// Ouvre directement le formulaire connexion
-document.getElementById("loginForm").classList.remove("hidden");
+alert("Compte professionnel créé avec succès !");
 
 document.getElementById("registerForm").classList.add("hidden");
+document.getElementById("authChoice").classList.add("hidden");
 document.getElementById("loginForm").classList.remove("hidden");
 
-// Pré-remplir l’email
 document.getElementById("loginEmail").value = email;
 }
 
@@ -449,6 +440,7 @@ return;
 
 </body>
 </html>
+
 
 
 
