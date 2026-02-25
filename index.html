@@ -30,17 +30,24 @@ table{width:100%;border-collapse:collapse;margin-top:20px;background:white;borde
 th,td{padding:12px;border-bottom:1px solid #e2e8f0;text-align:left;}
 th{background:#0f172a;color:white;}
 footer{padding:40px;background:#0f172a;color:white;text-align:center;margin-top:60px;}
+.nav-buttons{
+display:flex;
+gap:10px;
+}
 </style>
 </head>
 <body>
 
 <nav>
-<div class="logo">
-<div class="logo-box">N</div>
-NettoLead
-</div>
-<button onclick="goHome()">Accueil</button> 
-<button onclick="showPro()">Espace Pro</button>
+  <div class="logo">
+    <div class="logo-box">N</div>
+    NettoLead
+  </div>
+
+  <div class="nav-buttons">
+    <button onclick="goHome()">Accueil</button>
+    <button onclick="showPro()">Espace Pro</button>
+  </div>
 </nav>
 
 <div id="home">
@@ -407,6 +414,7 @@ return;
 
 </body>
 </html>
+
 
 
 
