@@ -77,8 +77,24 @@ font-size:14px;
 }
 @media (max-width:768px){
 
-.hero div{
+.hero{
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:40px 20px;
 text-align:center;
+}
+
+.hero img{
+width:100%;
+max-width:100%;
+height:auto;
+margin-top:25px;
+border-radius:16px;
+}
+
+.hero > div{
+width:100%;
 }
 
 }
@@ -516,6 +532,7 @@ return;
 
 </body>
 </html>
+
 
 
 
