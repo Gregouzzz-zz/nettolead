@@ -229,6 +229,12 @@ Retour
 <!-- DASHBOARD -->
 <div id="pro" class="hidden section">
 <h1>Dashboard Espace Pro</h1>
+<div style="margin:20px 0;">
+<label>Filtrer par ville :</label>
+<select id="cityFilter" onchange="loadLeads()">
+<option value="">Toutes les villes</option>
+</select>
+</div>
 <button onclick="logoutPro()" style="background:#dc2626;">Déconnexion</button>
 <button onclick="goBack()" style="background:#64748b;">
 Retour
@@ -375,7 +381,15 @@ loadLeads();
 }
 
 async function loadLeads(){
-const { data } = await supabaseClient.from("leads").select("*").order("created_at",{ascending:false});
+const selectedCity = document.getElementById("cityFilter").value;
+let query = supabaseClient
+.from("leads")
+.select("*")
+.order("created_at",{ascending:false});
+if(selectedCity){
+query = query.eq("city", selectedCity);
+}
+const { data } = await query;
 const tbody = document.getElementById("tbody");
 tbody.innerHTML="";
 data.forEach(function(l){
@@ -383,8 +397,22 @@ let contact=l.unlocked?l.phone+" / "+l.email:"Coordonnées masquées";
 let action=l.unlocked?"Débloqué":"<button onclick='unlockLead("+l.id+")'>Débloquer Gratuit</button>";
 tbody.innerHTML+="<tr><td>"+l.name+"</td><td>"+l.city+"</td><td>"+l.type+"</td><td>"+l.surface+"</td><td>"+contact+"</td><td>"+action+"</td></tr>";
 });
+loadCityOptions(data);
 }
 
+function loadCityOptions(data){
+
+const cityFilter = document.getElementById("cityFilter");
+
+// Extraire villes uniques
+const cities = [...new Set(data.map(item => item.city))];
+
+cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
+
+cities.forEach(function(city){
+cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
+});
+}
 async function unlockLead(id){
 await supabaseClient.from("leads").update({unlocked:true}).eq("id",id);
 alert("Lead débloqué !");
@@ -440,6 +468,7 @@ return;
 
 </body>
 </html>
+
 
 
 
