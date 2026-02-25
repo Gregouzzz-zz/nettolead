@@ -34,26 +34,51 @@ footer{padding:40px;background:#0f172a;color:white;text-align:center;margin-top:
 display:flex;
 gap:10px;
 }
-@media (max-width: 768px){
+@media (max-width:768px){
+
+nav{
+flex-direction:row;
+justify-content:space-between;
+padding:15px;
+}
 
 .hero{
 flex-direction:column;
-text-align:center;
+padding:40px 20px;
 }
 
 .hero img{
 width:100%;
-max-width:350px;
+max-width:100%;
 margin-top:20px;
+}
+
+.section{
+padding:40px 20px;
 }
 
 .grid{
 grid-template-columns:1fr;
 }
 
-nav{
-flex-direction:column;
-gap:10px;
+.card{
+padding:20px;
+}
+
+.logo{
+font-size:18px;
+}
+
+button{
+padding:10px 14px;
+font-size:14px;
+}
+
+}
+@media (max-width:768px){
+
+.hero div{
+text-align:center;
 }
 
 }
@@ -491,6 +516,7 @@ return;
 
 </body>
 </html>
+
 
 
 
