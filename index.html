@@ -39,6 +39,7 @@ footer{padding:40px;background:#0f172a;color:white;text-align:center;margin-top:
 <div class="logo-box">N</div>
 NettoLead
 </div>
+<button onclick="goHome()">Accueil</button> 
 <button onclick="showPro()">Espace Pro</button>
 </nav>
 
@@ -209,6 +210,9 @@ J'accepte les CGU
 <div id="pro" class="hidden section">
 <h1>Dashboard Espace Pro</h1>
 <button onclick="logoutPro()" style="background:#dc2626;">Déconnexion</button>
+<button onclick="goBack()" style="background:#64748b;">
+Retour
+</button> 
 
 <table>
 <thead>
@@ -375,9 +379,34 @@ document.getElementById("step2").classList.add("hidden");
 document.getElementById("step3").classList.add("hidden");
 document.getElementById("step"+step).classList.remove("hidden");
 } 
+
+function goHome(){
+document.getElementById("home").classList.remove("hidden");
+document.getElementById("loginSection").classList.add("hidden");
+document.getElementById("pro").classList.add("hidden");
+}
+
+function goBack(){
+const home = document.getElementById("home");
+const login = document.getElementById("loginSection");
+const pro = document.getElementById("pro");
+
+if(!pro.classList.contains("hidden")){
+pro.classList.add("hidden");
+login.classList.remove("hidden");
+return;
+}
+
+if(!login.classList.contains("hidden")){
+login.classList.add("hidden");
+home.classList.remove("hidden");
+return;
+}
+}
 </script>
 
 </body>
 </html>
+
 
 
