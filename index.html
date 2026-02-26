@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>NettoLead - Plateforme nettoyage professionnel</title>
+<title>NettoLead - Plateforme nettoyage</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
 body{
 margin:0;
-font-family:Inter;
+font-family:Inter,sans-serif;
 background:#f8fafc;
 color:#1e293b;
+line-height:1.6;
 }
 
 nav{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:20px 8%;
 background:white;
 box-shadow:0 2px 10px rgba(0,0,0,0.05);
@@ -31,20 +31,19 @@ box-shadow:0 2px 10px rgba(0,0,0,0.05);
 display:flex;
 align-items:center;
 gap:10px;
-font-weight:bold;
+font-weight:700;
 font-size:22px;
 }
 
 .logo-box{
+width:32px;
+height:32px;
 background:#2563eb;
 color:white;
-padding:6px 10px;
-border-radius:6px;
-}
-
-.nav-buttons{
 display:flex;
-gap:10px;
+align-items:center;
+justify-content:center;
+border-radius:6px;
 }
 
 button{
@@ -58,29 +57,38 @@ cursor:pointer;
 
 .hero{
 display:flex;
-align-items:center;
 justify-content:space-between;
+align-items:center;
 padding:80px 8%;
+gap:50px;
 }
 
-.hero-text h1{
+.hero h1{
 font-size:42px;
 font-weight:700;
+line-height:1.2;
 margin-bottom:20px;
 }
 
-.hero-text p{
-font-size:18px;
-color:#64748b;
-}
-
 .hero img{
-width:480px;
-border-radius:14px;
+width:450px;
+border-radius:16px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
 .section{
-padding:60px 8%;
+padding:70px 8%;
+}
+
+.light{
+background:#eef2f7;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+margin-top:30px;
 }
 
 .card{
@@ -90,9 +98,43 @@ border-radius:14px;
 box-shadow:0 6px 18px rgba(0,0,0,0.06);
 }
 
+.card-small{
+background:white;
+padding:18px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.05);
+font-size:14px;
+}
+
 .centered{
 max-width:600px;
-margin:auto;
+margin:0 auto;
+}
+
+.centered-small{
+max-width:420px;
+margin:0 auto;
+}
+
+.step{
+width:32px;
+height:32px;
+background:#2563eb;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:6px;
+margin-bottom:10px;
+font-weight:bold;
+}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border-radius:8px;
+border:1px solid #cbd5e1;
 }
 
 .hidden{
@@ -111,6 +153,7 @@ padding:20px;
 border-radius:12px;
 box-shadow:0 4px 12px rgba(0,0,0,0.05);
 text-align:center;
+min-width:150px;
 }
 
 .stat-card span{
@@ -122,14 +165,14 @@ color:#2563eb;
 .filters{
 display:flex;
 gap:10px;
-margin-bottom:20px;
 flex-wrap:wrap;
 }
 
 .leads-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
 gap:20px;
+margin-top:20px;
 }
 
 .lead-card{
@@ -139,29 +182,22 @@ border-radius:14px;
 box-shadow:0 6px 18px rgba(0,0,0,0.06);
 }
 
-.lead-badge{
-background:#22c55e;
-color:white;
-padding:4px 8px;
-border-radius:6px;
-font-size:12px;
-display:inline-block;
-margin-bottom:5px;
+.nav-buttons{
+display:flex;
+gap:10px;
 }
 
 footer{
+padding:40px;
 background:#0f172a;
 color:white;
-padding:40px;
 text-align:center;
-margin-top:50px;
+margin-top:60px;
 }
 
 </style>
 </head>
-
 <body>
-
 
 <nav>
 
@@ -177,21 +213,20 @@ NettoLead
 
 </nav>
 
-
-
 <div id="home">
 
 <div class="hero">
 
-<div class="hero-text">
+<div>
 
-<h1>
-Recevez des demandes de nettoyage qualifiées près de chez vous
-</h1>
+<h1>Trouvez une entreprise de nettoyage fiable et professionnelle</h1>
 
 <p>
-NettoLead connecte les entreprises de nettoyage avec des clients
-réellement intéressés. Débloquez les coordonnées avec vos crédits.
+NettoLead simplifie la mise en relation entre particuliers et entreprises de nettoyage qualifiées.
+</p>
+
+<p>
+Vos coordonnées sont protégées et accessibles uniquement aux professionnels réellement intéressés.
 </p>
 
 </div>
@@ -200,91 +235,17 @@ réellement intéressés. Débloquez les coordonnées avec vos crédits.
 
 </div>
 
-
-
-<div class="section">
-
-<div class="card centered">
-
-<form id="leadForm">
-
-<input id="name" placeholder="Nom" required>
-<input id="email" placeholder="Email" required>
-<input id="phone" placeholder="Téléphone" required>
-<input id="city" placeholder="Ville" required>
-
-<select id="type">
-<option>Ménage</option>
-<option>Bureaux</option>
-<option>Fin de chantier</option>
-</select>
-
-<input id="surface" placeholder="Surface m²">
-<textarea id="message" placeholder="Message"></textarea>
-
-<button type="submit">Envoyer</button>
-
-</form>
-
 </div>
-
-</div>
-
-</div>
-
-
 
 <div id="loginSection" class="hidden section">
-
-<div class="card centered">
-
-<div id="authChoice">
-
-<button onclick="showLogin()">Connexion</button>
-<button onclick="showRegister()">Créer compte</button>
-
+LOGIN
 </div>
-
-
-<div id="loginForm" class="hidden">
-
-<input id="loginEmail" placeholder="Email">
-<input id="loginPassword" placeholder="Mot de passe">
-
-<button onclick="loginPro()">Connexion</button>
-
-</div>
-
-
-<div id="registerForm" class="hidden">
-
-<input id="companyName" placeholder="Entreprise">
-<input id="contactPhone" placeholder="Téléphone">
-
-<input id="loginEmailRegister" placeholder="Email">
-<input id="loginPasswordRegister" placeholder="Mot de passe">
-
-<button onclick="registerPro()">Créer</button>
-
-</div>
-
-</div>
-
-</div>
-
-
 
 <div id="pro" class="hidden section">
 
-<h1>Dashboard Pro</h1>
-
+<h1>Dashboard Espace Pro</h1>
 
 <div class="dashboard-stats">
-
-<div class="stat-card">
-<span id="credits">0</span>
-<p>Crédits</p>
-</div>
 
 <div class="stat-card">
 <span id="totalLeads">0</span>
@@ -296,160 +257,125 @@ réellement intéressés. Débloquez les coordonnées avec vos crédits.
 <p>Nouveaux</p>
 </div>
 
+<div class="stat-card">
+<span id="credits">0</span>
+<p>Crédits</p>
 </div>
 
-
-<div class="filters">
-
-<select id="cityFilter" onchange="loadLeads()"></select>
-
-<select id="typeFilter" onchange="loadLeads()">
-<option value="">Type</option>
-<option>Ménage</option>
-<option>Bureaux</option>
-<option>Fin de chantier</option>
-</select>
-
-<button onclick="logoutPro()">Déconnexion</button>
-
 </div>
-
 
 <div id="leadsContainer" class="leads-grid"></div>
 
 </div>
 
-
-
 <footer>
-
 © NettoLead
-
 </footer>
-
-
 
 <script>
 
-const supabaseClient =
-supabase.createClient(
-"https://rldhxezafzeencuaifpm.supabase.co",
-"TA_CLE"
-);
+const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
+const supabaseKey = "TON_ANON_KEY";
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+function goHome(){
 
+document.getElementById("home").classList.remove("hidden");
+document.getElementById("loginSection").classList.add("hidden");
+document.getElementById("pro").classList.add("hidden");
 
-leadForm.addEventListener("submit", async e=>{
+}
 
-e.preventDefault();
+async function showPro(){
 
-await supabaseClient.from("leads").insert([{
+const { data } = await supabaseClient.auth.getSession();
 
-name:name.value,
-email:email.value,
-phone:phone.value,
-city:city.value,
-type:type.value,
-surface:surface.value,
-message:message.value,
-price:1,
-unlocked:false
+if(!data.session){
 
-}]);
+document.getElementById("home").classList.add("hidden");
+document.getElementById("loginSection").classList.remove("hidden");
 
-alert("Demande envoyée");
-
-});
-
-
-
-async function registerPro(){
-
-const { data,error }=
-await supabaseClient.auth.signUp({
-
-email:loginEmailRegister.value,
-password:loginPasswordRegister.value
-
-});
-
-if(error){
-alert(error.message);
 return;
-}
-
-await supabaseClient.from("pros").insert([{
-
-user_id:data.user.id,
-company_name:companyName.value,
-phone:contactPhone.value,
-credits:5
-
-}]);
-
-alert("Compte créé avec 5 crédits offerts");
 
 }
 
+document.getElementById("home").classList.add("hidden");
+document.getElementById("pro").classList.remove("hidden");
 
-
-async function loginPro(){
-
-const { error }=
-await supabaseClient.auth.signInWithPassword({
-
-email:loginEmail.value,
-password:loginPassword.value
-
-});
-
-if(error){
-alert(error.message);
-return;
-}
-
-loginSection.classList.add("hidden");
-pro.classList.remove("hidden");
-
-loadCredits();
-loadCities();
 loadLeads();
 
 }
 
+async function loadLeads(){
 
+const { data: { user } } = await supabaseClient.auth.getUser();
 
-async function loadCredits(){
+if(user){
 
-const { data:session }=
-await supabaseClient.auth.getSession();
-
-const { data }=
-await supabaseClient
+const { data: pro } = await supabaseClient
 .from("pros")
 .select("credits")
-.eq("user_id",session.session.user.id)
+.eq("user_id", user.id)
 .single();
 
-credits.innerText=data.credits;
+if(pro){
+document.getElementById("credits").innerText = pro.credits;
+}
 
 }
 
+const { data } = await supabaseClient
+.from("leads")
+.select("*")
+.order("created_at", { ascending:false });
 
+const container = document.getElementById("leadsContainer");
+
+container.innerHTML="";
+
+let todayCount = 0;
+
+data.forEach(lead=>{
+
+const today = new Date().toDateString();
+const leadDate = new Date(lead.created_at).toDateString();
+
+if(today === leadDate) todayCount++;
+
+container.innerHTML += `
+
+<div class="lead-card">
+
+<b>${lead.type} - ${lead.city}</b><br>
+Surface : ${lead.surface}<br>
+Prix : ${lead.price}€<br><br>
+
+<button onclick="unlockLead(${lead.id})">
+Débloquer
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("totalLeads").innerText = data.length;
+document.getElementById("newLeads").innerText = todayCount;
+
+}
 
 async function unlockLead(id){
 
-const { data:session }=
-await supabaseClient.auth.getSession();
+const { data: { user } } = await supabaseClient.auth.getUser();
 
-const { data }=
-await supabaseClient
+const { data: pro } = await supabaseClient
 .from("pros")
 .select("credits")
-.eq("user_id",session.session.user.id)
+.eq("user_id", user.id)
 .single();
 
-if(data.credits<=0){
+if(pro.credits <= 0){
 
 alert("Plus de crédits");
 
@@ -459,111 +385,17 @@ return;
 
 await supabaseClient
 .from("leads")
-.update({unlocked:true})
+.update({ unlocked:true })
 .eq("id",id);
 
 await supabaseClient
 .from("pros")
-.update({credits:data.credits-1})
-.eq("user_id",session.session.user.id);
+.update({ credits: pro.credits - 1 })
+.eq("user_id", user.id);
 
-loadCredits();
+alert("Lead débloqué");
+
 loadLeads();
-
-}
-
-
-
-async function loadLeads(){
-
-const { data }=
-await supabaseClient
-.from("leads")
-.select("*")
-.order("created_at",{ascending:false});
-
-leadsContainer.innerHTML="";
-
-let today=0;
-
-data.forEach(l=>{
-
-const isNew=
-new Date(l.created_at).toDateString()===
-new Date().toDateString();
-
-if(isNew)today++;
-
-leadsContainer.innerHTML+=`
-
-<div class="lead-card">
-
-${isNew?'<div class="lead-badge">NEW</div>':''}
-
-<strong>${l.type}</strong><br>
-${l.city}<br>
-${l.surface} m²<br>
-
-<button onclick="unlockLead(${l.id})">
-Débloquer (1 crédit)
-</button>
-
-</div>
-
-`;
-
-});
-
-totalLeads.innerText=data.length;
-newLeads.innerText=today;
-
-}
-
-
-
-async function loadCities(){
-
-const { data }=
-await supabaseClient.from("leads").select("city");
-
-const cities=[...new Set(data.map(l=>l.city))];
-
-cityFilter.innerHTML="<option value=''>Ville</option>";
-
-cities.forEach(c=>{
-
-cityFilter.innerHTML+=`<option>${c}</option>`;
-
-});
-
-}
-
-
-
-function showPro(){
-
-home.classList.add("hidden");
-loginSection.classList.remove("hidden");
-
-}
-
-
-
-function goHome(){
-
-home.classList.remove("hidden");
-loginSection.classList.add("hidden");
-pro.classList.add("hidden");
-
-}
-
-
-
-function logoutPro(){
-
-supabaseClient.auth.signOut();
-
-goHome();
 
 }
 
