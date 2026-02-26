@@ -304,6 +304,39 @@ Retour
 Retour
 </button> 
 
+<div class="card" style="margin-bottom:20px;">
+
+<h3>Filtrer les leads</h3>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+<select id="cityFilter" onchange="loadLeads()">
+<option value="">Toutes les villes</option>
+</select>
+
+<select id="typeFilter" onchange="loadLeads()">
+<option value="">Tous les types</option>
+<option value="Ménage">Ménage</option>
+<option value="Bureaux">Bureaux</option>
+<option value="Fin de chantier">Fin de chantier</option>
+</select>
+
+<input
+type="text"
+id="searchFilter"
+placeholder="Rechercher nom, ville..."
+oninput="loadLeads()"
+style="min-width:200px;"
+>
+
+<select id="dateFilter" onchange="loadLeads()">
+<option value="desc">Plus récents</option>
+<option value="asc">Plus anciens</option>
+</select>
+
+</div>
+
+</div>
 <table>
 <thead>
 <tr>
@@ -443,27 +476,101 @@ document.getElementById("home").classList.add("hidden");
 document.getElementById("pro").classList.remove("hidden");
 loadLeads();
 }
+async function loadCities(){
 
+const { data } = await supabaseClient
+.from("leads")
+.select("city");
+
+const cityFilter = document.getElementById("cityFilter");
+
+cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
+
+const cities = [...new Set(data.map(l => l.city))];
+
+cities.forEach(city => {
+
+cityFilter.innerHTML += `<option value="${city}">${city}</option>`;
+
+});
+
+}
+async function loadCities(){
+
+const { data } = await supabaseClient
+.from("leads")
+.select("city");
+
+const cityFilter = document.getElementById("cityFilter");
+
+cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
+
+const cities = [...new Set(data.map(l => l.city))];
+
+cities.forEach(city => {
+
+cityFilter.innerHTML +=
+`<option value="${city}">${city}</option>`;
+
+});
+
+}
 async function loadLeads(){
-const selectedCity = document.getElementById("cityFilter").value;
+
+const city = document.getElementById("cityFilter").value;
+const type = document.getElementById("typeFilter").value;
+const search = document.getElementById("searchFilter").value.toLowerCase();
+const order = document.getElementById("dateFilter").value;
+
 let query = supabaseClient
 .from("leads")
 .select("*")
-.order("created_at",{ascending:false});
-if(selectedCity){
-query = query.eq("city", selectedCity);
-}
-const { data } = await query;
-const tbody = document.getElementById("tbody");
-tbody.innerHTML="";
-data.forEach(function(l){
-let contact=l.unlocked?l.phone+" / "+l.email:"Coordonnées masquées";
-let action=l.unlocked?"Débloqué":"<button onclick='unlockLead("+l.id+")'>Débloquer Gratuit</button>";
-tbody.innerHTML+="<tr><td>"+l.name+"</td><td>"+l.city+"</td><td>"+l.type+"</td><td>"+l.surface+"</td><td>"+contact+"</td><td>"+action+"</td></tr>";
-});
-loadCityOptions(data);
+.order("created_at", { ascending: order === "asc" });
+
+if(city){
+query = query.eq("city", city);
 }
 
+if(type){
+query = query.eq("type", type);
+}
+
+const { data } = await query;
+
+const tbody = document.getElementById("tbody");
+
+tbody.innerHTML = "";
+
+data
+.filter(l =>
+!search ||
+l.name.toLowerCase().includes(search) ||
+l.city.toLowerCase().includes(search)
+)
+.forEach(l => {
+
+let contact = l.unlocked
+? l.phone+" / "+l.email
+: "Coordonnées masquées";
+
+let action = l.unlocked
+? "Débloqué"
+: `<button onclick="unlockLead(${l.id})">Débloquer Gratuit</button>`;
+
+tbody.innerHTML += `
+<tr>
+<td>${l.name}</td>
+<td>${l.city}</td>
+<td>${l.type}</td>
+<td>${l.surface}</td>
+<td>${contact}</td>
+<td>${action}</td>
+</tr>
+`;
+
+});
+
+}
 function loadCityOptions(data){
 
 const cityFilter = document.getElementById("cityFilter");
@@ -532,6 +639,7 @@ return;
 
 </body>
 </html>
+
 
 
 
