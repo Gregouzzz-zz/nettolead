@@ -35,40 +35,32 @@ display:flex;
 gap:10px;
 }
 @media (max-width:768px){
-
 nav{
 flex-direction:row;
 justify-content:space-between;
 padding:15px;
 }
-
 .hero{
 flex-direction:column;
 padding:40px 20px;
 }
-
 .hero img{
 width:100%;
 max-width:100%;
 margin-top:20px;
 }
-
 .section{
 padding:40px 20px;
 }
-
 .grid{
 grid-template-columns:1fr;
 }
-
 .card{
 padding:20px;
 }
-
 .logo{
 font-size:18px;
 }
-
 button{
 padding:10px 14px;
 font-size:14px;
@@ -92,11 +84,73 @@ height:auto;
 margin-top:25px;
 border-radius:16px;
 }
-
 .hero > div{
 width:100%;
 }
+}
+.dashboard-stats{
+display:flex;
+gap:20px;
+margin:20px 0;
+flex-wrap:wrap;
+}
 
+.stat-card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.05);
+text-align:center;
+min-width:160px;
+}
+
+.stat-card span{
+font-size:28px;
+font-weight:bold;
+color:#2563eb;
+}
+.leads-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.lead-card{
+background:white;
+padding:20px;
+border-radius:14px;
+box-shadow:0 6px 18px rgba(0,0,0,0.06);
+position:relative;
+}
+
+.lead-badge{
+position:absolute;
+top:10px;
+right:10px;
+background:#22c55e;
+color:white;
+padding:4px 8px;
+border-radius:6px;
+font-size:12px;
+}
+
+.lead-header{
+font-weight:bold;
+font-size:18px;
+margin-bottom:8px;
+}
+
+.lead-info{
+font-size:14px;
+color:#64748b;
+margin-bottom:12px;
+}
+
+.lead-price{
+font-weight:bold;
+color:#2563eb;
+margin-bottom:10px;
 }
 </style>
 </head>
@@ -291,6 +345,24 @@ Retour
 </div>
 
 <!-- DASHBOARD -->
+<div class="dashboard-stats">
+
+  <div class="stat-card">
+    <span id="statTotal">0</span>
+    <p>Leads disponibles</p>
+  </div>
+
+  <div class="stat-card">
+    <span id="statNew">0</span>
+    <p>Nouveaux aujourd'hui</p>
+  </div>
+
+  <div class="stat-card">
+    <span id="creditsDisplay">0</span>
+    <p>Crédits</p>
+  </div>
+
+</div>
 <div id="pro" class="hidden section">
 <h1>Dashboard Espace Pro</h1>
 <div style="margin:20px 0;">
@@ -349,6 +421,7 @@ style="min-width:200px;"
 </tr>
 </thead>
 <tbody id="tbody"></tbody>
+  <div id="leadsContainer" class="leads-grid"></div>
 </table>
 
 </div>
@@ -517,58 +590,63 @@ cityFilter.innerHTML +=
 }
 async function loadLeads(){
 
-const city = document.getElementById("cityFilter").value;
-const type = document.getElementById("typeFilter").value;
-const search = document.getElementById("searchFilter").value.toLowerCase();
-const order = document.getElementById("dateFilter").value;
-
-let query = supabaseClient
+const { data } = await supabaseClient
 .from("leads")
 .select("*")
-.order("created_at", { ascending: order === "asc" });
+.order("created_at",{ascending:false})
 
-if(city){
-query = query.eq("city", city);
-}
+const container = document.getElementById("leadsContainer")
 
-if(type){
-query = query.eq("type", type);
-}
+container.innerHTML=""
 
-const { data } = await query;
+let newCount = 0
 
-const tbody = document.getElementById("tbody");
+data.forEach(lead=>{
 
-tbody.innerHTML = "";
+const today = new Date().toDateString()
+const leadDate = new Date(lead.created_at).toDateString()
 
-data
-.filter(l =>
-!search ||
-l.name.toLowerCase().includes(search) ||
-l.city.toLowerCase().includes(search)
-)
-.forEach(l => {
+const isNew = leadDate === today
 
-let contact = l.unlocked
-? l.phone+" / "+l.email
-: "Coordonnées masquées";
+if(isNew) newCount++
 
-let action = l.unlocked
-? "Débloqué"
-: `<button onclick="unlockLead(${l.id})">Débloquer Gratuit</button>`;
+const contact = lead.unlocked
+? lead.phone+" / "+lead.email
+: "Coordonnées masquées"
 
-tbody.innerHTML += `
-<tr>
-<td>${l.name}</td>
-<td>${l.city}</td>
-<td>${l.type}</td>
-<td>${l.surface}</td>
-<td>${contact}</td>
-<td>${action}</td>
-</tr>
-`;
+const button = lead.unlocked
+? "<span style='color:green'>Débloqué</span>"
+: `<button onclick="unlockLead(${lead.id})">Débloquer</button>`
 
-});
+container.innerHTML += `
+<div class="lead-card">
+
+${isNew ? '<div class="lead-badge">Nouveau</div>' : ''}
+
+<div class="lead-header">
+${lead.type} - ${lead.city}
+</div>
+
+<div class="lead-info">
+Nom : ${lead.name}<br>
+Surface : ${lead.surface} m²<br>
+Contact : ${contact}
+</div>
+
+<div class="lead-price">
+Prix : ${lead.price}€
+</div>
+
+${button}
+
+</div>
+`
+})
+
+document.getElementById("statTotal").innerText=data.length
+document.getElementById("statNew").innerText=newCount
+
+loadCredits()
 
 }
 function loadCityOptions(data){
@@ -639,6 +717,7 @@ return;
 
 </body>
 </html>
+
 
 
 
