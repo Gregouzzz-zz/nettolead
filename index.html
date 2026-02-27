@@ -617,10 +617,43 @@ const contact = lead.unlocked
 ? lead.phone+" / "+lead.email
 : "Coordonnées masquées";
 
-const button = lead.unlocked
-? "<span style='color:green'>Débloqué</span>"
-: `<button onclick="unlockLead(${lead.id})">Débloquer</button>`;
+let badge = "";
+let button = "";
 
+// badge position
+badge = `
+<div style="
+font-size:13px;
+color:#64748b;
+margin-bottom:8px;
+">
+${lead.unlock_count}/3 pros déjà positionnés
+</div>
+`;
+
+// bouton
+if(lead.unlock_count >= 3){
+
+button = `
+<span style="
+color:red;
+font-weight:bold;
+">
+Complet (3/3)
+</span>
+`;
+
+}else{
+
+button = `
+<button onclick="unlockLead(${lead.id})">
+Débloquer Gratuit
+</button>
+`;
+
+}
+
+}
 container.innerHTML += `
 <div class="lead-card">
 
@@ -633,6 +666,8 @@ Nom : ${lead.name}<br>
 Surface : ${lead.surface} m²<br>
 Contact : ${contact}
 </div>
+
+${badge}
 
 <div class="lead-price">
 Prix : ${lead.price}€
@@ -663,16 +698,69 @@ cities.forEach(function(city){
 cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 });
 }
-async function unlockLead(id){
+async function unlockLead(leadId){
 
+const { data:{user} } =
+await supabaseClient.auth.getUser();
+
+const proId = user.id;
+
+
+// vérifier si déjà débloqué par ce pro
+const { data:existing } =
+await supabaseClient
+.from("lead_unlocks")
+.select("*")
+.eq("lead_id",leadId)
+.eq("pro_id",proId)
+.single();
+
+if(existing){
+alert("Vous avez déjà débloqué ce lead");
+return;
+}
+
+
+// récupérer lead
+const { data:lead } =
 await supabaseClient
 .from("leads")
-.update({unlocked:true})
-.eq("id",id);
+.select("unlock_count")
+.eq("id",leadId)
+.single();
 
-alert("Lead débloqué !");
 
-await loadCities();
+// limite 3 pros
+if(lead.unlock_count >= 3){
+
+alert(
+"Ce lead a déjà été attribué à 3 professionnels"
+);
+
+return;
+
+}
+
+
+// débloquer lead pour ce pro
+await supabaseClient
+.from("lead_unlocks")
+.insert({
+lead_id:leadId,
+pro_id:proId
+});
+
+
+// incrémenter compteur
+await supabaseClient
+.from("leads")
+.update({
+unlock_count:lead.unlock_count + 1
+})
+.eq("id",leadId);
+
+alert("Lead débloqué avec succès");
+
 await loadLeads();
 
 }
@@ -740,6 +828,7 @@ return;
 
 </body>
 </html>
+
 
 
 
