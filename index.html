@@ -579,11 +579,12 @@ cityFilter.appendChild(option);
 }
 async function loadLeads(){
 
-const city = document.getElementById("cityFilter").value;
-const type = document.getElementById("typeFilter").value;
-const search = document.getElementById("searchFilter").value.toLowerCase();
-const order = document.getElementById("dateFilter").value;
+const city = document.getElementById("cityFilter")?.value || "";
+const type = document.getElementById("typeFilter")?.value || "";
+const search = document.getElementById("searchFilter")?.value.toLowerCase() || "";
+const order = document.getElementById("dateFilter")?.value || "desc";
 
+// requête Supabase
 let query = supabaseClient
 .from("leads")
 .select("*")
@@ -597,7 +598,12 @@ if(type){
 query = query.eq("type",type);
 }
 
-const { data } = await query;
+const { data, error } = await query;
+
+if(error){
+console.log(error);
+return;
+}
 
 const container = document.getElementById("leadsContainer");
 
@@ -609,48 +615,64 @@ const today = new Date().toDateString();
 
 data.forEach(lead=>{
 
+// filtre recherche texte
+if(
+search &&
+!lead.name.toLowerCase().includes(search) &&
+!lead.city.toLowerCase().includes(search)
+){
+return;
+}
+
 const leadDate = new Date(lead.created_at).toDateString();
 
 if(leadDate===today){
 newCount++;
 }
 
-data.forEach(lead=>{
-
+// contact
 const contact = lead.unlocked
 ? lead.phone+" / "+lead.email
 : "Coordonnées masquées";
 
-// ✅ BADGE POSITIONNEMENT
-let badge = `
+// badge compteur
+const count = lead.unlock_count || 0;
+
+const badge = `
 <div style="
 font-size:13px;
 color:#64748b;
 margin-bottom:8px;
 ">
-${lead.unlock_count || 0}/3 pros positionnés
+${count}/3 pros positionnés
 </div>
 `;
 
-let button = "";
+// bouton logique
+let button="";
 
-if((lead.unlock_count || 0) >= 3){
+if(count>=3){
 
-button = `
-<span style="color:red;font-weight:bold;">
+button=`
+<span style="
+color:red;
+font-weight:bold;
+">
 Complet (3/3)
 </span>
 `;
 
 }else{
 
-button = `
+button=`
 <button onclick="unlockLead(${lead.id})">
 Débloquer Gratuit
 </button>
 `;
 
 }
+
+// affichage carte
 container.innerHTML += `
 <div class="lead-card">
 
@@ -675,10 +697,14 @@ ${button}
 </div>
 `;
 
-}); // ✅ le forEach se ferme ici
+});
 
-document.getElementById("statTotal").innerText = data.length;
-document.getElementById("statNew").innerText = newCount;
+// compteurs dashboard
+const totalEl=document.getElementById("statTotal");
+const newEl=document.getElementById("statNew");
+
+if(totalEl) totalEl.innerText=data.length;
+if(newEl) newEl.innerText=newCount;
 
 }
 function loadCityOptions(data){
@@ -840,6 +866,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
