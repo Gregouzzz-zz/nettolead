@@ -577,54 +577,91 @@ cityFilter.appendChild(option);
 }
 async function loadLeads(){
 
-const city = document.getElementById("cityFilter").value;
-const type = document.getElementById("typeFilter").value;
-const search = document.getElementById("searchFilter").value.toLowerCase();
-const order = document.getElementById("dateFilter").value;
+const city =
+document.getElementById("cityFilter").value;
 
+const type =
+document.getElementById("typeFilter").value;
+
+const search =
+document.getElementById("searchFilter").value.toLowerCase();
+
+const order =
+document.getElementById("dateFilter").value;
+
+
+// requête Supabase
 let query = supabaseClient
 .from("leads")
 .select("*")
-.order("created_at",{ascending:order==="asc"});
+.order("created_at", { ascending: order === "asc" });
 
+
+// FILTRE VILLE (IMPORTANT)
 if(city && city !== ""){
 query = query.eq("city", city);
 }
 
+
+// FILTRE TYPE
 if(type && type !== ""){
 query = query.eq("type", type);
 }
 
-const { data } = await query;
 
-const container = document.getElementById("leadsContainer");
+const { data, error } = await query;
 
-container.innerHTML="";
+if(error){
+console.log(error);
+return;
+}
+
+
+const container =
+document.getElementById("leadsContainer");
+
+container.innerHTML = "";
 
 let newCount = 0;
 
+
 data
-.filter(lead =>
-!search ||
-lead.name.toLowerCase().includes(search) ||
+.filter(lead => {
+
+if(!search) return true;
+
+return (
+lead.name.toLowerCase().includes(search)
+||
 lead.city.toLowerCase().includes(search)
-)
-.forEach(lead=>{
+);
 
-const today = new Date().toDateString();
-const leadDate = new Date(lead.created_at).toDateString();
+})
+.forEach(lead => {
 
-const isNew = leadDate === today;
+const today =
+new Date().toDateString();
+
+const leadDate =
+new Date(lead.created_at).toDateString();
+
+const isNew =
+leadDate === today;
 
 if(isNew) newCount++;
 
-const contact = lead.unlocked
-? lead.phone+" / "+lead.email
+
+const contact =
+lead.unlocked
+? lead.phone + " / " + lead.email
 : "Coordonnées masquées";
 
-const button = lead.unlocked
+
+const button =
+lead.unlocked
 ? "<span style='color:green'>Débloqué</span>"
 : `<button onclick="unlockLead(${lead.id})">Débloquer</button>`;
+
 
 container.innerHTML += `
 <div class="lead-card">
@@ -652,10 +689,12 @@ ${button}
 
 });
 
-document.getElementById("statTotal").innerText = data.length;
-document.getElementById("statNew").innerText = newCount;
 
-loadCredits();
+document.getElementById("statTotal").innerText =
+data.length;
+
+document.getElementById("statNew").innerText =
+newCount;
 
 }
 function loadCityOptions(data){
@@ -734,6 +773,7 @@ return;
 
 </body>
 </html>
+
 
 
 
