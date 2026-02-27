@@ -553,7 +553,6 @@ return;
 
 const cityFilter = document.getElementById("cityFilter");
 
-// sauvegarde la ville sélectionnée
 const selectedCity = cityFilter.value;
 
 cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
@@ -563,6 +562,7 @@ const cities = [...new Set(data.map(l => l.city))];
 cities.forEach(city => {
 
 const option = document.createElement("option");
+
 option.value = city;
 option.textContent = city;
 
@@ -577,63 +577,68 @@ cityFilter.appendChild(option);
 }
 async function loadLeads(){
 
-const { data } = await supabaseClient
+const cityFilter = document.getElementById("cityFilter");
+const typeFilter = document.getElementById("typeFilter");
+const searchFilter = document.getElementById("searchFilter");
+const dateFilter = document.getElementById("dateFilter");
+
+const city = cityFilter ? cityFilter.value : "";
+const type = typeFilter ? typeFilter.value : "";
+const search = searchFilter ? searchFilter.value.toLowerCase() : "";
+const order = dateFilter ? dateFilter.value : "desc";
+
+let query = supabaseClient
 .from("leads")
 .select("*")
-.order("created_at",{ascending:false})
+.order("created_at", { ascending: order === "asc" });
 
-const container = document.getElementById("leadsContainer")
+if(city && city !== ""){
+query = query.eq("city", city);
+}
 
-container.innerHTML=""
+if(type && type !== ""){
+query = query.eq("type", type);
+}
 
-let newCount = 0
+const { data, error } = await query;
 
-data.forEach(lead=>{
+if(error){
+console.log(error);
+return;
+}
 
-const today = new Date().toDateString()
-const leadDate = new Date(lead.created_at).toDateString()
+const tbody = document.getElementById("tbody");
 
-const isNew = leadDate === today
+tbody.innerHTML = "";
 
-if(isNew) newCount++
+data
+.filter(l =>
+!search ||
+l.name.toLowerCase().includes(search) ||
+l.city.toLowerCase().includes(search)
+)
+.forEach(l => {
 
-const contact = lead.unlocked
-? lead.phone+" / "+lead.email
-: "Coordonnées masquées"
+let contact = l.unlocked
+? l.phone + " / " + l.email
+: "Coordonnées masquées";
 
-const button = lead.unlocked
-? "<span style='color:green'>Débloqué</span>"
-: `<button onclick="unlockLead(${lead.id})">Débloquer</button>`
+let action = l.unlocked
+? "Débloqué"
+: `<button onclick="unlockLead(${l.id})">Débloquer Gratuit</button>`;
 
-container.innerHTML += `
-<div class="lead-card">
+tbody.innerHTML += `
+<tr>
+<td>${l.name}</td>
+<td>${l.city}</td>
+<td>${l.type}</td>
+<td>${l.surface}</td>
+<td>${contact}</td>
+<td>${action}</td>
+</tr>
+`;
 
-${isNew ? '<div class="lead-badge">Nouveau</div>' : ''}
-
-<div class="lead-header">
-${lead.type} - ${lead.city}
-</div>
-
-<div class="lead-info">
-Nom : ${lead.name}<br>
-Surface : ${lead.surface} m²<br>
-Contact : ${contact}
-</div>
-
-<div class="lead-price">
-Prix : ${lead.price}€
-</div>
-
-${button}
-
-</div>
-`
-})
-
-document.getElementById("statTotal").innerText=data.length
-document.getElementById("statNew").innerText=newCount
-
-loadCredits()
+});
 
 }
 function loadCityOptions(data){
@@ -712,6 +717,7 @@ return;
 
 </body>
 </html>
+
 
 
 
