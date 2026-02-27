@@ -594,17 +594,17 @@ document.getElementById("dateFilter").value;
 let query = supabaseClient
 .from("leads")
 .select("*")
-.order("created_at", { ascending: order === "asc" });
+.order("created_at",{ascending:order==="asc"});
 
 
-// FILTRE VILLE (IMPORTANT)
-if(city && city !== ""){
+// FILTRE VILLE
+if(city){
 query = query.eq("city", city);
 }
 
 
 // FILTRE TYPE
-if(type && type !== ""){
+if(type){
 query = query.eq("type", type);
 }
 
@@ -620,9 +620,7 @@ return;
 const container =
 document.getElementById("leadsContainer");
 
-container.innerHTML = "";
-
-let newCount = 0;
+container.innerHTML="";
 
 
 data
@@ -637,36 +635,20 @@ lead.city.toLowerCase().includes(search)
 );
 
 })
-.forEach(lead => {
-
-const today =
-new Date().toDateString();
-
-const leadDate =
-new Date(lead.created_at).toDateString();
-
-const isNew =
-leadDate === today;
-
-if(isNew) newCount++;
-
+.forEach(lead=>{
 
 const contact =
 lead.unlocked
-? lead.phone + " / " + lead.email
+? lead.phone+" / "+lead.email
 : "Coordonnées masquées";
-
 
 const button =
 lead.unlocked
 ? "<span style='color:green'>Débloqué</span>"
 : `<button onclick="unlockLead(${lead.id})">Débloquer</button>`;
 
-
 container.innerHTML += `
 <div class="lead-card">
-
-${isNew ? '<div class="lead-badge">Nouveau</div>' : ''}
 
 <div class="lead-header">
 ${lead.type} - ${lead.city}
@@ -688,13 +670,6 @@ ${button}
 `;
 
 });
-
-
-document.getElementById("statTotal").innerText =
-data.length;
-
-document.getElementById("statNew").innerText =
-newCount;
 
 }
 function loadCityOptions(data){
@@ -773,6 +748,7 @@ return;
 
 </body>
 </html>
+
 
 
 
