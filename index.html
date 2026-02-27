@@ -615,13 +615,20 @@ if(leadDate===today){
 newCount++;
 }
 
+data.forEach(lead=>{
+
 const contact = lead.unlocked
 ? lead.phone+" / "+lead.email
 : "Coordonnées masquées";
 
+// ✅ BADGE POSITIONNEMENT
 let badge = `
-<div style="font-size:13px;color:#64748b;margin-bottom:8px;">
-${lead.unlock_count || 0}/3 pros déjà positionnés
+<div style="
+font-size:13px;
+color:#64748b;
+margin-bottom:8px;
+">
+${lead.unlock_count || 0}/3 pros positionnés
 </div>
 `;
 
@@ -644,7 +651,6 @@ Débloquer Gratuit
 `;
 
 }
-
 container.innerHTML += `
 <div class="lead-card">
 
@@ -690,69 +696,57 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 }
 async function unlockLead(leadId){
 
-const { data:{user} } =
-await supabaseClient.auth.getUser();
+const { data: { user } } = await supabaseClient.auth.getUser();
 
-const proId = user.id;
+if(!user){
+alert("Connectez-vous");
+return;
+}
 
-
-// vérifier si déjà débloqué par ce pro
-const { data:existing } =
-await supabaseClient
+// vérifier si déjà débloqué
+const { data: already } = await supabaseClient
 .from("lead_unlocks")
 .select("*")
-.eq("lead_id",leadId)
-.eq("pro_id",proId)
+.eq("lead_id", leadId)
+.eq("pro_id", user.id)
 .single();
 
-if(existing){
+if(already){
 alert("Vous avez déjà débloqué ce lead");
 return;
 }
 
-
 // récupérer lead
-const { data:lead } =
-await supabaseClient
+const { data: lead } = await supabaseClient
 .from("leads")
 .select("unlock_count")
-.eq("id",leadId)
+.eq("id", leadId)
 .single();
 
-
-// limite 3 pros
 if(lead.unlock_count >= 3){
-
-alert(
-"Ce lead a déjà été attribué à 3 professionnels"
-);
-
+alert("Ce lead est complet");
 return;
-
 }
 
-
-// débloquer lead pour ce pro
+// enregistrer le déblocage
 await supabaseClient
 .from("lead_unlocks")
 .insert({
-lead_id:leadId,
-pro_id:proId
+lead_id: leadId,
+pro_id: user.id
 });
-
 
 // incrémenter compteur
 await supabaseClient
 .from("leads")
 .update({
-unlock_count:lead.unlock_count + 1
+unlock_count: lead.unlock_count + 1
 })
-.eq("id",leadId);
+.eq("id", leadId);
 
-alert("Lead débloqué avec succès");
+alert("Lead débloqué");
 
 await loadLeads();
-
 }
 async function loadCredits(){
 
@@ -846,6 +840,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
