@@ -382,10 +382,6 @@ Retour
 
 <div style="display:flex;gap:10px;flex-wrap:wrap;">
 
-<select id="cityFilter" onchange="loadLeads()">
-<option value="">Toutes les villes</option>
-</select>
-
 <select id="typeFilter" onchange="loadLeads()">
 <option value="">Tous les types</option>
 <option value="Ménage">Ménage</option>
@@ -528,23 +524,37 @@ document.getElementById("home").classList.remove("hidden");
 }
 
 async function showPro(){
+
 const { data } = await supabaseClient.auth.getSession();
+
 if(!data.session){
 document.getElementById("home").classList.add("hidden");
 document.getElementById("loginSection").classList.remove("hidden");
 return;
 }
+
 document.getElementById("home").classList.add("hidden");
 document.getElementById("pro").classList.remove("hidden");
-loadLeads();
+
+await loadCities();
+await loadLeads();
+
 }
 async function loadCities(){
 
-const { data } = await supabaseClient
+const { data, error } = await supabaseClient
 .from("leads")
 .select("city");
 
+if(error){
+console.log(error);
+return;
+}
+
 const cityFilter = document.getElementById("cityFilter");
+
+// sauvegarde la ville sélectionnée
+const selectedCity = cityFilter.value;
 
 cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
 
@@ -552,27 +562,15 @@ const cities = [...new Set(data.map(l => l.city))];
 
 cities.forEach(city => {
 
-cityFilter.innerHTML += `<option value="${city}">${city}</option>`;
+const option = document.createElement("option");
+option.value = city;
+option.textContent = city;
 
-});
-
+if(city === selectedCity){
+option.selected = true;
 }
-async function loadCities(){
 
-const { data } = await supabaseClient
-.from("leads")
-.select("city");
-
-const cityFilter = document.getElementById("cityFilter");
-
-cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
-
-const cities = [...new Set(data.map(l => l.city))];
-
-cities.forEach(city => {
-
-cityFilter.innerHTML +=
-`<option value="${city}">${city}</option>`;
+cityFilter.appendChild(option);
 
 });
 
@@ -652,9 +650,17 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 });
 }
 async function unlockLead(id){
-await supabaseClient.from("leads").update({unlocked:true}).eq("id",id);
+
+await supabaseClient
+.from("leads")
+.update({unlocked:true})
+.eq("id",id);
+
 alert("Lead débloqué !");
-loadLeads();
+
+await loadCities();
+await loadLeads();
+
 }
 function showLogin(){
 document.getElementById("authChoice").classList.add("hidden");
@@ -706,6 +712,7 @@ return;
 
 </body>
 </html>
+
 
 
 
