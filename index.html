@@ -720,72 +720,60 @@ cities.forEach(function(city){
 cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 });
 }
-async function unlockLead(leadId){
+async function unlockLead(id){
 
-const { data: { user } } = await supabaseClient.auth.getUser();
-
-if(!user){
-alert("Connectez-vous");
-return;
-}
-
-// vérifier si déjà débloqué
-const { data: already } = await supabaseClient
-.from("lead_unlocks")
-.select("*")
-.eq("lead_id", leadId)
-.eq("pro_id", user.id)
-.single();
-
-if(already){
-alert("Vous avez déjà débloqué ce lead");
-return;
-}
-
-// récupérer lead
-const { data: lead } = await supabaseClient
+// récupérer le lead actuel
+const { data: lead, error } = await supabaseClient
 .from("leads")
-.select("unlock_count")
-.eq("id", leadId)
+.select("*")
+.eq("id", id)
 .single();
 
-if(lead.unlock_count >= 3){
-alert("Ce lead est complet");
+if(error){
+alert("Erreur chargement lead");
 return;
 }
 
-// enregistrer le déblocage
-await supabaseClient
-.from("lead_unlocks")
-.insert({
-lead_id: leadId,
-pro_id: user.id
-});
+// sécurité
+const currentCount = lead.unlock_count || 0;
+
+// si déjà complet
+if(currentCount >= 3){
+
+alert("Ce lead est déjà complet (3/3 pros).");
+return;
+
+}
 
 // incrémenter compteur
-await supabaseClient
+const newCount = currentCount + 1;
+
+// update Supabase
+const { error: updateError } = await supabaseClient
 .from("leads")
 .update({
-unlock_count: lead.unlock_count + 1
+
+unlock_count: newCount,
+
+// débloquer contact
+unlocked: true
+
 })
-.eq("id", leadId);
+.eq("id", id);
 
-alert("Lead débloqué");
+if(updateError){
 
-await loadLeads();
+alert("Erreur déblocage");
+return;
+
 }
-async function loadCredits(){
 
-const { data: { user } } = await supabaseClient.auth.getUser();
+// message succès
+alert("Lead débloqué ! ("+newCount+"/3)");
 
-const { data } = await supabaseClient
-.from("pros")
-.select("credits")
-.eq("user_id",user.id)
-.single();
-
-document.getElementById("creditsDisplay").innerText =
-data?.credits || 0;
+// refresh dashboard
+await loadCities();
+await loadLeads();
 
 }
 function showLogin(){
@@ -866,6 +854,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
