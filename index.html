@@ -525,52 +525,48 @@ document.getElementById("home").classList.remove("hidden");
 
 async function showPro(){
 
-console.log("showPro exécuté");
-
 const { data } = await supabaseClient.auth.getSession();
 
-if(!data.session){
 document.getElementById("home").classList.add("hidden");
-document.getElementById("loginSection").classList.remove("hidden");
-return;
-}
 
-document.getElementById("home").classList.add("hidden");
+if(!data.session){
+
+document.getElementById("loginSection").classList.remove("hidden");
+
+}else{
+
 document.getElementById("pro").classList.remove("hidden");
 
 await loadCities();
 await loadLeads();
-await loadCredits();
+
+}
 
 }
 async function loadCities(){
 
-const { data, error } = await supabaseClient
+const { data } = await supabaseClient
 .from("leads")
-.select("city")
-.order("city",{ascending:true});
+.select("city");
 
-if(error){
-console.log(error);
-return;
+const cityFilter=document.getElementById("cityFilter");
+
+const selected=cityFilter.value;
+
+cityFilter.innerHTML='<option value="">Toutes les villes</option>';
+
+const cities=[...new Set(data.map(l=>l.city))];
+
+cities.forEach(city=>{
+
+const option=document.createElement("option");
+
+option.value=city;
+option.textContent=city;
+
+if(city===selected){
+option.selected=true;
 }
-
-const cityFilter =
-document.getElementById("cityFilter");
-
-cityFilter.innerHTML =
-'<option value="">Toutes les villes</option>';
-
-const uniqueCities =
-[...new Set(data.map(item => item.city))];
-
-uniqueCities.forEach(city => {
-
-const option =
-document.createElement("option");
-
-option.value = city;
-option.textContent = city;
 
 cityFilter.appendChild(option);
 
@@ -854,6 +850,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
