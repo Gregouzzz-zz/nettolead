@@ -576,66 +576,47 @@ cityFilter.appendChild(option);
 }
 async function loadLeads(){
 
-const city =
-document.getElementById("cityFilter").value;
+const city = document.getElementById("cityFilter").value;
+const type = document.getElementById("typeFilter").value;
+const search = document.getElementById("searchFilter").value.toLowerCase();
+const order = document.getElementById("dateFilter").value;
 
-const type =
-document.getElementById("typeFilter").value;
-
-const search =
-document.getElementById("searchFilter").value.toLowerCase();
-
-const order =
-document.getElementById("dateFilter").value;
-
-let query =
-supabaseClient
+let query = supabaseClient
 .from("leads")
 .select("*")
 .order("created_at",{ascending:order==="asc"});
 
 if(city){
-query=query.eq("city",city);
+query = query.eq("city",city);
 }
 
 if(type){
-query=query.eq("type",type);
+query = query.eq("type",type);
 }
 
 const { data } = await query;
 
-const container =
-document.getElementById("leadsContainer");
+const container = document.getElementById("leadsContainer");
 
 container.innerHTML="";
 
-let newCount=0;
+let newCount = 0;
 
-const today =
-new Date().toDateString();
+const today = new Date().toDateString();
 
-data
-.filter(lead =>
-!search ||
-lead.name.toLowerCase().includes(search) ||
-lead.city.toLowerCase().includes(search)
-)
-.forEach(lead=>{
+data.forEach(lead=>{
 
-const leadDate =
-new Date(lead.created_at).toDateString();
+const leadDate = new Date(lead.created_at).toDateString();
 
 if(leadDate===today){
 newCount++;
 }
 
-const contact =
-lead.unlocked
+const contact = lead.unlocked
 ? lead.phone+" / "+lead.email
 : "Coordonnées masquées";
 
-const button =
-lead.unlocked
+const button = lead.unlocked
 ? "<span style='color:green'>Débloqué</span>"
 : `<button onclick="unlockLead(${lead.id})">Débloquer</button>`;
 
@@ -663,10 +644,9 @@ ${button}
 
 });
 
-
-// ✅ COMPTEURS CORRECTS
-document.getElementById("totalLeads").innerText = data.length;
-document.getElementById("newLeads").innerText = newCount;
+// ✅ METTRE À JOUR TES COMPTEURS (TES IDS)
+document.getElementById("statTotal").innerText = data.length;
+document.getElementById("statNew").innerText = newCount;
 
 }
 function loadCityOptions(data){
@@ -745,6 +725,7 @@ return;
 
 </body>
 </html>
+
 
 
 
