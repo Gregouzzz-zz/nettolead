@@ -619,28 +619,18 @@ const contact = lead.unlocked
 ? lead.phone+" / "+lead.email
 : "Coordonnées masquées";
 
-let badge = "";
-let button = "";
-
-// badge position
-badge = `
-<div style="
-font-size:13px;
-color:#64748b;
-margin-bottom:8px;
-">
-${lead.unlock_count}/3 pros déjà positionnés
+let badge = `
+<div style="font-size:13px;color:#64748b;margin-bottom:8px;">
+${lead.unlock_count || 0}/3 pros déjà positionnés
 </div>
 `;
 
-// bouton
-if(lead.unlock_count >= 3){
+let button = "";
+
+if((lead.unlock_count || 0) >= 3){
 
 button = `
-<span style="
-color:red;
-font-weight:bold;
-">
+<span style="color:red;font-weight:bold;">
 Complet (3/3)
 </span>
 `;
@@ -679,13 +669,11 @@ ${button}
 </div>
 `;
 
-});
+}); // ✅ le forEach se ferme ici
 
-// ✅ METTRE À JOUR TES COMPTEURS (TES IDS)
 document.getElementById("statTotal").innerText = data.length;
 document.getElementById("statNew").innerText = newCount;
-}
-  
+
 }
 function loadCityOptions(data){
 
@@ -858,6 +846,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
