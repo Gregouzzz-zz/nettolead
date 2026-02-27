@@ -544,31 +544,30 @@ async function loadCities(){
 
 const { data, error } = await supabaseClient
 .from("leads")
-.select("city");
+.select("city")
+.order("city",{ascending:true});
 
 if(error){
 console.log(error);
 return;
 }
 
-const cityFilter = document.getElementById("cityFilter");
+const cityFilter =
+document.getElementById("cityFilter");
 
-// sauvegarde la ville sélectionnée
-const selectedCity = cityFilter.value;
+cityFilter.innerHTML =
+'<option value="">Toutes les villes</option>';
 
-cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
+const uniqueCities =
+[...new Set(data.map(item => item.city))];
 
-const cities = [...new Set(data.map(l => l.city))];
+uniqueCities.forEach(city => {
 
-cities.forEach(city => {
+const option =
+document.createElement("option");
 
-const option = document.createElement("option");
 option.value = city;
 option.textContent = city;
-
-if(city === selectedCity){
-option.selected = true;
-}
 
 cityFilter.appendChild(option);
 
@@ -748,6 +747,7 @@ return;
 
 </body>
 </html>
+
 
 
 
