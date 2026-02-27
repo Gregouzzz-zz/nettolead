@@ -594,28 +594,25 @@ supabaseClient
 .select("*")
 .order("created_at",{ascending:order==="asc"});
 
-
-// ✅ FILTRE VILLE (LA CORRECTION)
 if(city){
-query = query.eq("city", city);
+query=query.eq("city",city);
 }
 
-// filtre type
 if(type){
-query = query.eq("type", type);
+query=query.eq("type",type);
 }
 
-const { data, error } = await query;
-
-if(error){
-console.log(error);
-return;
-}
+const { data } = await query;
 
 const container =
 document.getElementById("leadsContainer");
 
 container.innerHTML="";
+
+let newCount=0;
+
+const today =
+new Date().toDateString();
 
 data
 .filter(lead =>
@@ -624,6 +621,13 @@ lead.name.toLowerCase().includes(search) ||
 lead.city.toLowerCase().includes(search)
 )
 .forEach(lead=>{
+
+const leadDate =
+new Date(lead.created_at).toDateString();
+
+if(leadDate===today){
+newCount++;
+}
 
 const contact =
 lead.unlocked
@@ -658,6 +662,11 @@ ${button}
 `;
 
 });
+
+
+// ✅ COMPTEURS CORRECTS
+document.getElementById("totalLeads").innerText = data.length;
+document.getElementById("newLeads").innerText = newCount;
 
 }
 function loadCityOptions(data){
@@ -736,6 +745,7 @@ return;
 
 </body>
 </html>
+
 
 
 
