@@ -538,6 +538,7 @@ document.getElementById("pro").classList.remove("hidden");
 
 await loadCities();
 await loadLeads();
+await loadCredits();
 
 }
 async function loadCities(){
@@ -675,6 +676,20 @@ await loadCities();
 await loadLeads();
 
 }
+async function loadCredits(){
+
+const { data: { user } } = await supabaseClient.auth.getUser();
+
+const { data } = await supabaseClient
+.from("pros")
+.select("credits")
+.eq("user_id",user.id)
+.single();
+
+document.getElementById("creditsDisplay").innerText =
+data?.credits || 0;
+
+}
 function showLogin(){
 document.getElementById("authChoice").classList.add("hidden");
 document.getElementById("loginForm").classList.remove("hidden");
@@ -725,6 +740,7 @@ return;
 
 </body>
 </html>
+
 
 
 
