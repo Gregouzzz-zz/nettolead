@@ -525,6 +525,8 @@ document.getElementById("home").classList.remove("hidden");
 
 async function showPro(){
 
+console.log("showPro exécuté");
+
 const { data } = await supabaseClient.auth.getSession();
 
 if(!data.session){
@@ -828,6 +830,7 @@ return;
 
 </body>
 </html>
+
 
 
 
