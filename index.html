@@ -827,10 +827,39 @@ home.classList.remove("hidden");
 return;
 }
 }
+
+// FIX rendre fonctions accessibles aux boutons
+window.showPro = async function(){
+    const { data } = await supabaseClient.auth.getSession();
+
+    if(!data.session){
+        document.getElementById("home").classList.add("hidden");
+        document.getElementById("loginSection").classList.remove("hidden");
+        return;
+    }
+
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("pro").classList.remove("hidden");
+
+    await loadCities();
+    await loadLeads();
+};
+
+window.goHome = function(){
+    document.getElementById("home").classList.remove("hidden");
+    document.getElementById("loginSection").classList.add("hidden");
+    document.getElementById("pro").classList.add("hidden");
+};
+
+window.logoutPro = async function(){
+    await supabaseClient.auth.signOut();
+    goHome();
+};
 </script>
 
 </body>
 </html>
+
 
 
 
