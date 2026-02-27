@@ -553,6 +553,7 @@ return;
 
 const cityFilter = document.getElementById("cityFilter");
 
+// sauvegarde la ville sélectionnée
 const selectedCity = cityFilter.value;
 
 cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
@@ -562,7 +563,6 @@ const cities = [...new Set(data.map(l => l.city))];
 cities.forEach(city => {
 
 const option = document.createElement("option");
-
 option.value = city;
 option.textContent = city;
 
@@ -577,20 +577,15 @@ cityFilter.appendChild(option);
 }
 async function loadLeads(){
 
-const cityFilter = document.getElementById("cityFilter");
-const typeFilter = document.getElementById("typeFilter");
-const searchFilter = document.getElementById("searchFilter");
-const dateFilter = document.getElementById("dateFilter");
-
-const city = cityFilter ? cityFilter.value : "";
-const type = typeFilter ? typeFilter.value : "";
-const search = searchFilter ? searchFilter.value.toLowerCase() : "";
-const order = dateFilter ? dateFilter.value : "desc";
+const city = document.getElementById("cityFilter").value;
+const type = document.getElementById("typeFilter").value;
+const search = document.getElementById("searchFilter").value.toLowerCase();
+const order = document.getElementById("dateFilter").value;
 
 let query = supabaseClient
 .from("leads")
 .select("*")
-.order("created_at", { ascending: order === "asc" });
+.order("created_at",{ascending:order==="asc"});
 
 if(city && city !== ""){
 query = query.eq("city", city);
@@ -600,45 +595,67 @@ if(type && type !== ""){
 query = query.eq("type", type);
 }
 
-const { data, error } = await query;
+const { data } = await query;
 
-if(error){
-console.log(error);
-return;
-}
+const container = document.getElementById("leadsContainer");
 
-const tbody = document.getElementById("tbody");
+container.innerHTML="";
 
-tbody.innerHTML = "";
+let newCount = 0;
 
 data
-.filter(l =>
+.filter(lead =>
 !search ||
-l.name.toLowerCase().includes(search) ||
-l.city.toLowerCase().includes(search)
+lead.name.toLowerCase().includes(search) ||
+lead.city.toLowerCase().includes(search)
 )
-.forEach(l => {
+.forEach(lead=>{
 
-let contact = l.unlocked
-? l.phone + " / " + l.email
+const today = new Date().toDateString();
+const leadDate = new Date(lead.created_at).toDateString();
+
+const isNew = leadDate === today;
+
+if(isNew) newCount++;
+
+const contact = lead.unlocked
+? lead.phone+" / "+lead.email
 : "Coordonnées masquées";
 
-let action = l.unlocked
-? "Débloqué"
-: `<button onclick="unlockLead(${l.id})">Débloquer Gratuit</button>`;
+const button = lead.unlocked
+? "<span style='color:green'>Débloqué</span>"
+: `<button onclick="unlockLead(${lead.id})">Débloquer</button>`;
 
-tbody.innerHTML += `
-<tr>
-<td>${l.name}</td>
-<td>${l.city}</td>
-<td>${l.type}</td>
-<td>${l.surface}</td>
-<td>${contact}</td>
-<td>${action}</td>
-</tr>
+container.innerHTML += `
+<div class="lead-card">
+
+${isNew ? '<div class="lead-badge">Nouveau</div>' : ''}
+
+<div class="lead-header">
+${lead.type} - ${lead.city}
+</div>
+
+<div class="lead-info">
+Nom : ${lead.name}<br>
+Surface : ${lead.surface} m²<br>
+Contact : ${contact}
+</div>
+
+<div class="lead-price">
+Prix : ${lead.price}€
+</div>
+
+${button}
+
+</div>
 `;
 
 });
+
+document.getElementById("statTotal").innerText = data.length;
+document.getElementById("statNew").innerText = newCount;
+
+loadCredits();
 
 }
 function loadCityOptions(data){
@@ -717,7 +734,6 @@ return;
 
 </body>
 </html>
-
 
 
 
