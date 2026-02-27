@@ -588,25 +588,22 @@ document.getElementById("searchFilter").value.toLowerCase();
 const order =
 document.getElementById("dateFilter").value;
 
-
-// requête Supabase
-let query = supabaseClient
+let query =
+supabaseClient
 .from("leads")
 .select("*")
 .order("created_at",{ascending:order==="asc"});
 
 
-// FILTRE VILLE
+// ✅ FILTRE VILLE (LA CORRECTION)
 if(city){
 query = query.eq("city", city);
 }
 
-
-// FILTRE TYPE
+// filtre type
 if(type){
 query = query.eq("type", type);
 }
-
 
 const { data, error } = await query;
 
@@ -615,25 +612,17 @@ console.log(error);
 return;
 }
 
-
 const container =
 document.getElementById("leadsContainer");
 
 container.innerHTML="";
 
-
 data
-.filter(lead => {
-
-if(!search) return true;
-
-return (
-lead.name.toLowerCase().includes(search)
-||
+.filter(lead =>
+!search ||
+lead.name.toLowerCase().includes(search) ||
 lead.city.toLowerCase().includes(search)
-);
-
-})
+)
 .forEach(lead=>{
 
 const contact =
@@ -747,6 +736,7 @@ return;
 
 </body>
 </html>
+
 
 
 
