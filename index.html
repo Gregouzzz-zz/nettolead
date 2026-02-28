@@ -743,57 +743,87 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 }
 async function unlockLead(leadId){
 
-const { data: session } = await supabaseClient.auth.getSession();
+try{
 
-if(!session.session){
-alert("Connecte-toi");
+// récupérer session
+const { data: { session } } = await supabaseClient.auth.getSession();
+
+if(!session){
+alert("Vous devez être connecté");
 return;
 }
 
-const proId = session.session.user.id;
+const userId = session.user.id;
 
-
-// vérifier limite
-const { data: unlocks } = await supabaseClient
-.from("lead_unlocks")
-.select("*")
-.eq("lead_id", leadId);
-
-if(unlocks.length >= 3){
-alert("Lead complet");
-return;
-}
-
-
-// vérifier si déjà débloqué
+// vérifier si déjà débloqué par ce pro
 const { data: existing } = await supabaseClient
 .from("lead_unlocks")
 .select("*")
 .eq("lead_id", leadId)
-.eq("pro_id", proId);
+.eq("pro_id", userId)
+.single();
 
-if(existing.length > 0){
-alert("Déjà débloqué");
+if(existing){
+alert("Vous avez déjà débloqué ce lead");
 return;
 }
 
+// récupérer unlock_count actuel
+const { data: lead } = await supabaseClient
+.from("leads")
+.select("unlock_count")
+.eq("id", leadId)
+.single();
 
-// INSERT
-const { error } = await supabaseClient
+if(!lead){
+alert("Lead introuvable");
+return;
+}
+
+if(lead.unlock_count >= 3){
+alert("Ce lead est complet");
+return;
+}
+
+// insérer unlock
+const { error: insertError } = await supabaseClient
 .from("lead_unlocks")
 .insert({
 lead_id: leadId,
-pro_id: proId
+pro_id: userId
 });
 
-if(error){
-console.log(error);
-alert("Erreur déblocage");
+if(insertError){
+console.log(insertError);
+alert("Erreur déblocage (insert)");
 return;
 }
 
-alert("Lead débloqué");
-loadLeads();
+// incrémenter compteur
+const { error: updateError } = await supabaseClient
+.from("leads")
+.update({
+unlock_count: lead.unlock_count + 1
+})
+.eq("id", leadId);
+
+if(updateError){
+console.log(updateError);
+alert("Erreur déblocage (update)");
+return;
+}
+
+alert("Lead débloqué avec succès");
+
+// recharger
+await loadLeads();
+
+}catch(e){
+
+console.log(e);
+alert("Erreur déblocage");
+
+}
 
 }
 function showLogin(){
@@ -874,6 +904,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
