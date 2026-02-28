@@ -575,12 +575,13 @@ cityFilter.appendChild(option);
 }
 async function loadLeads(){
 
-const city = document.getElementById("cityFilter")?.value || "";
-const type = document.getElementById("typeFilter")?.value || "";
-const search = document.getElementById("searchFilter")?.value.toLowerCase() || "";
+const city = document.getElementById("cityFilter")?.value;
+const type = document.getElementById("typeFilter")?.value;
+const search = document.getElementById("searchFilter")?.value?.toLowerCase() || "";
 const order = document.getElementById("dateFilter")?.value || "desc";
 
-// requête Supabase
+
+// requête leads
 let query = supabaseClient
 .from("leads")
 .select("*")
@@ -601,48 +602,56 @@ console.log(error);
 return;
 }
 
-  const { data: unlocks } = await supabaseClient
+
+// récupérer tous les unlocks
+const { data: unlocks, error: unlockError } = await supabaseClient
 .from("lead_unlocks")
 .select("*");
 
-data.forEach(lead=>{
-  lead.unlock_count = unlocks.filter(u => u.lead_id === lead.id).length;
-});
-  
-const container = document.getElementById("leadsContainer");
-
-container.innerHTML="";
-
-let newCount = 0;
-
-const today = new Date().toDateString();
-
-data.forEach(lead=>{
-
-// filtre recherche texte
-if(
-search &&
-!lead.name.toLowerCase().includes(search) &&
-!lead.city.toLowerCase().includes(search)
-){
+if(unlockError){
+console.log(unlockError);
 return;
 }
 
-const leadDate = new Date(lead.created_at).toDateString();
 
-if(leadDate===today){
+// ajouter unlock_count à chaque lead
+data.forEach(lead=>{
+lead.unlock_count = unlocks.filter(u => u.lead_id === lead.id).length;
+});
+
+
+// container
+const container = document.getElementById("leadsContainer");
+container.innerHTML="";
+
+let newCount = 0;
+const today = new Date().toDateString();
+
+
+// afficher leads
+data.forEach(lead=>{
+
+// filtre recherche
+if(search){
+const text = (lead.name+" "+lead.city+" "+lead.type).toLowerCase();
+if(!text.includes(search)) return;
+}
+
+
+// compteur nouveaux
+const leadDate = new Date(lead.created_at).toDateString();
+if(leadDate === today){
 newCount++;
 }
 
-// contact
-const contact = lead.unlocked
-? lead.phone+" / "+lead.email
-: "Coordonnées masquées";
 
-// badge compteur
-const count = lead.unlock_count || 0;
+// vérifier si ce pro a déjà débloqué
+const session = supabaseClient.auth.getSession();
+let alreadyUnlocked = false;
 
-const badge = `
+
+// badge
+let badge = `
 <div style="
 font-size:13px;
 color:#64748b;
@@ -652,12 +661,13 @@ ${lead.unlock_count || 0}/3 pros déjà positionnés
 </div>
 `;
 
-// bouton logique
+
+// bouton
 let button="";
 
-if(count>=3){
+if(lead.unlock_count >= 3){
 
-button=`
+button = `
 <span style="
 color:red;
 font-weight:bold;
@@ -668,7 +678,7 @@ Complet (3/3)
 
 }else{
 
-button=`
+button = `
 <button onclick="unlockLead(${lead.id})">
 Débloquer Gratuit
 </button>
@@ -676,7 +686,16 @@ Débloquer Gratuit
 
 }
 
-// affichage carte
+
+// contact visible si déjà débloqué
+const unlock = unlocks.find(u=>u.lead_id===lead.id);
+
+const contact = unlock
+? lead.phone+" / "+lead.email
+: "Coordonnées masquées";
+
+
+// afficher carte
 container.innerHTML += `
 <div class="lead-card">
 
@@ -703,12 +722,10 @@ ${button}
 
 });
 
-// compteurs dashboard
-const totalEl=document.getElementById("statTotal");
-const newEl=document.getElementById("statNew");
 
-if(totalEl) totalEl.innerText=data.length;
-if(newEl) newEl.innerText=newCount;
+// compteurs dashboard
+document.getElementById("statTotal").innerText = data.length;
+document.getElementById("statNew").innerText = newCount;
 
 }
 function loadCityOptions(data){
@@ -724,24 +741,55 @@ cities.forEach(function(city){
 cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 });
 }
-async function showPro(){
+async function unlockLead(leadId){
 
-const { data } = await supabaseClient.auth.getSession();
+const { data: sessionData } = await supabaseClient.auth.getSession();
 
-document.getElementById("home").classList.add("hidden");
-
-if(!data.session){
-
-document.getElementById("loginSection").classList.remove("hidden");
-
-}else{
-
-document.getElementById("pro").classList.remove("hidden");
-
-await loadCities();
-await loadLeads();
-
+if(!sessionData.session){
+alert("Vous devez être connecté");
+return;
 }
+
+const proId = sessionData.session.user.id;
+
+
+// vérifier nombre unlocks
+const { data: unlocks } = await supabaseClient
+.from("lead_unlocks")
+.select("*")
+.eq("lead_id",leadId);
+
+if(unlocks.length >= 3){
+alert("Lead déjà complet");
+return;
+}
+
+
+// vérifier si déjà débloqué par ce pro
+const already = unlocks.find(u=>u.pro_id===proId);
+
+if(already){
+alert("Vous avez déjà débloqué ce lead");
+return;
+}
+
+
+// insert unlock
+const { error } = await supabaseClient
+.from("lead_unlocks")
+.insert([{
+lead_id: leadId,
+pro_id: proId
+}]);
+
+if(error){
+console.log(error);
+alert("Erreur déblocage");
+return;
+}
+
+alert("Lead débloqué !");
+loadLeads();
 
 }
 function showLogin(){
@@ -822,6 +870,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
