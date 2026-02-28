@@ -743,81 +743,74 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 }
 async function unlockLead(leadId){
 
-    try{
+    console.log("Lead ID reçu:", leadId);
 
-        // 1. récupérer l'utilisateur connecté
-        const { data: { user } } = await supabaseClient.auth.getUser();
+    const { data: { user } } = await supabaseClient.auth.getUser();
 
-        if(!user){
-            alert("Vous devez être connecté");
-            return;
-        }
+    if(!user){
+        alert("Connectez-vous");
+        return;
+    }
 
-        const proId = user.id;
+    const prodId = user.id;
 
-        // 2. vérifier si le lead existe
-        const { data: lead, error: leadError } = await supabaseClient
+    // Vérifier que le lead existe
+    const { data: lead, error: leadError } = await supabaseClient
         .from("leads")
         .select("*")
         .eq("id", leadId)
         .single();
 
-        if(leadError || !lead){
-            alert("Lead introuvable");
-            return;
-        }
+    console.log("Lead trouvé:", lead);
 
-        // 3. vérifier combien de pros ont déjà débloqué
-        const { data: unlocks, error: unlockError } = await supabaseClient
+    if(leadError || !lead){
+        console.log(leadError);
+        alert("Lead introuvable");
+        return;
+    }
+
+    // Vérifier combien de pros ont débloqué
+    const { data: unlocks, error: unlockError } = await supabaseClient
         .from("lead_unlocks")
         .select("*")
         .eq("lead_id", leadId);
 
-        if(unlockError){
-            alert("Erreur vérification");
-            return;
-        }
+    if(unlockError){
+        console.log(unlockError);
+        alert("Erreur vérification");
+        return;
+    }
 
-        // 4. vérifier limite 3 pros
-        if(unlocks.length >= 3){
-            alert("Ce lead est complet (3/3)");
-            return;
-        }
+    if(unlocks.length >= 3){
+        alert("Lead complet");
+        return;
+    }
 
-        // 5. vérifier si ce pro a déjà débloqué
-        const alreadyUnlocked = unlocks.find(u => u.pro_id === proId);
+    // Vérifier si déjà débloqué par ce pro
+    const already = unlocks.find(u => u.prod_id === prodId);
 
-        if(alreadyUnlocked){
-            alert("Vous avez déjà débloqué ce lead");
-            return;
-        }
+    if(already){
+        alert("Déjà débloqué");
+        return;
+    }
 
-        // 6. insérer le déblocage
-        const { error: insertError } = await supabaseClient
+    // Insérer
+    const { error: insertError } = await supabaseClient
         .from("lead_unlocks")
         .insert({
             lead_id: leadId,
-            pro_id: proId
+            prod_id: prodId
         });
 
-        if(insertError){
-            console.log(insertError);
-            alert("Erreur déblocage");
-            return;
-        }
-
-        // 7. succès
-        alert("Lead débloqué avec succès");
-
-        // 8. recharger les leads
-        loadLeads();
-
-    }
-    catch(e){
-        console.log(e);
-        alert("Erreur");
+    if(insertError){
+        console.log(insertError);
+        alert("Erreur déblocage");
+        return;
     }
 
+    alert("Lead débloqué");
+
+    loadLeads();
 }
 function showLogin(){
 document.getElementById("authChoice").classList.add("hidden");
@@ -897,6 +890,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
