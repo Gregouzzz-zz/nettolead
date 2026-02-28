@@ -743,87 +743,80 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 }
 async function unlockLead(leadId){
 
-try{
+    try{
 
-// récupérer session
-const { data: { session } } = await supabaseClient.auth.getSession();
+        // 1. récupérer l'utilisateur connecté
+        const { data: { user } } = await supabaseClient.auth.getUser();
 
-if(!session){
-alert("Vous devez être connecté");
-return;
-}
+        if(!user){
+            alert("Vous devez être connecté");
+            return;
+        }
 
-const userId = session.user.id;
+        const proId = user.id;
 
-// vérifier si déjà débloqué par ce pro
-const { data: existing } = await supabaseClient
-.from("lead_unlocks")
-.select("*")
-.eq("lead_id", leadId)
-.eq("pro_id", userId)
-.single();
+        // 2. vérifier si le lead existe
+        const { data: lead, error: leadError } = await supabaseClient
+        .from("leads")
+        .select("*")
+        .eq("id", leadId)
+        .single();
 
-if(existing){
-alert("Vous avez déjà débloqué ce lead");
-return;
-}
+        if(leadError || !lead){
+            alert("Lead introuvable");
+            return;
+        }
 
-// récupérer unlock_count actuel
-const { data: lead } = await supabaseClient
-.from("leads")
-.select("unlock_count")
-.eq("id", leadId)
-.single();
+        // 3. vérifier combien de pros ont déjà débloqué
+        const { data: unlocks, error: unlockError } = await supabaseClient
+        .from("lead_unlocks")
+        .select("*")
+        .eq("lead_id", leadId);
 
-if(!lead){
-alert("Lead introuvable");
-return;
-}
+        if(unlockError){
+            alert("Erreur vérification");
+            return;
+        }
 
-if(lead.unlock_count >= 3){
-alert("Ce lead est complet");
-return;
-}
+        // 4. vérifier limite 3 pros
+        if(unlocks.length >= 3){
+            alert("Ce lead est complet (3/3)");
+            return;
+        }
 
-// insérer unlock
-const { error: insertError } = await supabaseClient
-.from("lead_unlocks")
-.insert({
-lead_id: leadId,
-pro_id: userId
-});
+        // 5. vérifier si ce pro a déjà débloqué
+        const alreadyUnlocked = unlocks.find(u => u.pro_id === proId);
 
-if(insertError){
-console.log(insertError);
-alert("Erreur déblocage (insert)");
-return;
-}
+        if(alreadyUnlocked){
+            alert("Vous avez déjà débloqué ce lead");
+            return;
+        }
 
-// incrémenter compteur
-const { error: updateError } = await supabaseClient
-.from("leads")
-.update({
-unlock_count: lead.unlock_count + 1
-})
-.eq("id", leadId);
+        // 6. insérer le déblocage
+        const { error: insertError } = await supabaseClient
+        .from("lead_unlocks")
+        .insert({
+            lead_id: leadId,
+            pro_id: proId
+        });
 
-if(updateError){
-console.log(updateError);
-alert("Erreur déblocage (update)");
-return;
-}
+        if(insertError){
+            console.log(insertError);
+            alert("Erreur déblocage");
+            return;
+        }
 
-alert("Lead débloqué avec succès");
+        // 7. succès
+        alert("Lead débloqué avec succès");
 
-// recharger
-await loadLeads();
+        // 8. recharger les leads
+        loadLeads();
 
-}catch(e){
-
-console.log(e);
-alert("Erreur déblocage");
-
-}
+    }
+    catch(e){
+        console.log(e);
+        alert("Erreur");
+    }
 
 }
 function showLogin(){
@@ -904,6 +897,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
