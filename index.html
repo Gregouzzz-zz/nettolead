@@ -601,6 +601,14 @@ console.log(error);
 return;
 }
 
+  const { data: unlocks } = await supabaseClient
+.from("lead_unlocks")
+.select("*");
+
+data.forEach(lead=>{
+  lead.unlock_count = unlocks.filter(u => u.lead_id === lead.id).length;
+});
+  
 const container = document.getElementById("leadsContainer");
 
 container.innerHTML="";
@@ -640,7 +648,7 @@ font-size:13px;
 color:#64748b;
 margin-bottom:8px;
 ">
-${count}/3 pros positionnés
+${lead.unlock_count || 0}/3 pros déjà positionnés
 </div>
 `;
 
@@ -716,60 +724,24 @@ cities.forEach(function(city){
 cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 });
 }
-async function unlockLead(id){
+async function showPro(){
 
-// récupérer le lead actuel
-const { data: lead, error } = await supabaseClient
-.from("leads")
-.select("*")
-.eq("id", id)
-.single();
+const { data } = await supabaseClient.auth.getSession();
 
-if(error){
-alert("Erreur chargement lead");
-return;
-}
+document.getElementById("home").classList.add("hidden");
 
-// sécurité
-const currentCount = lead.unlock_count || 0;
+if(!data.session){
 
-// si déjà complet
-if(currentCount >= 3){
+document.getElementById("loginSection").classList.remove("hidden");
 
-alert("Ce lead est déjà complet (3/3 pros).");
-return;
+}else{
 
-}
+document.getElementById("pro").classList.remove("hidden");
 
-// incrémenter compteur
-const newCount = currentCount + 1;
-
-// update Supabase
-const { error: updateError } = await supabaseClient
-.from("leads")
-.update({
-
-unlock_count: newCount,
-
-// débloquer contact
-unlocked: true
-
-})
-.eq("id", id);
-
-if(updateError){
-
-alert("Erreur déblocage");
-return;
-
-}
-
-// message succès
-alert("Lead débloqué ! ("+newCount+"/3)");
-
-// refresh dashboard
 await loadCities();
 await loadLeads();
+
+}
 
 }
 function showLogin(){
@@ -850,6 +822,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
