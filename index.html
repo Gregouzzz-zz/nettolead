@@ -743,27 +743,35 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 }
 async function unlockLead(leadId){
 
-    const { data: { user } } = await supabaseClient.auth.getUser();
+    console.log("unlockLead appelé avec id:", leadId);
+
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+
+    console.log("USER:", user);
+    console.log("USER ERROR:", userError);
 
     if(!user){
-        alert("Non connecté");
+        alert("Utilisateur non connecté");
         return;
     }
 
-    const { error } = await supabaseClient
+    const { data, error } = await supabaseClient
         .from("lead_unlocks")
         .insert({
-            lead_id: parseInt(leadId),
+            lead_id: Number(leadId),
             prod_id: user.id
-        });
+        })
+        .select();
+
+    console.log("INSERT DATA:", data);
+    console.log("INSERT ERROR:", error);
 
     if(error){
-        console.log(error);
         alert("Erreur déblocage");
         return;
     }
 
-    alert("Lead débloqué");
+    alert("Lead débloqué !");
     loadLeads();
 }
 function showLogin(){
@@ -844,6 +852,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
