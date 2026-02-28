@@ -743,9 +743,9 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 }
 async function unlockLead(leadId){
 
-const { data: sessionData } = await supabaseClient.auth.getSession();
+const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
 
-if(!sessionData.session){
+if(sessionError || !sessionData.session){
 alert("Vous devez être connecté");
 return;
 }
@@ -753,40 +753,57 @@ return;
 const proId = sessionData.session.user.id;
 
 
-// vérifier nombre unlocks
-const { data: unlocks } = await supabaseClient
+// vérifier si déjà débloqué
+const { data: existing, error: existingError } = await supabaseClient
 .from("lead_unlocks")
 .select("*")
-.eq("lead_id",leadId);
+.eq("lead_id", leadId)
+.eq("pro_id", proId);
 
-if(unlocks.length >= 3){
-alert("Lead déjà complet");
+if(existingError){
+console.log(existingError);
+alert("Erreur vérification");
 return;
 }
 
-
-// vérifier si déjà débloqué par ce pro
-const already = unlocks.find(u=>u.pro_id===proId);
-
-if(already){
+if(existing.length > 0){
 alert("Vous avez déjà débloqué ce lead");
 return;
 }
 
 
-// insert unlock
-const { error } = await supabaseClient
+// vérifier limite 3
+const { data: unlocks, error: countError } = await supabaseClient
+.from("lead_unlocks")
+.select("*")
+.eq("lead_id", leadId);
+
+if(countError){
+console.log(countError);
+alert("Erreur vérification limite");
+return;
+}
+
+if(unlocks.length >= 3){
+alert("Lead complet");
+return;
+}
+
+
+// INSERT
+const { error: insertError } = await supabaseClient
 .from("lead_unlocks")
 .insert([{
 lead_id: leadId,
 pro_id: proId
 }]);
 
-if(error){
-console.log(error);
+if(insertError){
+console.log(insertError);
 alert("Erreur déblocage");
 return;
 }
+
 
 alert("Lead débloqué !");
 loadLeads();
@@ -870,6 +887,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
