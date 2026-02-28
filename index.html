@@ -743,46 +743,21 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 }
 async function unlockLead(leadId){
 
-const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+const { data: session } = await supabaseClient.auth.getSession();
 
-if(sessionError || !sessionData.session){
-alert("Vous devez être connecté");
+if(!session.session){
+alert("Connecte-toi");
 return;
 }
 
-const proId = sessionData.session.user.id;
+const proId = session.session.user.id;
 
 
-// vérifier si déjà débloqué
-const { data: existing, error: existingError } = await supabaseClient
-.from("lead_unlocks")
-.select("*")
-.eq("lead_id", leadId)
-.eq("pro_id", proId);
-
-if(existingError){
-console.log(existingError);
-alert("Erreur vérification");
-return;
-}
-
-if(existing.length > 0){
-alert("Vous avez déjà débloqué ce lead");
-return;
-}
-
-
-// vérifier limite 3
-const { data: unlocks, error: countError } = await supabaseClient
+// vérifier limite
+const { data: unlocks } = await supabaseClient
 .from("lead_unlocks")
 .select("*")
 .eq("lead_id", leadId);
-
-if(countError){
-console.log(countError);
-alert("Erreur vérification limite");
-return;
-}
 
 if(unlocks.length >= 3){
 alert("Lead complet");
@@ -790,22 +765,34 @@ return;
 }
 
 
-// INSERT
-const { error: insertError } = await supabaseClient
+// vérifier si déjà débloqué
+const { data: existing } = await supabaseClient
 .from("lead_unlocks")
-.insert([{
-lead_id: leadId,
-pro_id: proId
-}]);
+.select("*")
+.eq("lead_id", leadId)
+.eq("pro_id", proId);
 
-if(insertError){
-console.log(insertError);
-alert("Erreur déblocage");
+if(existing.length > 0){
+alert("Déjà débloqué");
 return;
 }
 
 
-alert("Lead débloqué !");
+// INSERT
+const { error } = await supabaseClient
+.from("lead_unlocks")
+.insert({
+lead_id: leadId,
+pro_id: proId
+});
+
+if(error){
+console.log(error);
+alert("Erreur déblocage");
+return;
+}
+
+alert("Lead débloqué");
 loadLeads();
 
 }
@@ -887,6 +874,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
