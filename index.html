@@ -743,36 +743,68 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 }
 async function unlockLead(leadId){
 
-    console.log("unlockLead appelé avec id:", leadId);
+    try{
 
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+        // 1. récupérer le pro connecté
+        const { data: { user } } = await supabaseClient.auth.getUser();
 
-    console.log("USER:", user);
-    console.log("USER ERROR:", userError);
+        if(!user){
+            alert("Vous devez être connecté");
+            return;
+        }
 
-    if(!user){
-        alert("Utilisateur non connecté");
-        return;
-    }
+        // 2. vérifier combien de pros ont déjà débloqué ce lead
+        const { data: existingUnlocks, error: countError } = await supabaseClient
+        .from("lead_unlocks")
+        .select("*")
+        .eq("lead_id", leadId);
 
-    const { data, error } = await supabaseClient
+        if(countError){
+            console.log(countError);
+            alert("Erreur vérification");
+            return;
+        }
+
+        // 3. limiter à 3 pros max
+        if(existingUnlocks.length >= 3){
+            alert("Ce lead est complet (3/3)");
+            return;
+        }
+
+        // 4. vérifier si ce pro a déjà débloqué
+        const alreadyUnlocked = existingUnlocks.find(
+            unlock => unlock.prod_id === user.id
+        );
+
+        if(alreadyUnlocked){
+            alert("Vous avez déjà débloqué ce lead");
+            return;
+        }
+
+        // 5. insérer le déblocage
+        const { error: insertError } = await supabaseClient
         .from("lead_unlocks")
         .insert({
             lead_id: Number(leadId),
             prod_id: user.id
-        })
-        .select();
+        });
 
-    console.log("INSERT DATA:", data);
-    console.log("INSERT ERROR:", error);
+        if(insertError){
+            console.log(insertError);
+            alert("Erreur déblocage");
+            return;
+        }
 
-    if(error){
-        alert("Erreur déblocage");
-        return;
+        alert("Lead débloqué avec succès");
+
+        // 6. recharger les leads
+        await loadLeads();
+
+    }catch(e){
+        console.log(e);
+        alert("Erreur inattendue");
     }
 
-    alert("Lead débloqué !");
-    loadLeads();
 }
 function showLogin(){
 document.getElementById("authChoice").classList.add("hidden");
@@ -852,6 +884,7 @@ window.logoutPro = async function(){
 
 </body>
 </html>
+
 
 
 
