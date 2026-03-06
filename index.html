@@ -294,26 +294,24 @@ box-shadow:0 20px 40px rgba(0,0,0,0.15);
 display:flex;
 align-items:center;
 justify-content:space-between;
-gap:80px;
-max-width:1400px;
+gap:60px;
+max-width:1300px;
 margin:auto;
-padding:80px 40px;
+padding:80px 20px;
 }
 
 .hero-text{
-flex:1;
 max-width:900px;
 }
 
-.hero-text h1{
+.hero h1{
 font-size:56px;
-font-weight:700;
-line-height:1.15;
+line-height:1.2;
 margin-bottom:25px;
-letter-spacing:-1px;
+font-weight:700;
 }
 
-.hero-text p{
+.hero p{
 font-size:20px;
 line-height:1.7;
 color:#555;
@@ -321,13 +319,7 @@ margin-bottom:15px;
 }
 
 .hero-image{
-flex:1;
-display:flex;
-justify-content:center;
-}
-
-.hero-image img{
-width:420px;
+width:380px;
 border-radius:16px;
 box-shadow:0 20px 40px rgba(0,0,0,0.15);
 }
@@ -335,6 +327,22 @@ box-shadow:0 20px 40px rgba(0,0,0,0.15);
 </style>
 </head>
 <body>
+
+<nav>
+<div class="logo" onclick="goHome()" style="cursor:pointer;">
+<div class="logo-box">N</div>
+NettoLead
+</div>
+
+  <div class="nav-buttons">
+    <button onclick="goHome()">Accueil</button>
+    <button onclick="showPro()">Espace Pro</button>
+  </div>
+</nav>
+
+<div id="home">
+
+<!-- HERO -->
 <div class="hero">
 
 <div class="hero-text">
@@ -355,23 +363,6 @@ alt="Entreprise de nettoyage professionnelle">
 </div>
 
 </div>
-<nav>
-<div class="logo" onclick="goHome()" style="cursor:pointer;">
-<div class="logo-box">N</div>
-NettoLead
-</div>
-
-  <div class="nav-buttons">
-    <button onclick="goHome()">Accueil</button>
-    <button onclick="showPro()">Espace Pro</button>
-  </div>
-</nav>
-
-<div id="home">
-
-<!-- HERO -->
-
-
 <!-- COMMENT -->
 <section class="process">
 
@@ -1208,7 +1199,6 @@ closeResetPopup();
 
 </body>
 </html>
-
 
 
 
