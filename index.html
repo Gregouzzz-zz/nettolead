@@ -192,6 +192,10 @@ border:none;
 border-radius:6px;
 cursor:pointer;
 }
+  .filter-card{
+max-width:500px;
+margin:20px auto;
+}
 </style>
 </head>
 <body>
@@ -460,11 +464,6 @@ Retour
 
 <div class="dashboard-actions">
 
-<label>Filtrer par ville :</label>
-<select id="cityFilter" onchange="loadLeads()">
-<option value="">Toutes les villes</option>
-</select>
-
 <button onclick="logoutPro()" class="logout-btn">
 Déconnexion
 </button>
@@ -477,11 +476,14 @@ Retour
 
 </div>
 
-<div class="card" style="margin-bottom:20px;">
-
+<div class="card filter-card">
 <h3>Filtrer les leads</h3>
 
 <div style="display:flex;gap:10px;flex-wrap:wrap;">
+  <label>Filtrer par ville :</label>
+<select id="cityFilter" onchange="loadLeads()">
+<option value="">Toutes les villes</option>
+</select>
 
 <select id="typeFilter" onchange="loadLeads()">
 <option value="">Tous les types</option>
@@ -1030,6 +1032,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
