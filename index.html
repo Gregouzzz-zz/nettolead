@@ -405,33 +405,45 @@ Retour
 </div>
 <div id="pro" class="hidden section">
 <h1>Dashboard Espace Pro</h1>
+<div class="dashboard-header">
+
 <div class="dashboard-stats">
 
-  <div class="stat-card">
-    <span id="statTotal">0</span>
-    <p>Leads disponibles</p>
-  </div>
+<div class="stat-card">
+<span id="statTotal">0</span>
+<p>Leads disponibles</p>
+</div>
 
-  <div class="stat-card">
-    <span id="statNew">0</span>
-    <p>Nouveaux aujourd'hui</p>
-  </div>
+<div class="stat-card">
+<span id="statNew">0</span>
+<p>Nouveaux aujourd'hui</p>
+</div>
 
-  <div class="stat-card">
-    <span id="creditsDisplay">0</span>
-    <p>Crédits</p>
-  </div>
+<div class="stat-card">
+<span id="creditsDisplay">0</span>
+<p>Crédits</p>
+</div>
 
-<div style="margin:20px 0;">
+</div>
+
+<div class="dashboard-actions">
+
 <label>Filtrer par ville :</label>
 <select id="cityFilter" onchange="loadLeads()">
 <option value="">Toutes les villes</option>
 </select>
-</div>
-<button onclick="logoutPro()" style="background:#dc2626;">Déconnexion</button>
-<button onclick="goBack()" style="background:#64748b;">
+
+<button onclick="logoutPro()" class="logout-btn">
+Déconnexion
+</button>
+
+<button onclick="goBack()" class="back-btn">
 Retour
-</button> 
+</button>
+
+</div>
+
+</div>
 
 <div class="card" style="margin-bottom:20px;">
 
@@ -986,6 +998,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
