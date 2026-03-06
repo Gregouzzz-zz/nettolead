@@ -1006,24 +1006,7 @@ cities.forEach(function(city){
 cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 });
 }
-  async function unlockLead(leadId) {
-
-const { data, error } = await supabase
-.from("leads")
-.update({
-  unlocked: true,
-  unlock_count: 1
-})
-.eq("id", leadId)
-
-if (error) {
-console.error("Erreur déblocage :", error)
-} else {
-console.log("Lead débloqué")
-}
-
-}
-async function unlockLead(leadId){
+  async function unlockLead(leadId){
 
     try{
 
@@ -1063,7 +1046,7 @@ async function unlockLead(leadId){
             return;
         }
 
-        // 5. insérer le déblocage
+        // 5. insérer le déblocage dans la table lead_unlocks
         const { error: insertError } = await supabaseClient
         .from("lead_unlocks")
         .insert({
@@ -1077,9 +1060,20 @@ async function unlockLead(leadId){
             return;
         }
 
+        // 6. mettre à jour la table leads pour déclencher le webhook Make
+        const { error: updateError } = await supabaseClient
+        .from("leads")
+        .update({ unlocked: true })
+        .eq("id", leadId);
+
+        if(updateError){
+            console.log(updateError);
+        }
+
+        // 7. confirmation
         alert("Lead débloqué avec succès");
 
-        // 6. recharger les leads
+        // 8. recharger les leads
         await loadLeads();
 
     }catch(e){
@@ -1211,6 +1205,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
