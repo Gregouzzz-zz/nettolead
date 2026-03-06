@@ -1006,6 +1006,23 @@ cities.forEach(function(city){
 cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 });
 }
+  async function unlockLead(leadId) {
+
+const { data, error } = await supabase
+.from("leads")
+.update({
+  unlocked: true,
+  unlock_count: 1
+})
+.eq("id", leadId)
+
+if (error) {
+console.error("Erreur déblocage :", error)
+} else {
+console.log("Lead débloqué")
+}
+
+}
 async function unlockLead(leadId){
 
     try{
@@ -1194,6 +1211,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
