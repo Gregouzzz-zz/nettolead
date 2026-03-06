@@ -294,24 +294,26 @@ box-shadow:0 20px 40px rgba(0,0,0,0.15);
 display:flex;
 align-items:center;
 justify-content:space-between;
-gap:60px;
-max-width:1300px;
+gap:80px;
+max-width:1400px;
 margin:auto;
-padding:80px 20px;
+padding:80px 40px;
 }
 
 .hero-text{
+flex:1;
 max-width:900px;
 }
 
-.hero h1{
+.hero-text h1{
 font-size:56px;
-line-height:1.2;
-margin-bottom:25px;
 font-weight:700;
+line-height:1.15;
+margin-bottom:25px;
+letter-spacing:-1px;
 }
 
-.hero p{
+.hero-text p{
 font-size:20px;
 line-height:1.7;
 color:#555;
@@ -319,7 +321,13 @@ margin-bottom:15px;
 }
 
 .hero-image{
-width:380px;
+flex:1;
+display:flex;
+justify-content:center;
+}
+
+.hero-image img{
+width:420px;
 border-radius:16px;
 box-shadow:0 20px 40px rgba(0,0,0,0.15);
 }
@@ -327,7 +335,26 @@ box-shadow:0 20px 40px rgba(0,0,0,0.15);
 </style>
 </head>
 <body>
+<div class="hero">
 
+<div class="hero-text">
+<h1>Trouvez une entreprise de nettoyage fiable et professionnelle</h1>
+
+<p>
+NettoLead simplifie la mise en relation entre particuliers et entreprises de nettoyage qualifiées.
+</p>
+
+<p>
+Vos coordonnées sont protégées et accessibles uniquement aux professionnels réellement intéressés.
+</p>
+</div>
+
+<div class="hero-image">
+<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200" 
+alt="Entreprise de nettoyage professionnelle">
+</div>
+
+</div>
 <nav>
 <div class="logo" onclick="goHome()" style="cursor:pointer;">
 <div class="logo-box">N</div>
@@ -343,16 +370,7 @@ NettoLead
 <div id="home">
 
 <!-- HERO -->
-<div class="hero">
-<div>
-<h1>Trouvez une entreprise de nettoyage fiable et professionnelle</h1>
-<p>NettoLead simplifie la mise en relation entre particuliers et entreprises de nettoyage qualifiées.</p>
-<p>Vos coordonnées sont protégées et accessibles uniquement aux professionnels réellement intéressés.</p>
-</div>
-<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200" 
-style="width:400px; border-radius:16px; box-shadow:0 20px 40px rgba(0,0,0,0.15);" 
-alt="Entreprise de nettoyage professionnelle">
-</div>
+
 
 <!-- COMMENT -->
 <section class="process">
@@ -1190,6 +1208,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
