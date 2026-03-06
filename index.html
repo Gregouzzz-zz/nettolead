@@ -345,6 +345,40 @@ color:#555;
 margin-bottom:12px;
 max-width:900px;
 }
+  .hero{
+display:flex;
+align-items:center;
+justify-content:space-between;
+max-width:1200px;
+margin:auto;
+padding:80px 20px;
+gap:60px;
+}
+
+.hero-left{
+flex:1;
+max-width:650px;
+}
+
+.hero-left h1{
+font-size:52px;
+line-height:1.2;
+font-weight:700;
+margin-bottom:25px;
+}
+
+.hero-left p{
+font-size:20px;
+line-height:1.6;
+color:#555;
+margin-bottom:15px;
+}
+
+.hero-right img{
+width:420px;
+border-radius:16px;
+box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
 </style>
 </head>
 <body>
@@ -364,19 +398,27 @@ NettoLead
 <div id="home">
 
 <!-- HERO -->
-<div class="hero-text">
+<div class="hero">
 
-<h1 class="hero-title">
+<div class="hero-left">
+
+<h1>
 Trouvez une entreprise de nettoyage fiable et professionnelle
 </h1>
 
-<p class="hero-subtitle">
+<p>
 NettoLead simplifie la mise en relation entre particuliers et entreprises de nettoyage qualifiées.
 </p>
 
-<p class="hero-subtitle">
+<p>
 Vos coordonnées sont protégées et accessibles uniquement aux professionnels réellement intéressés.
 </p>
+
+</div>
+
+<div class="hero-right">
+<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200" alt="Nettoyage professionnel">
+</div>
 
 </div>
 
@@ -1222,6 +1264,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
