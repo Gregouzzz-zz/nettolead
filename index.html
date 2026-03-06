@@ -300,6 +300,15 @@ color:#555;
 max-width:750px;
 margin-bottom:10px;
 }
+  .form-container{
+max-width:600px;
+margin:80px auto;
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+border:1px solid #eee;
+}
 </style>
 </head>
 <body>
@@ -442,6 +451,29 @@ NettoLead
 <button type="submit">Envoyer</button>
 
 </form>
+  <div class="form-container">
+
+<form id="leadForm">
+
+<input type="text" placeholder="Nom">
+<input type="email" placeholder="Email">
+<input type="tel" placeholder="Téléphone">
+<input type="text" placeholder="Ville">
+
+<select>
+<option>Ménage</option>
+<option>Bureaux</option>
+</select>
+
+<input type="text" placeholder="Surface en m²">
+
+<textarea placeholder="Détails supplémentaires"></textarea>
+
+<button>Envoyer</button>
+
+</form>
+
+</div>
 </div>
 </div>
 
@@ -1164,6 +1196,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
