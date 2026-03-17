@@ -711,7 +711,9 @@ alert("Demande envoyée !");
 document.getElementById("leadForm").reset();
 });
 
-/* AUTH PRO */
+// =========================
+// 🔹 INSCRIPTION PRO
+// =========================
 async function registerPro(){
 
 if(!document.getElementById("acceptCgu").checked){
@@ -727,7 +729,7 @@ alert("Email et mot de passe obligatoires.");
 return;
 }
 
-// 1. inscription
+// ✅ inscription uniquement (PAS de insert dans pros)
 const { data, error } = await supabaseClient.auth.signUp({
 email: email,
 password: password
@@ -738,47 +740,81 @@ alert("Erreur inscription : " + error.message);
 return;
 }
 
-const user = data.user;
+// ✅ message clair
+alert("Compte créé ! Vérifiez votre email pour activer votre compte.");
 
-if(!user){
-alert("Erreur utilisateur");
+}
+
+
+
+// =========================
+// 🔹 LOGIN PRO + CRÉATION PROFIL
+// =========================
+async function loginPro(){
+
+const email = document.getElementById("loginEmail").value;
+const password = document.getElementById("loginPassword").value;
+
+const { data, error } = await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+alert("Erreur connexion : " + error.message);
 return;
 }
 
-// 2. création du profil pro 🔥 CORRIGÉ ICI
-const { error: insertError } = await supabaseClient.from("pros").insert([{
-id: user.id, // ✅ IMPORTANT (au lieu de user_id)
-company_name: document.getElementById("companyName").value,
-siret: document.getElementById("companySiret").value,
-address: document.getElementById("companyAddress").value,
-city: document.getElementById("companyCity").value,
-first_name: document.getElementById("contactFirstName").value,
-last_name: document.getElementById("contactLastName").value,
-phone: document.getElementById("contactPhone").value,
-service_type: document.getElementById("serviceType").value,
-radius: document.getElementById("radius").value,
-employees: document.getElementById("employees").value,
+const user = data.user;
+
+// =========================
+// 🔥 CRÉER PROFIL SI N'EXISTE PAS
+// =========================
+
+const { data: existingPro, error: fetchError } = await supabaseClient
+.from("pros")
+.select("id")
+.eq("id", user.id)
+.single();
+
+// si erreur ≠ "no rows", on log
+if(fetchError && fetchError.code !== "PGRST116"){
+console.log(fetchError);
+}
+
+// si pas de profil → on crée
+if(!existingPro){
+
+const { error: insertError } = await supabaseClient.from("pros").insert({
+id: user.id,
+company_name: document.getElementById("companyName")?.value || "",
+siret: document.getElementById("companySiret")?.value || "",
+address: document.getElementById("companyAddress")?.value || "",
+city: document.getElementById("companyCity")?.value || "",
+first_name: document.getElementById("contactFirstName")?.value || "",
+last_name: document.getElementById("contactLastName")?.value || "",
+phone: document.getElementById("contactPhone")?.value || "",
+service_type: document.getElementById("serviceType")?.value || "",
+radius: parseInt(document.getElementById("radius")?.value) || 0,
+employees: parseInt(document.getElementById("employees")?.value) || 0,
 credits: 0
-}]);
+});
 
 if(insertError){
 console.log(insertError);
-alert("Erreur base de données : " + insertError.message);
+alert("Erreur création profil : " + insertError.message);
 return;
 }
 
-// 3. succès
-alert("Compte professionnel créé avec succès !");
-
-// 4. retour login
-document.getElementById("registerForm").classList.add("hidden");
-document.getElementById("authChoice").classList.add("hidden");
-document.getElementById("loginForm").classList.remove("hidden");
-
-document.getElementById("loginEmail").value = email;
-
 }
 
+alert("Connexion réussie");
+
+// 👉 ici tu peux charger le dashboard
+// loadLeads();
+// showDashboard();
+
+}
 async function loginPro(){
 const { error } = await supabaseClient.auth.signInWithPassword({
 email: document.getElementById("loginEmail").value,
@@ -1213,6 +1249,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
