@@ -716,103 +716,104 @@ document.getElementById("leadForm").reset();
 // =========================
 async function registerPro(){
 
-if(!document.getElementById("acceptCgu").checked){
-alert("Vous devez accepter les CGU.");
-return;
+  if(!document.getElementById("acceptCgu").checked){
+    alert("Vous devez accepter les CGU.");
+    return;
+  }
+
+  const email = document.getElementById("loginEmailRegister").value;
+  const password = document.getElementById("loginPasswordRegister").value;
+
+  if(!email || !password){
+    alert("Email et mot de passe obligatoires.");
+    return;
+  }
+
+  try {
+
+    // 🔹 1. Création du compte Supabase
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password
+    });
+
+    if(error){
+      alert("Erreur inscription : " + error.message);
+      return;
+    }
+
+    // ⚠️ IMPORTANT : attendre que l'utilisateur existe
+    const user = data.user;
+
+    if(!user){
+      alert("Compte créé, vérifie ton email.");
+      return;
+    }
+
+    // 🔹 2. INSERT DANS LA TABLE PROS
+    const { error: insertError } = await supabaseClient
+      .from("pros")
+      .insert([{
+        user_id: user.id,
+        company_name: document.getElementById("companyName").value,
+        siret: document.getElementById("companySiret").value,
+        address: document.getElementById("companyAddress").value,
+        city: document.getElementById("companyCity").value,
+        first_name: document.getElementById("contactFirstName").value,
+        last_name: document.getElementById("contactLastName").value,
+        phone: document.getElementById("contactPhone").value,
+        service_type: document.getElementById("serviceType").value,
+        radius: parseInt(document.getElementById("radius").value) || 0,
+        employees: parseInt(document.getElementById("employees").value) || 0,
+        credits: 0
+      }]);
+
+    if(insertError){
+      console.log(insertError);
+      alert("Erreur base de données : " + insertError.message);
+      return;
+    }
+
+    // 🔹 3. ENVOI EMAIL AVEC RESEND
+    await sendConfirmationEmail(email);
+
+    // 🔹 4. SUCCESS
+    alert("Compte créé avec succès 🚀");
+
+    document.getElementById("registerForm").classList.add("hidden");
+    document.getElementById("authChoice").classList.add("hidden");
+    document.getElementById("loginForm").classList.remove("hidden");
+
+    document.getElementById("loginEmail").value = email;
+
+  } catch(e){
+    console.log(e);
+    alert("Erreur inattendue");
+  }
 }
+async function sendConfirmationEmail(email){
 
-const email = document.getElementById("loginEmailRegister").value;
-const password = document.getElementById("loginPasswordRegister").value;
-
-if(!email || !password){
-alert("Email et mot de passe obligatoires.");
-return;
-}
-
-// ✅ inscription uniquement (PAS de insert dans pros)
-const { data, error } = await supabaseClient.auth.signUp({
-email: email,
-password: password
-});
-
-if(error){
-alert("Erreur inscription : " + error.message);
-return;
-}
-
-// ✅ message clair
-alert("Compte créé ! Vérifiez votre email pour activer votre compte.");
-
-}
-
-
-
-// =========================
-// 🔹 LOGIN PRO + CRÉATION PROFIL
-// =========================
-async function loginPro(){
-
-const email = document.getElementById("loginEmail").value;
-const password = document.getElementById("loginPassword").value;
-
-const { data, error } = await supabaseClient.auth.signInWithPassword({
-email,
-password
-});
-
-if(error){
-alert("Erreur connexion : " + error.message);
-return;
-}
-
-const user = data.user;
-
-// =========================
-// 🔥 CRÉER PROFIL SI N'EXISTE PAS
-// =========================
-
-const { data: existingPro, error: fetchError } = await supabaseClient
-.from("pros")
-.select("id")
-.eq("id", user.id)
-.single();
-
-// si erreur ≠ "no rows", on log
-if(fetchError && fetchError.code !== "PGRST116"){
-console.log(fetchError);
-}
-
-// si pas de profil → on crée
-if(!existingPro){
-
-const { error: insertError } = await supabaseClient.from("pros").insert({
-id: user.id,
-company_name: document.getElementById("companyName")?.value || "",
-siret: document.getElementById("companySiret")?.value || "",
-address: document.getElementById("companyAddress")?.value || "",
-city: document.getElementById("companyCity")?.value || "",
-first_name: document.getElementById("contactFirstName")?.value || "",
-last_name: document.getElementById("contactLastName")?.value || "",
-phone: document.getElementById("contactPhone")?.value || "",
-service_type: document.getElementById("serviceType")?.value || "",
-radius: parseInt(document.getElementById("radius")?.value) || 0,
-employees: parseInt(document.getElementById("employees")?.value) || 0,
-credits: 0
-});
-
-if(insertError){
-console.log(insertError);
-alert("Erreur création profil : " + insertError.message);
-return;
-}
-
-}
-
-alert("Connexion réussie");
-
-// 👉 ici tu peux charger le dashboard
-// loadLeads();
-// showDashboard();
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer re_R6H6DE9U_KigXjciBoDBeDHyuGhZXSKut",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: "NettoLead <onboarding@resend.dev>",
+      to: email,
+      subject: "Bienvenue sur NettoLead 🚀",
+      html: `
+        <h2>Bienvenue sur NettoLead</h2>
+        <p>Ton compte professionnel a été créé avec succès.</p>
+        <p>Tu peux maintenant te connecter et commencer à recevoir des leads.</p>
+        <a href="https://nettolead.vercel.app" 
+           style="padding:10px 20px;background:black;color:white;text-decoration:none;border-radius:5px;">
+           Accéder à mon compte
+        </a>
+      `
+    })
+  });
 
 }
 async function loginPro(){
@@ -1249,6 +1250,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
