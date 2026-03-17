@@ -727,6 +727,7 @@ alert("Email et mot de passe obligatoires.");
 return;
 }
 
+// 1. inscription
 const { data, error } = await supabaseClient.auth.signUp({
 email: email,
 password: password
@@ -737,13 +738,16 @@ alert("Erreur inscription : " + error.message);
 return;
 }
 
-if(!data.user){
-alert("Vérifiez votre email pour confirmer votre compte.");
+const user = data.user;
+
+if(!user){
+alert("Erreur utilisateur");
 return;
 }
 
+// 2. création du profil pro 🔥 CORRIGÉ ICI
 const { error: insertError } = await supabaseClient.from("pros").insert([{
-user_id: data.user.id,
+id: user.id, // ✅ IMPORTANT (au lieu de user_id)
 company_name: document.getElementById("companyName").value,
 siret: document.getElementById("companySiret").value,
 address: document.getElementById("companyAddress").value,
@@ -758,17 +762,21 @@ credits: 0
 }]);
 
 if(insertError){
+console.log(insertError);
 alert("Erreur base de données : " + insertError.message);
 return;
 }
 
+// 3. succès
 alert("Compte professionnel créé avec succès !");
 
+// 4. retour login
 document.getElementById("registerForm").classList.add("hidden");
 document.getElementById("authChoice").classList.add("hidden");
 document.getElementById("loginForm").classList.remove("hidden");
 
 document.getElementById("loginEmail").value = email;
+
 }
 
 async function loginPro(){
@@ -1205,6 +1213,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
