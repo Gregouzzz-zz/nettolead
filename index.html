@@ -828,8 +828,6 @@ async function sendConfirmationEmail(email){
     throw new Error(data.message || "Erreur envoi email");
   }
 }
-
-}
 async function loginPro(){
 const { error } = await supabaseClient.auth.signInWithPassword({
 email: document.getElementById("loginEmail").value,
@@ -1140,6 +1138,8 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
         console.log(e);
         alert("Erreur inattendue");
     }
+
+    
     window.showPro = async function(){
 
     console.log("CLICK ESPACE PRO");
@@ -1283,6 +1283,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
