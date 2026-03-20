@@ -1099,27 +1099,22 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
         console.log(e);
         alert("Erreur inattendue");
     }
-
-    
-    window.showPro = async function(){
-
-    console.log("CLICK ESPACE PRO");
-
+window.showPro = async function(){
     const { data } = await supabaseClient.auth.getSession();
 
-    document.getElementById("home").classList.add("hidden");
-
     if(!data.session){
+        document.getElementById("home").classList.add("hidden");
         document.getElementById("loginSection").classList.remove("hidden");
         return;
     }
 
+    document.getElementById("home").classList.add("hidden");
     document.getElementById("pro").classList.remove("hidden");
 
     await loadCities();
     await loadLeads();
 };
-
+    
 }
 function showLogin(){
 document.getElementById("authChoice").classList.add("hidden");
@@ -1244,6 +1239,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
