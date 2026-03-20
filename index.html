@@ -746,15 +746,7 @@ async function registerPro(){
     const { data: sessionData } = await supabaseClient.auth.getSession();
 const user = data.user;
 
-if(!user){
-  alert("Compte créé. Vérifie ton email avant connexion.");
-  return;
-}
-
-// 🔥 IMPORTANT : on log pour debug
-console.log("USER ID:", user.id);
-
-
+    
     // 🔹 4. SUCCESS
     alert("Compte créé avec succès 🚀");
 
@@ -1252,6 +1244,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
