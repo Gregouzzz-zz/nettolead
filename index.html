@@ -716,110 +716,94 @@ document.getElementById("leadForm").reset();
 // =========================
 async function registerPro(){
 
-  if(!document.getElementById("acceptCgu").checked){
-    alert("Vous devez accepter les CGU.");
-    return;
-  }
-
-  const email = document.getElementById("loginEmailRegister").value;
-  const password = document.getElementById("loginPasswordRegister").value;
-
-  if(!email || !password){
-    alert("Email et mot de passe obligatoires.");
-    return;
-  }
-
-  try {
-
-    // 🔹 1. Création du compte Supabase
-    const { data, error } = await supabaseClient.auth.signUp({
-      email: email,
-      password: password
-    });
-
-    if(error){
-      alert("Erreur inscription : " + error.message);
-      return;
-    }
-
-    // ⚠️ IMPORTANT : attendre que l'utilisateur existe
-    const { data: sessionData } = await supabaseClient.auth.getSession();
-const user = data.user;
-
-    
-    // 🔹 4. SUCCESS
-    alert("Compte créé avec succès 🚀");
-
-    document.getElementById("registerForm").classList.add("hidden");
-    document.getElementById("authChoice").classList.add("hidden");
-    document.getElementById("loginForm").classList.remove("hidden");
-
-    document.getElementById("loginEmail").value = email;
-
-  } catch(e){
-    console.log(e);
-    alert("Erreur inattendue");
-}
-}
-  
-const user = data.user;
-
-if(!user){
-  alert("Compte créé. Vérifie ton email avant connexion.");
-  return;
+if(!document.getElementById("acceptCgu").checked){
+alert("Vous devez accepter les CGU.");
+return;
 }
 
-// 🔥 IMPORTANT : on log pour debug
-console.log("USER ID:", user.id);
-  
+const email = document.getElementById("loginEmailRegister").value;
+const password = document.getElementById("loginPasswordRegister").value;
+
+if(!email || !password){
+alert("Email et mot de passe obligatoires.");
+return;
 }
-  
+
+try {
+
+const { data, error } = await supabaseClient.auth.signUp({
+email: email,
+password: password
+});
+
+if(error){
+alert("Erreur inscription : " + error.message);
+return;
+}
+
+alert("Compte créé. Vérifie ton email 📧");
+
+document.getElementById("registerForm").classList.add("hidden");
+document.getElementById("authChoice").classList.add("hidden");
+document.getElementById("loginForm").classList.remove("hidden");
+
+document.getElementById("loginEmail").value = email;
+
+} catch(e){
+console.log(e);
+alert("Erreur inattendue");
+}
+}
+
+// =========================
+// 🔹 LOGIN PRO
+// =========================
 async function loginPro(){
 
 const { data, error } = await supabaseClient.auth.signInWithPassword({
-  email: document.getElementById("loginEmail").value,
-  password: document.getElementById("loginPassword").value
+email: document.getElementById("loginEmail").value,
+password: document.getElementById("loginPassword").value
 });
 
 if(error){ 
-  alert(error.message); 
-  return; 
+alert(error.message); 
+return; 
 }
 
 const user = data.user;
 
-// 🔍 Vérifier si le pro existe déjà
+// vérifier si pro existe
 const { data: existingPro } = await supabaseClient
-  .from("pros")
-  .select("*")
-  .eq("user_id", user.id)
-  .maybeSingle();
+.from("pros")
+.select("*")
+.eq("user_id", user.id)
+.maybeSingle();
 
-// 🆕 Si pas de profil → on le crée
+// créer si pas existant
 if(!existingPro){
 
-  const { error: insertError } = await supabaseClient
-    .from("pros")
-    .insert([{
-      user_id: user.id,
-      company_name: document.getElementById("companyName")?.value || "",
-      siret: document.getElementById("companySiret")?.value || "",
-      address: document.getElementById("companyAddress")?.value || "",
-      city: document.getElementById("companyCity")?.value || "",
-      first_name: document.getElementById("contactFirstName")?.value || "",
-      last_name: document.getElementById("contactLastName")?.value || "",
-      phone: document.getElementById("contactPhone")?.value || "",
-      service_type: document.getElementById("serviceType")?.value || "",
-      radius: 0,
-      employees: 0,
-      credits: 0
-    }]);
+const { error: insertError } = await supabaseClient
+.from("pros")
+.insert([{
+user_id: user.id,
+company_name: "",
+siret: "",
+address: "",
+city: "",
+first_name: "",
+last_name: "",
+phone: "",
+service_type: "",
+radius: 0,
+employees: 0,
+credits: 0
+}]);
 
-  if(insertError){
-    console.log(insertError);
-    alert("Erreur création profil pro");
-    return;
-  }
+if(insertError){
+console.log(insertError);
+alert("Erreur création profil pro");
+return;
+}
 }
 
 document.getElementById("loginSection").classList.add("hidden");
@@ -828,7 +812,10 @@ document.getElementById("pro").classList.remove("hidden");
 await loadCities();
 await loadLeads();
 }
-  
+
+// =========================
+// 🔹 LOAD CITIES
+// =========================
 async function loadCities(){
 
 const { data } = await supabaseClient
@@ -844,9 +831,7 @@ cityFilter.innerHTML='<option value="">Toutes les villes</option>';
 const cities=[...new Set(data.map(l=>l.city))];
 
 cities.forEach(city=>{
-
 const option=document.createElement("option");
-
 option.value=city;
 option.textContent=city;
 
@@ -855,346 +840,160 @@ option.selected=true;
 }
 
 cityFilter.appendChild(option);
-
 });
-
 }
+
+// =========================
+// 🔹 LOAD LEADS
+// =========================
 async function loadLeads(){
 
-const city = document.getElementById("cityFilter")?.value;
-const type = document.getElementById("typeFilter")?.value;
-const search = document.getElementById("searchFilter")?.value?.toLowerCase() || "";
-const order = document.getElementById("dateFilter")?.value || "desc";
-
-
-// requête leads
-let query = supabaseClient
+const { data, error } = await supabaseClient
 .from("leads")
 .select("*")
-.order("created_at",{ascending:order==="asc"});
-
-if(city){
-query = query.eq("city",city);
-}
-
-if(type){
-query = query.eq("type",type);
-}
-
-const { data, error } = await query;
+.order("created_at",{ascending:false});
 
 if(error){
 console.log(error);
 return;
 }
 
-
-// récupérer tous les unlocks
-const { data: unlocks, error: unlockError } = await supabaseClient
+const { data: unlocks } = await supabaseClient
 .from("lead_unlocks")
 .select("*");
 
-if(unlockError){
-console.log(unlockError);
-return;
-}
-
-
-// ajouter unlock_count à chaque lead
 data.forEach(lead=>{
 lead.unlock_count = unlocks.filter(u => u.lead_id === lead.id).length;
 });
 
-
-// container
 const container = document.getElementById("leadsContainer");
 container.innerHTML="";
 
 let newCount = 0;
 const today = new Date().toDateString();
 
-
-// afficher leads
 data.forEach(lead=>{
 
-// filtre recherche
-if(search){
-const text = (lead.name+" "+lead.city+" "+lead.type).toLowerCase();
-if(!text.includes(search)) return;
-}
-
-
-// compteur nouveaux
 const leadDate = new Date(lead.created_at).toDateString();
 if(leadDate === today){
 newCount++;
 }
 
-
-// vérifier si ce pro a déjà débloqué
-const session = supabaseClient.auth.getSession();
-let alreadyUnlocked = false;
-
-
-// badge
-let badge = `
-<div style="
-font-size:13px;
-color:#64748b;
-margin-bottom:8px;
-">
-${lead.unlock_count || 0}/3 pros déjà positionnés
-</div>
-`;
-
-
-// bouton
 let button="";
 
 if(lead.unlock_count >= 3){
-
-button = `
-<span style="
-color:red;
-font-weight:bold;
-">
-Complet (3/3)
-</span>
-`;
-
+button = `<span style="color:red;font-weight:bold;">Complet (3/3)</span>`;
 }else{
-
-button = `
-<button onclick="unlockLead(${lead.id})">
-Débloquer Gratuit
-</button>
-`;
-
+button = `<button onclick="unlockLead(${lead.id})">Débloquer</button>`;
 }
 
-
-// contact visible si déjà débloqué
 const unlock = unlocks.find(u=>u.lead_id===lead.id);
 
 const contact = unlock
 ? lead.phone+" / "+lead.email
 : "Coordonnées masquées";
 
-
-// afficher carte
 container.innerHTML += `
 <div class="lead-card">
-
-<div class="lead-header">
-${lead.type} - ${lead.city}
-</div>
-
+<div class="lead-header">${lead.type} - ${lead.city}</div>
 <div class="lead-info">
 Nom : ${lead.name}<br>
 Surface : ${lead.surface} m²<br>
 <p><strong>Demande :</strong> ${lead.message || "Aucun détail"}</p>
 Contact : ${contact}
 </div>
-
-${badge}
-
-<div class="lead-price">
-Prix : ${lead.price}€
-</div>
-
+<div>${lead.unlock_count}/3 pros</div>
+<div class="lead-price">Prix : ${lead.price}€</div>
 ${button}
-
 </div>
 `;
-
 });
 
-
-// compteurs dashboard
 document.getElementById("statTotal").innerText = data.length;
 document.getElementById("statNew").innerText = newCount;
-
 }
-function loadCityOptions(data){
 
-const cityFilter = document.getElementById("cityFilter");
+// =========================
+// 🔹 UNLOCK
+// =========================
+async function unlockLead(leadId){
 
-// Extraire villes uniques
-const cities = [...new Set(data.map(item => item.city))];
+try{
 
-cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
+const { data: { user } } = await supabaseClient.auth.getUser();
 
-cities.forEach(function(city){
-cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
+if(!user){
+alert("Vous devez être connecté");
+return;
+}
+
+const { data: existingUnlocks } = await supabaseClient
+.from("lead_unlocks")
+.select("*")
+.eq("lead_id", leadId);
+
+if(existingUnlocks.length >= 3){
+alert("Complet");
+return;
+}
+
+const alreadyUnlocked = existingUnlocks.find(u=>u.prod_id===user.id);
+
+if(alreadyUnlocked){
+alert("Déjà débloqué");
+return;
+}
+
+await supabaseClient.from("lead_unlocks").insert({
+lead_id: leadId,
+prod_id: user.id
 });
+
+await supabaseClient.from("leads")
+.update({ unlocked:true })
+.eq("id", leadId);
+
+alert("Débloqué");
+
+await loadLeads();
+
+}catch(e){
+console.log(e);
+alert("Erreur");
 }
-  async function unlockLead(leadId){
+}
 
-    try{
-
-        // 1. récupérer le pro connecté
-        const { data: { user } } = await supabaseClient.auth.getUser();
-
-        if(!user){
-            alert("Vous devez être connecté");
-            return;
-        }
-
-        // 2. vérifier combien de pros ont déjà débloqué ce lead
-        const { data: existingUnlocks, error: countError } = await supabaseClient
-        .from("lead_unlocks")
-        .select("*")
-        .eq("lead_id", leadId);
-
-        if(countError){
-            console.log(countError);
-            alert("Erreur vérification");
-            return;
-        }
-
-        // 3. limiter à 3 pros max
-        if(existingUnlocks.length >= 3){
-            alert("Ce lead est complet (3/3)");
-            return;
-        }
-
-        // 4. vérifier si ce pro a déjà débloqué
-        const alreadyUnlocked = existingUnlocks.find(
-            unlock => unlock.prod_id === user.id
-        );
-
-        if(alreadyUnlocked){
-            alert("Vous avez déjà débloqué ce lead");
-            return;
-        }
-
-        // 5. insérer le déblocage dans la table lead_unlocks
-        const { error: insertError } = await supabaseClient
-        .from("lead_unlocks")
-        .insert({
-            lead_id: Number(leadId),
-            prod_id: user.id
-        });
-
-        if(insertError){
-            console.log(insertError);
-            alert("Erreur déblocage");
-            return;
-        }
-
-        // 6. mettre à jour la table leads pour déclencher le webhook Make
-        const { error: updateError } = await supabaseClient
-        .from("leads")
-        .update({ unlocked: true })
-        .eq("id", leadId);
-
-        if(updateError){
-            console.log(updateError);
-        }
-
-        // 7. confirmation
-        alert("Lead débloqué avec succès");
-
-        // 8. recharger les leads
-        await loadLeads();
-
-    }catch(e){
-        console.log(e);
-        alert("Erreur inattendue");
-    }
-
-    
+// =========================
+// 🔹 NAVIGATION
+// =========================
 window.showPro = async function(){
-    const { data } = await supabaseClient.auth.getSession();
 
-    if(!data.session){
-        document.getElementById("home").classList.add("hidden");
-        document.getElementById("loginSection").classList.remove("hidden");
-        return;
-    }
+const { data } = await supabaseClient.auth.getSession();
 
-    document.getElementById("home").classList.add("hidden");
-    document.getElementById("pro").classList.remove("hidden");
-
-    await loadCities();
-    await loadLeads();
-};
-    
-}
-function showLogin(){
-document.getElementById("authChoice").classList.add("hidden");
-document.getElementById("loginForm").classList.remove("hidden");
-}
-
-function showRegister(){
-document.getElementById("authChoice").classList.add("hidden");
-document.getElementById("registerForm").classList.remove("hidden");
-}
-
-function nextStep(step){
-document.getElementById("step1").classList.add("hidden");
-document.getElementById("step2").classList.add("hidden");
-document.getElementById("step3").classList.add("hidden");
-document.getElementById("step"+step).classList.remove("hidden");
-}
-
-function backToChoice(){
-document.getElementById("loginForm").classList.add("hidden");
-document.getElementById("registerForm").classList.add("hidden");
-document.getElementById("authChoice").classList.remove("hidden");
-}
-
-function goHome(){
-document.getElementById("home").classList.remove("hidden");
-document.getElementById("loginSection").classList.add("hidden");
-document.getElementById("pro").classList.add("hidden");
-}
-
-function goBack(){
-const home = document.getElementById("home");
-const login = document.getElementById("loginSection");
-const pro = document.getElementById("pro");
-
-if(!pro.classList.contains("hidden")){
-pro.classList.add("hidden");
-login.classList.remove("hidden");
+if(!data.session){
+document.getElementById("home").classList.add("hidden");
+document.getElementById("loginSection").classList.remove("hidden");
 return;
 }
 
-if(!login.classList.contains("hidden")){
-login.classList.add("hidden");
-home.classList.remove("hidden");
-return;
-}
-}
+document.getElementById("home").classList.add("hidden");
+document.getElementById("pro").classList.remove("hidden");
 
-// FIX rendre fonctions accessibles aux boutons
-window.showPro = async function(){
-    const { data } = await supabaseClient.auth.getSession();
-
-    if(!data.session){
-        document.getElementById("home").classList.add("hidden");
-        document.getElementById("loginSection").classList.remove("hidden");
-        return;
-    }
-
-    document.getElementById("home").classList.add("hidden");
-    document.getElementById("pro").classList.remove("hidden");
-
-    await loadCities();
-    await loadLeads();
+await loadCities();
+await loadLeads();
 };
 
 window.goHome = function(){
-    document.getElementById("home").classList.remove("hidden");
-    document.getElementById("loginSection").classList.add("hidden");
-    document.getElementById("pro").classList.add("hidden");
+document.getElementById("home").classList.remove("hidden");
+document.getElementById("loginSection").classList.add("hidden");
+document.getElementById("pro").classList.add("hidden");
 };
 
 window.logoutPro = async function(){
-    await supabaseClient.auth.signOut();
-    goHome();
+await supabaseClient.auth.signOut();
+goHome();
 };
+
 
   function openResetPopup(){
 
@@ -1244,6 +1043,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
