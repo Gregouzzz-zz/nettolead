@@ -788,6 +788,8 @@ const user = sessionData.session?.user;
     console.log(e);
     alert("Erreur inattendue");
 }
+}
+  
 
 async function loginPro(){
 const { error } = await supabaseClient.auth.signInWithPassword({
@@ -1099,6 +1101,8 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
         console.log(e);
         alert("Erreur inattendue");
     }
+
+    
 window.showPro = async function(){
     const { data } = await supabaseClient.auth.getSession();
 
@@ -1239,6 +1243,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
