@@ -796,14 +796,14 @@ if(error){
 
 const user = data.user;
 
-// 🔥 CHECK SI PRO EXISTE DEJA
+// 🔍 Vérifier si le pro existe déjà
 const { data: existingPro } = await supabaseClient
   .from("pros")
   .select("*")
   .eq("user_id", user.id)
-  .single();
+  .maybeSingle();
 
-// 🔥 SI PAS EXISTANT → ON CRÉE
+// 🆕 Si pas de profil → on le crée
 if(!existingPro){
 
   const { error: insertError } = await supabaseClient
@@ -826,14 +826,16 @@ if(!existingPro){
   if(insertError){
     console.log(insertError);
     alert("Erreur création profil pro");
+    return;
   }
 }
 
 document.getElementById("loginSection").classList.add("hidden");
 document.getElementById("pro").classList.remove("hidden");
 
+await loadCities();
 await loadLeads();
-}  
+}
   
 async function loadCities(){
 
@@ -1250,6 +1252,7 @@ closeResetPopup();
 
 </body>
 </html>
+
 
 
 
