@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 module.exports = async (req, res) => {
 
   if (req.method !== "POST") {
@@ -8,13 +10,11 @@ module.exports = async (req, res) => {
 
     const { to, lead } = req.body;
 
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + process.env.RESEND_API_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+    console.log("EMAIL ENVOYÉ À :", to);
+
+    const response = await axios.post(
+      "https://api.resend.com/emails",
+      {
         from: "onboarding@resend.dev",
         to: to,
         subject: "Nouveau lead 🚀",
@@ -25,15 +25,19 @@ module.exports = async (req, res) => {
           <p>Téléphone : ${lead.phone}</p>
           <p>Email : ${lead.email}</p>
         `
-      })
-    });
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
-    const data = await response.json();
-
-    return res.status(200).json(data);
+    return res.status(200).json(response.data);
 
   } catch (error) {
-    console.log(error);
+    console.log("ERREUR API:", error.response?.data || error.message);
     return res.status(500).json({ error: "Erreur serveur" });
   }
 };
