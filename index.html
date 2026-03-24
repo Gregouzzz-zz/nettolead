@@ -793,13 +793,47 @@ if(insertError){
   
 
 async function loginPro(){
-const { error } = await supabaseClient.auth.signInWithPassword({
-email: document.getElementById("loginEmail").value,
-password: document.getElementById("loginPassword").value
+
+const { data, error } = await supabaseClient.auth.signInWithPassword({
+  email: document.getElementById("loginEmail").value,
+  password: document.getElementById("loginPassword").value
 });
-if(error){ alert(error.message); return; }
+
+if(error){ 
+  alert(error.message); 
+  return; 
+}
+
+const user = data.user;
+
+// 👇 👉 TU METS TON BLOC ICI
+
+const { data: existingPro } = await supabaseClient
+  .from("pros")
+  .select("id")
+  .eq("user_id", user.id);
+
+if(!existingPro || existingPro.length === 0){
+
+  const { error: insertError } = await supabaseClient
+    .from("pros")
+    .insert([{
+      user_id: user.id,
+      credits: 0
+    }]);
+
+  if(insertError){
+    console.log(insertError);
+    alert("Erreur création profil pro");
+    return;
+  }
+}
+
+// 👇 ENSUITE TON CODE NORMAL
+
 document.getElementById("loginSection").classList.add("hidden");
 document.getElementById("pro").classList.remove("hidden");
+
 loadLeads();
 }
 
