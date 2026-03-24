@@ -1065,7 +1065,7 @@ cities.forEach(function(city){
 cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
 });
 }
-  async function unlockLead(leadId){
+async function unlockLead(leadId){
 
     try{
 
@@ -1076,6 +1076,8 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
             alert("Vous devez être connecté");
             return;
         }
+
+        const proEmail = user.email; // ✅ EMAIL DU PRO
 
         // 2. vérifier combien de pros ont déjà débloqué ce lead
         const { data: existingUnlocks, error: countError } = await supabaseClient
@@ -1105,7 +1107,7 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
             return;
         }
 
-        // 5. insérer le déblocage dans la table lead_unlocks
+        // 5. insérer le déblocage
         const { error: insertError } = await supabaseClient
         .from("lead_unlocks")
         .insert({
@@ -1119,26 +1121,36 @@ cityFilter.innerHTML += '<option value="'+city+'">'+city+'</option>';
             return;
         }
 
-        // 6. mettre à jour la table leads pour déclencher le webhook Make
-        const { error: updateError } = await supabaseClient
+        // 6. récupérer les infos du lead
+        const { data: lead } = await supabaseClient
         .from("leads")
-        .update({ unlocked: true })
-        .eq("id", leadId);
+        .select("*")
+        .eq("id", leadId)
+        .single();
 
-        if(updateError){
-            console.log(updateError);
-        }
+        // 7. ENVOI EMAIL AU PRO 🚀
+        await fetch("/api/send-email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                to: proEmail,
+                lead: lead
+            })
+        });
 
-        // 7. confirmation
-        alert("Lead débloqué avec succès");
+        // 8. confirmation
+        alert("Lead débloqué + email envoyé 🚀");
 
-        // 8. recharger les leads
+        // 9. reload
         await loadLeads();
 
     }catch(e){
         console.log(e);
         alert("Erreur inattendue");
     }
+}
 
     
 window.showPro = async function(){
