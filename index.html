@@ -5,53 +5,94 @@
 <title>NettoLead</title>
 
 <style>
-body{
+*{
   margin:0;
-  font-family:Arial, sans-serif;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family: 'Arial', sans-serif;
   background: linear-gradient(135deg,#eaf2ff,#ffffff);
-  text-align:center;
   color:#0f172a;
 }
 
-/* HEADER */
+/* HERO FULL SCREEN */
 .hero{
-  padding:60px 20px 40px;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
 }
 
+/* LOGO */
 .logo{
-  font-size:32px;
+  font-size:40px;
   font-weight:bold;
+  color:#2563eb;
+  margin-bottom:20px;
+}
+
+/* TITRE */
+.title{
+  font-size:64px;
+  font-weight:800;
+  max-width:900px;
+  line-height:1.2;
+}
+
+.highlight{
   color:#2563eb;
 }
 
-.title{
-  font-size:42px;
-  font-weight:700;
+/* SUBTITLE */
+.subtitle{
+  font-size:22px;
   margin-top:20px;
+  color:#475569;
+  max-width:600px;
 }
 
-.subtitle{
-  font-size:20px;
-  margin-top:10px;
-  color:#475569;
+/* BADGES */
+.badges{
+  margin-top:25px;
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.badge{
+  background:white;
+  padding:10px 18px;
+  border-radius:999px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+  font-size:14px;
 }
 
 /* CARDS */
 .cards{
+  margin-top:60px;
   display:flex;
+  gap:25px;
   flex-wrap:wrap;
   justify-content:center;
-  gap:20px;
-  margin:40px auto;
-  max-width:1000px;
 }
 
 .card{
+  width:280px;
+  padding:30px;
+  border-radius:20px;
   background:white;
-  padding:25px;
-  border-radius:16px;
-  width:260px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  box-shadow:0 20px 40px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
 }
 
 .card h3{
@@ -62,28 +103,37 @@ body{
   color:#64748b;
 }
 
-/* EMAIL BOX */
+/* NEWSLETTER */
 .newsletter{
-  margin-top:40px;
+  margin-top:60px;
+}
+
+.newsletter h2{
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+.input-group{
+  margin-top:20px;
 }
 
 input{
-  padding:14px;
-  width:260px;
-  border-radius:10px;
+  padding:16px;
+  width:280px;
+  border-radius:12px;
   border:1px solid #ccc;
   font-size:16px;
 }
 
 button{
-  padding:14px 25px;
+  padding:16px 30px;
+  margin-left:10px;
   border:none;
+  border-radius:12px;
   background:#2563eb;
   color:white;
-  border-radius:10px;
   font-size:16px;
   cursor:pointer;
-  margin-left:10px;
 }
 
 button:hover{
@@ -97,8 +147,8 @@ button:hover{
 
 /* FOOTER */
 .footer{
-  margin-top:60px;
-  padding:20px;
+  position:absolute;
+  bottom:20px;
   font-size:14px;
   color:#94a3b8;
 }
@@ -108,55 +158,71 @@ button:hover{
 <body>
 
 <div class="hero">
+
   <div class="logo">🚀 NettoLead</div>
 
   <div class="title">
-    Générez des leads qualifiés
+    Générez des <span class="highlight">leads qualifiés</span><br>
+    en nettoyage
   </div>
 
   <div class="subtitle">
-    Recevez des demandes clients sans prospection
-  </div>
-</div>
-
-<div class="cards">
-
-  <div class="card">
-    <h3>1. Inscrivez-vous</h3>
-    <p>En 2 minutes, simple et rapide</p>
+    Recevez des demandes clients prêtes à signer, sans prospection,
+    partout en Île-de-France
   </div>
 
-  <div class="card">
-    <h3>2. Recevez des leads</h3>
-    <p>Des demandes réelles avec coordonnées</p>
+  <div class="badges">
+    <div class="badge">✔ Leads exclusifs</div>
+    <div class="badge">⚡ Réponse rapide</div>
+    <div class="badge">💼 100% qualifiés</div>
   </div>
 
-  <div class="card">
-    <h3>3. Obtenez des chantiers</h3>
-    <p>Contactez et signez vos clients</p>
+  <div class="cards">
+
+    <div class="card">
+      <h3>1. Inscrivez-vous</h3>
+      <p>Créez votre compte en 2 minutes</p>
+    </div>
+
+    <div class="card">
+      <h3>2. Recevez des leads</h3>
+      <p>Des demandes réelles avec coordonnées</p>
+    </div>
+
+    <div class="card">
+      <h3>3. Obtenez des chantiers</h3>
+      <p>Contactez et signez vos clients</p>
+    </div>
+
+  </div>
+
+  <div class="newsletter">
+
+    <h2>🚧 Lancement imminent</h2>
+    <p>Laissez votre email pour être informé</p>
+
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Votre email">
+      <button onclick="subscribe()">Être informé</button>
+    </div>
+
+    <div class="msg" id="msg"></div>
+
+  </div>
+
+  <div class="footer">
+    © 2026 NettoLead
   </div>
 
 </div>
 
-<div class="newsletter">
-  <h2>🚀 Bientôt disponible</h2>
-  <p>Laissez votre email pour être informé du lancement</p>
-
-  <input type="email" id="email" placeholder="Votre email">
-  <button onclick="subscribe()">Être informé</button>
-
-  <div class="msg" id="msg"></div>
-</div>
-
-<div class="footer">
-  © 2026 NettoLead — Tous droits réservés
-</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
-const supabaseUrl = "https://TON_URL.supabase.co";
-const supabaseKey = "TON_ANON_KEY";
+const supabaseUrl = "TON_URL";
+const supabaseKey = "TON_KEY";
 
-const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 async function subscribe(){
 
@@ -169,19 +235,16 @@ async function subscribe(){
 
   const { error } = await supabaseClient
     .from("newsletter")
-    .insert([{ email: email }]);
+    .insert([{ email }]);
 
   if(error){
     document.getElementById("msg").innerText = "Erreur...";
   }else{
-    document.getElementById("msg").innerText = "✅ Merci ! Vous serez informé";
+    document.getElementById("msg").innerText = "✅ Merci !";
     document.getElementById("email").value = "";
   }
 }
 </script>
-
-<!-- Supabase CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 </body>
 </html>
