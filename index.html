@@ -274,7 +274,8 @@ async function subscribe(){
     .insert([{ email }]);
 
   if(error){
-    document.getElementById("msg").innerText = "Erreur...";
+    console.log(error);
+    document.getElementById("msg").innerText = "Erreur ou email déjà enregistré";
   }else{
     document.getElementById("msg").innerText = "✅ Merci !";
     document.getElementById("email").value = "";
