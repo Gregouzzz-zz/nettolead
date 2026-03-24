@@ -247,6 +247,10 @@ button:hover{
     </div>
 
     <div class="msg" id="msg"></div>
+    
+    <p style="margin-top:10px;color:#64748b;font-size:14px;">
+Déjà +12 professionnels inscrits 🚀
+</p>
 
   </div>
 
@@ -263,7 +267,7 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 async function subscribe(){
 
   const email = document.getElementById("email").value;
-
+  
   if(!email){
     alert("Entrez un email");
     return;
