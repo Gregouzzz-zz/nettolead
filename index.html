@@ -722,9 +722,23 @@ async function registerPro(){
     return;
   }
 
-  // 🔹 Récupération des champs
+  // 🔹 Infos compte
   const email = document.getElementById("loginEmailRegister").value;
   const password = document.getElementById("loginPasswordRegister").value;
+
+  // 🔹 Infos PRO
+  const proData = {
+    company_name: document.getElementById("companyName").value,
+    siret: document.getElementById("companySiret").value,
+    address: document.getElementById("companyAddress").value,
+    city: document.getElementById("companyCity").value,
+    first_name: document.getElementById("contactFirstName").value,
+    last_name: document.getElementById("contactLastName").value,
+    phone: document.getElementById("contactPhone").value,
+    service_type: document.getElementById("serviceType").value,
+    radius: parseInt(document.getElementById("radius").value) || 0,
+    employees: parseInt(document.getElementById("employees").value) || 0
+  };
 
   if(!email || !password){
     alert("Email et mot de passe obligatoires.");
@@ -733,10 +747,13 @@ async function registerPro(){
 
   try {
 
-    // 🔹 Création du compte Supabase
+    // 🔥 ON STOCKE LES INFOS (IMPORTANT)
+    localStorage.setItem("proData", JSON.stringify(proData));
+
+    // 🔹 Création compte
     const { error } = await supabaseClient.auth.signUp({
-      email: email,
-      password: password
+      email,
+      password
     });
 
     if(error){
@@ -744,13 +761,9 @@ async function registerPro(){
       return;
     }
 
-    // 🔥 IMPORTANT : pas d’insert dans "pros" ici
-    // (car email confirmation activée)
+    alert("Compte créé 🚀 Vérifie ton email avant connexion");
 
-    // 🔹 Message utilisateur
-    alert("Compte créé avec succès 🚀 Vérifiez votre email avant de vous connecter.");
-
-    // 🔹 UI reset
+    // 🔹 UI
     document.getElementById("registerForm").classList.add("hidden");
     document.getElementById("authChoice").classList.add("hidden");
     document.getElementById("loginForm").classList.remove("hidden");
@@ -762,53 +775,71 @@ async function registerPro(){
     alert("Erreur inattendue");
   }
 }
-  
+  async function loginPro(){
 
-async function loginPro(){
+  // 🔹 Connexion
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: document.getElementById("loginEmail").value,
+    password: document.getElementById("loginPassword").value
+  });
 
-const { data, error } = await supabaseClient.auth.signInWithPassword({
-  email: document.getElementById("loginEmail").value,
-  password: document.getElementById("loginPassword").value
-});
-
-if(error){ 
-  alert(error.message); 
-  return; 
-}
-
-const user = data.user;
-
-// 👇 👉 TU METS TON BLOC ICI
-
-const { data: existingPro } = await supabaseClient
-  .from("pros")
-  .select("id")
-  .eq("user_id", user.id);
-
-if(!existingPro || existingPro.length === 0){
-
-  const { error: insertError } = await supabaseClient
-    .from("pros")
-    .insert([{
-      user_id: user.id,
-      credits: 0
-    }]);
-
-  if(insertError){
-    console.log(insertError);
-    alert("Erreur création profil pro");
-    return;
+  if(error){ 
+    alert(error.message); 
+    return; 
   }
+
+  const user = data.user;
+
+  // 🔹 Vérifier si le pro existe déjà
+  const { data: existingPro } = await supabaseClient
+    .from("pros")
+    .select("id")
+    .eq("user_id", user.id);
+
+  // 🔹 Si pas de profil → on le crée
+  if(!existingPro || existingPro.length === 0){
+
+    // 🔥 récupérer les données stockées au register
+    const storedData = JSON.parse(localStorage.getItem("proData"));
+
+    // 🔥 fallback si jamais y'a rien
+    const proData = storedData || {};
+
+    const { error: insertError } = await supabaseClient
+      .from("pros")
+      .insert([{
+        user_id: user.id,
+        company_name: proData.company_name || "",
+        siret: proData.siret || "",
+        address: proData.address || "",
+        city: proData.city || "",
+        first_name: proData.first_name || "",
+        last_name: proData.last_name || "",
+        phone: proData.phone || "",
+        service_type: proData.service_type || "",
+        radius: proData.radius || 0,
+        employees: proData.employees || 0,
+        credits: 0
+      }]);
+
+    if(insertError){
+      console.log(insertError);
+      alert("Erreur création profil pro");
+      return;
+    }
+
+    // 🔥 nettoyage
+    localStorage.removeItem("proData");
+  }
+
+  // 🔹 UI
+  document.getElementById("loginSection").classList.add("hidden");
+  document.getElementById("pro").classList.remove("hidden");
+
+  // 🔹 Chargement data
+  await loadCities();
+  await loadLeads();
 }
-
-// 👇 ENSUITE TON CODE NORMAL
-
-document.getElementById("loginSection").classList.add("hidden");
-document.getElementById("pro").classList.remove("hidden");
-
-loadLeads();
-}
-
 async function logoutPro(){
 await supabaseClient.auth.signOut();
 document.getElementById("pro").classList.add("hidden");
