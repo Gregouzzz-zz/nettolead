@@ -716,11 +716,13 @@ document.getElementById("leadForm").reset();
 // =========================
 async function registerPro(){
 
+  // 🔹 Vérifier CGU
   if(!document.getElementById("acceptCgu").checked){
     alert("Vous devez accepter les CGU.");
     return;
   }
 
+  // 🔹 Récupération des champs
   const email = document.getElementById("loginEmailRegister").value;
   const password = document.getElementById("loginPasswordRegister").value;
 
@@ -731,8 +733,8 @@ async function registerPro(){
 
   try {
 
-    // 🔹 1. Création du compte Supabase
-    const { data, error } = await supabaseClient.auth.signUp({
+    // 🔹 Création du compte Supabase
+    const { error } = await supabaseClient.auth.signUp({
       email: email,
       password: password
     });
@@ -742,43 +744,13 @@ async function registerPro(){
       return;
     }
 
-    // ⚠️ IMPORTANT : attendre que l'utilisateur existe
-    const { data: sessionData } = await supabaseClient.auth.getSession();
-const user = data.user;
+    // 🔥 IMPORTANT : pas d’insert dans "pros" ici
+    // (car email confirmation activée)
 
-if(!user){
-  alert("Compte créé. Vérifie ton email avant connexion.");
-  return;
-}
+    // 🔹 Message utilisateur
+    alert("Compte créé avec succès 🚀 Vérifiez votre email avant de vous connecter.");
 
-// 🔥 IMPORTANT : on log pour debug
-console.log("USER ID:", user.id);
-
-const { error: insertError } = await supabaseClient
-  .from("pros")
-  .insert([{
-    user_id: user.id,
-    company_name: document.getElementById("companyName").value,
-    siret: document.getElementById("companySiret").value,
-    address: document.getElementById("companyAddress").value,
-    city: document.getElementById("companyCity").value,
-    first_name: document.getElementById("contactFirstName").value,
-    last_name: document.getElementById("contactLastName").value,
-    phone: document.getElementById("contactPhone").value,
-    service_type: document.getElementById("serviceType").value,
-    radius: parseInt(document.getElementById("radius").value) || 0,
-    employees: parseInt(document.getElementById("employees").value) || 0,
-    credits: 0
-  }]);
-
-if(insertError){
-  console.log("INSERT ERROR:", insertError);
-  alert("Erreur base de données : " + insertError.message);
-  return;
-}
-    // 🔹 4. SUCCESS
-    alert("Compte créé avec succès 🚀");
-
+    // 🔹 UI reset
     document.getElementById("registerForm").classList.add("hidden");
     document.getElementById("authChoice").classList.add("hidden");
     document.getElementById("loginForm").classList.remove("hidden");
@@ -788,7 +760,7 @@ if(insertError){
   } catch(e){
     console.log(e);
     alert("Erreur inattendue");
-}
+  }
 }
   
 
