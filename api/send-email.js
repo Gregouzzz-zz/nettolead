@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        from: "NettoLead <onboarding@resend.dev>",
+        from: "NettoLead <contact@send.nettolead.fr>"
         to: email,
         subject: "🚀 Bienvenue sur NettoLead",
         html: `
