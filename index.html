@@ -374,6 +374,13 @@ async function submitEmail(){
     console.log(error);
     alert("Erreur ou email déjà enregistré");
   } else {
+    await fetch("/api/send-email", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ email })
+});
     document.getElementById("msg").innerText = "✅ Merci ! Vous êtes inscrit 🚀";
     document.getElementById("email").value = "";
   }
