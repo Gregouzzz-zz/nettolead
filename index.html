@@ -231,15 +231,6 @@ button:hover{
   #counter{
     font-size:13px;
   }
-  .msg{
-  margin-top:15px;
-  font-weight:bold;
-  transition:0.3s;
-}
-  
-  <script>
-
-</script>
 
 }
 </style>
@@ -355,19 +346,18 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-<script>
 async function submitEmail(){
 
   const email = document.getElementById("email").value;
   const consent = document.getElementById("consent").checked;
 
   if(!email){
-    showMessage("❌ Entrez votre email", "error");
+    alert("Entrez votre email");
     return;
   }
 
   if(!consent){
-    showMessage("❌ Veuillez accepter les conditions", "error");
+    alert("Veuillez accepter les conditions");
     return;
   }
 
@@ -379,28 +369,12 @@ async function submitEmail(){
     }]);
 
   if(error){
-    showMessage("❌ Email déjà inscrit ou erreur", "error");
+    console.log(error);
+    alert("Erreur ou email déjà enregistré");
   } else {
-    showMessage("✅ Merci ! Vous êtes inscrit 🚀", "success");
+    alert("Inscription réussie 🚀");
     document.getElementById("email").value = "";
   }
-}
-
-// 🔥 fonction affichage message
-function showMessage(text, type){
-
-  const msg = document.getElementById("msg");
-
-  msg.innerText = text;
-
-  msg.style.color = type === "success" ? "#16a34a" : "#dc2626";
-
-  msg.style.opacity = "1";
-
-  // fade out après 3 secondes
-  setTimeout(() => {
-    msg.style.opacity = "0";
-  }, 3000);
 }
 </script>
   
