@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     },
     body: JSON.stringify({
      from: "NettoLead <contact@nettolead.fr>"
-     to: "nettolead@gmail.com",
+     to: "klein.gregory@outlook.fr",
       subject: "🚀 Bienvenue sur NettoLead",
       html: `
         <h2>Bienvenue sur NettoLead 🚀</h2>
