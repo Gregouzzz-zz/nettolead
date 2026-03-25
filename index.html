@@ -331,7 +331,7 @@ button:hover{
     <div class="msg" id="msg"></div>
     
     <p style="margin-top:10px;color:#64748b;font-size:14px;">
-Déjà +12 professionnels inscrits 🚀
+Déjà + 20 professionnels inscrits 🚀
 </p>
 
   </div>
@@ -372,7 +372,7 @@ async function submitEmail(){
     console.log(error);
     alert("Erreur ou email déjà enregistré");
   } else {
-    alert("Inscription réussie 🚀");
+    document.getElementById("msg").innerText = "✅ Merci ! Vous êtes inscrit 🚀";
     document.getElementById("email").value = "";
   }
 }
