@@ -342,42 +342,11 @@ Déjà +12 professionnels inscrits 🚀
 
 <script>
 const supabaseUrl = "https://rldhxezafzeencuaifpm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZGh4ZXphZnplZW5jdWFpZnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1ODYyMDYsImV4cCI6MjA4NzE2MjIwNn0.XBYuEOk6ngwOTjH1KM1i4MtipGqwtnYmtPWiBAoZehs"; 
 
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-async function subscribe(){
-
-  const email = document.getElementById("email").value;
-  
-  if(!email){
-    alert("Entrez un email");
-    return;
-  }
-
- const consent = document.getElementById("consent").checked;
-
-if(!consent){
-  alert("Veuillez accepter les conditions");
-  return;
-}
-
-await supabase
-  .from("newsletter")
-  .insert([{ 
-    email: email,
-    consent: consent
-  }]);
-
-  if(error){
-    console.log(error);
-    document.getElementById("msg").innerText = "Erreur ou email déjà enregistré";
-  }else{
-    document.getElementById("msg").innerText = "✅ Merci !";
-    document.getElementById("email").value = "";
-  }
-}
-  async function submitEmail(){
+async function submitEmail(){
 
   const email = document.getElementById("email").value;
   const consent = document.getElementById("consent").checked;
@@ -392,14 +361,19 @@ await supabase
     return;
   }
 
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from("newsletter")
-    .insert([{ email: email }]);
+    .insert([{ 
+      email: email,
+      consent: true
+    }]);
 
   if(error){
-    alert("Erreur");
+    console.log(error);
+    alert("Erreur ou email déjà enregistré");
   } else {
     alert("Inscription réussie 🚀");
+    document.getElementById("email").value = "";
   }
 }
 </script>
