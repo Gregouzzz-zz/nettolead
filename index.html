@@ -284,11 +284,38 @@ button:hover{
 
     <h2>Accédez en avant-première 🚀</h2>
 
-    <div class="input-group">
-      <input type="email" id="email" placeholder="Votre email">
-      <button onclick="subscribe()">Accéder</button>
-    </div>
+   <div style="margin-top:30px; text-align:center;">
 
+  <input 
+    type="email" 
+    id="email"
+    placeholder="Votre email professionnel"
+    style="padding:15px; width:260px; border-radius:10px; border:1px solid #ccc;"
+  />
+
+  <button onclick="submitEmail()" style="
+    padding:15px 25px;
+    margin-left:10px;
+    background:#3b82f6;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+  ">
+    Inscrivez-vous gratuitement
+  </button>
+
+  <div style="margin-top:15px; font-size:14px; color:#555;">
+    <input type="checkbox" id="consent">
+    J’accepte d’être contacté par NettoLead et de recevoir des informations sur le lancement du service.
+  </div>
+
+  <p style="font-size:12px; margin-top:10px;">
+    <a href="/confidentialite.html">Politique de confidentialité</a>
+  </p>
+
+</div>
     <div class="msg" id="msg"></div>
     
     <p style="margin-top:10px;color:#64748b;font-size:14px;">
@@ -316,9 +343,19 @@ async function subscribe(){
     return;
   }
 
-  const { error } = await supabaseClient
-    .from("newsletter")
-    .insert([{ email }]);
+ const consent = document.getElementById("consent").checked;
+
+if(!consent){
+  alert("Veuillez accepter les conditions");
+  return;
+}
+
+await supabase
+  .from("newsletter")
+  .insert([{ 
+    email: email,
+    consent: consent
+  }]);
 
   if(error){
     console.log(error);
@@ -326,6 +363,31 @@ async function subscribe(){
   }else{
     document.getElementById("msg").innerText = "✅ Merci !";
     document.getElementById("email").value = "";
+  }
+}
+  async function submitEmail(){
+
+  const email = document.getElementById("email").value;
+  const consent = document.getElementById("consent").checked;
+
+  if(!email){
+    alert("Entrez votre email");
+    return;
+  }
+
+  if(!consent){
+    alert("Veuillez accepter les conditions");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("newsletter")
+    .insert([{ email: email }]);
+
+  if(error){
+    alert("Erreur");
+  } else {
+    alert("Inscription réussie 🚀");
   }
 }
 </script>
